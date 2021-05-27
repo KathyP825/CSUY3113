@@ -1,0 +1,48 @@
+What is a Game / Game Programming?
+----------------------------------
+Youtube link:
+https://www.youtube.com/watch?v=KfEYjI02zuU&list=PL_QmvmIfJvh08conK3PndW6EZaAot-Z2Y&index=5&ab_channel=ProfessorCarmineProfessorCarmine
+----------------------------------
+
+What is a Game?
+- no exact definition of a game.
+- typically has a challenge
+- not all games are things that are won
+    - ex. Dungeons & Dragons
+    - might have goals but don't necessarily win at Dungeons & Dragons
+
+----------------------------------
+
+What is Game Programming?
+- programming the referee
+- provides the randomness
+- provide simulated opponent
+- simulating physics
+
+----------------------------------
+
+Common Things in Video Games:
+- have graphics
+- have some form of input
+- game logic
+    - something happens when you use keyboard/mouse/etc.
+- audio
+    - can be used for feedback to player
+- physics
+- AI
+- UI (user interface elements)
+    - remaining lives
+    - score in game
+
+----------------------------------
+
+Heart of Game Programming (every video game has this code):
+
+Startup();
+while (gameIsRunning){
+    ProcessInput();
+    Update();
+    Render();
+}
+Shutdown();
+

@@ -1,0 +1,19 @@
+How to Create Repository on Github
+-----------------------
+Youtube link:
+https://www.youtube.com/watch?v=95WKIvf4Siw&list=PL_QmvmIfJvh08conK3PndW6EZaAot-Z2Y&index=5&ab_channel=ProfessorCarmine
+-----------------------
+
+On your own GitHub:
+1.  Go to "Your repositories" tab
+2.  Click "New" button (should be green & had picture of a closed book)
+3.  Enter name for new repository
+4.  Click "Create repository" button (should be green), ignore all other settings
+
+Connecting Repo w/ Folder in Computer (Windows):
+1. Use Command Prompt (not Windows Powershell)
+2. Copy the instructions on the new repository for connecting
+    - make sure there are no "quotations marks" around the message on ECHO command line
+        - this is to make sure the words in the README.md will be bold and not "# CSUY3113"
+    - Command Prompt might ask for login email and username
+

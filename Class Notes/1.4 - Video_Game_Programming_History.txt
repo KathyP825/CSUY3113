@@ -1,0 +1,19 @@
+Brief History of Video Game Programming
+---------------------------------------
+Youtube link:
+https://www.youtube.com/watch?v=6uCto_OAIQg&list=PL_QmvmIfJvh08conK3PndW6EZaAot-Z2Y&index=6&ab_channel=ProfessorCarmineProfessorCarmine
+---------------------------------------
+
+- originally written in Assembly
+    - ex. Prince of Persia = 6502 assembly language
+    - wanted to get as many CPU cycles as possible, so did not use high level languages
+
+- had to write code to support all different kinds of devices
+    - player has to know their own system parts
+
+
+
+
+
+
+
