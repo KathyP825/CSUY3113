@@ -1,0 +1,31 @@
+OpenGL and DirectX
+------------------
+Youtube link:
+https://www.youtube.com/watch?v=w9Tav_YRkK0&list=PL_QmvmIfJvh08conK3PndW6EZaAot-Z2Y&index=7&ab_channel=ProfessorCarmineProfessorCarmine
+------------------
+
+OpenGL = Open Graphics Library
+-   created in 1992
+-   will be used for this class
+
+DirectX
+-   created by Microsoft in 1995
+
+
+Purpose of these Libraries:
+-   removes the need to know the graphics/sound cards
+-   we talk to these Libraries and the Libraries talk to the hardware for us
+
+------------------
+
+Used for this course:
+-   SDL (Simple Directmedia Layer)
+    -   layer on top of OpenGL
+    -   Window management, input, events, audio, game controller, etc.
+    -   works on Mac OS, Windows, Linux, iOS, Android
+-   OpenGL
+    -   provides graphics
+-   C++
+
+
+
