@@ -1,0 +1,14 @@
+Software Rendering
+------------------
+Youtube link:
+https://www.youtube.com/watch?v=eoJTznNkiHg&list=PL_QmvmIfJvh08conK3PndW6EZaAot-Z2Y&index=14&ab_channel=ProfessorCarmineProfessorCarmine
+------------------
+
+Raycasting
+-   drawing a line from the player
+-   lines fans out on a 2d map
+-   length of line = height of wall drawn
+-   makes graphics look 3D
+
+
+
