@@ -27,5 +27,11 @@ Model Coordinates
 -   bottom right corner = (1, -1)
 
 Shaders
-
+-   Vertex Shader
+    -   translates verticies to screen positions
+    -   translates and maps the data
+-   Fragment Shader
+    -   determines what color to draw for each triangle
+    -   when it goes to fill a triangle, for each pixel, determines what color to draw
+    -   can pull the data from the texture or a solid color
 
