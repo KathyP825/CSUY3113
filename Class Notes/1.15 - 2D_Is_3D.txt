@@ -4,7 +4,28 @@ Youtube link:
 https://www.youtube.com/watch?v=sumOSHI4y18&list=PL_QmvmIfJvh08conK3PndW6EZaAot-Z2Y&index=17&ab_channel=ProfessorCarmineProfessorCarmine
 --------------------------
 
+More on Triangles:
+-   sending very simple models with 2 triangles
+-   each triangle has 3 verticies & each point is a vertex
+-   triangles are 1 sided
+    -   the side is determined by the order of the verticies
+        -   clockwise = back-facing
+        -   counter-clockwise = front-facing
 
+Texture Coordinates:
+-   top left corner = (0, 0)
+-   top right corner = (1, 0)
+-   bottom left corner = (0, 1)
+-   bottom right corner = (1, 1)
+-   coordinates are from 0 to 1 regardless of resolution of the image (ex. 256x256 pixels or 1024x1024 pixels)
 
+Model Coordinates
+-   origin = center = (0, 0)
+-   top left corner = (-1, 1)
+-   top right corner = (1, 1)
+-   bottom left corner = (-1, -1)
+-   bottom right corner = (1, -1)
+
+Shaders
 
 
