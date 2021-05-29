@@ -31,5 +31,6 @@ Cartesian Coordinate System (Rene Descartes)
 Problem:
 -   a point is a location on a plane
 -   can't math a point
+-   Answer = Vectors
 
 
