@@ -15,4 +15,4 @@ Transformations (basic ones used in this course)
 
 
 How to do transformations?
--   Answer = Matricies
+-   Answer = Matrices
