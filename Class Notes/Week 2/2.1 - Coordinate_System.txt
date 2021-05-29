@@ -4,6 +4,32 @@ Youtube link:
 https://www.youtube.com/watch?v=w8fYLFf366Q&list=PL_QmvmIfJvh16FRisoRmP8LlDgArHmG8V&index=2&ab_channel=ProfessorCarmine
 -----------------
 
+Cartesian Coordinate System (Rene Descartes)
+-   will be used for this class
+-   xy-axis graph
+                    ^
+                    |
+                  3 |
+                    |
+                  2 |
+                    |
+                  1 |
+                    |
+    <------------------------------->
+       -3  -2  -1   |   1   2   3
+                 -1 |
+                    |
+                 -2 |
+                    |
+                 -3 |
+                    |
+                    v
+-   points are described by their x & y coordinates
+-   can be used to calculate the distance between 2 points
+    -   Pythagorean Theorem: A^2 + B^2 = C^2
 
+Problem:
+-   a point is a location on a plane
+-   can't math a point
 
 
