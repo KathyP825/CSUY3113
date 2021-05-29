@@ -4,3 +4,54 @@ Youtube link:
 https://www.youtube.com/watch?v=N2fzBH0a-XE&list=PL_QmvmIfJvh16FRisoRmP8LlDgArHmG8V&index=2&ab_channel=ProfessorCarmineProfessorCarmine
 -------
 
+Difference between Points & Vectors
+-   point = location
+    -   ex. (4,3)
+-   vector = displacement from somewhere
+    -   [4, 3] = 4 across, 3 up
+
+Vectors
+-   have direction and magnitude (length)
+    -   ex.    ------> [2, 0]      
+                                |
+                                |
+                                |
+                                V [0, -3]
+
+-   can add vectors & get the result
+    - ex.   ------------>
+            ^          ^
+            |         /
+            |        /           *in this case, hypotenuse is the result
+            |       /
+            |      /
+            |     /
+            |    /
+            |   /
+            |  /
+            | /
+            |/
+
+-   can multiply vectors by a scalar
+    - ex.   
+                         ^ [4, 3]              ^ [8, 6]
+                        /                     /
+            2   *      /                     /
+                      /          =          /
+                     /                     /
+                    /                     /
+                                         /
+                                        /
+                                       /
+                                      /
+                                     /
+                                    /
+
+-   can rotate vectors
+    -   ex.    ------> [4, 0]       ^ [0, 4]  
+                                    |
+                                    |
+                                    |
+                                    |
+
+
