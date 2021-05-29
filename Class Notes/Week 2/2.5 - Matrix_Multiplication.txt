@@ -6,10 +6,15 @@ https://www.youtube.com/watch?v=wPFv34Dcamg&list=PL_QmvmIfJvh16FRisoRmP8LlDgArHm
 
 -   number of columns in 1st matrix must match the number of rows in 2nd matrix
     -   ex. 
-                ___           ___           ___       ___        ___           ___
-                |   A   B   C   |           |   G   H   |        |   1   2   7   |
-                |__ D   E   F __|     x     |   I   J   |   =    |   0   3   2   |                            |__ 4   3 __|        |__ 4   3   1 __|
-                                            |__ K   L __|        |__ 4   3   1 __|
+                ___           ___           ___       ___        ___       ___
+                |   A   B   C   |           |   G   H   |        |   ?   ?   |
+                |__ D   E   F __|     x     |   I   J   |   =    |__ ?   ? __|
+                                            |__ K   L __|
                     
-                      2 x 3           x         3 x 2
+                      2 x 3           x         3 x 2       =        2 x 2
+                    ___                                                     ___
+                =   |   AxG  +  BxI  +  CxK             AxH  +  BxJ  +  CxL   |
+                    |__ DxG  +  ExI  +  FxK             DxH  +  ExJ  +  FxL __|
+
+    -   size of result matrix = outer numbers
 
