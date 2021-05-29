@@ -11,4 +11,16 @@ Identity Matrix
             |__ 1 __|           |   1   0   |           |   1   0   0   |
                                 |__ 0   1 __|           |   0   1   0   |
                                                         |__ 0   0   1 __|
+-   code for Identity Matrix:
+        modelMatrix = glm::mat4(1.0f);
 
+Multiplying by Identity Matrix
+-   has no effect / does not make a difference
+-   ex.         ___       ___           ___   ___        ___             ___
+                |   1   0   |     x     |   X   |    =   |   1*X  +  0*Y   |
+                |__ 0   1 __|           |__ Y __|        |__ 0*X  +  1*Y __|
+                                                    
+                                                         ___   ___
+                                                     =   |   X   |
+                                                         |__ Y __|
+                                                         
