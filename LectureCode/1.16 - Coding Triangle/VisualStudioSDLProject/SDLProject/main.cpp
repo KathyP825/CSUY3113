@@ -32,7 +32,8 @@ void Initialize() {
     program.Load("shaders/vertex.glsl", "shaders/fragment.glsl");       // sets up Shader program
 
     viewMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::mat4(1.0f);      // set modelMatrix to Identity Matrix
+                                        // this wasn't changed in this program --> triangle drawn in center of window
     projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);     // the box of the world you see
 
     program.SetProjectionMatrix(projectionMatrix);
@@ -56,17 +57,18 @@ void ProcessInput() {
 void Update() { }
 
 void Render() {
-    glClear(GL_COLOR_BUFFER_BIT);       // uses glClearColor
+    glClear(GL_COLOR_BUFFER_BIT);   // uses glClearColor, clear background
 
-    program.SetModelMatrix(modelMatrix);
+    program.SetModelMatrix(modelMatrix);    // tells shader prog which matrix to use when drawing the next thing
 
-    float vertices[] = { 0.5f, -0.5f, 0.0f, 0.5f, -0.5f, -0.5f };       // verticies of the triangle
-    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);      // gives list of verticies
+    float vertices[] = { 0.5f, -0.5f, 0.0f, 0.5f, -0.5f, -0.5f };   // verticies of the triangle { X1, Y1, X2, Y2, X3, Y3 }
+                                                                    // apply modelMatrix to all 3 of these verticies
+    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);  // gives list of verticies
     glEnableVertexAttribArray(program.positionAttribute);
-    glDrawArrays(GL_TRIANGLES, 0, 3);       // tells prog that you want it to draw triangles, have 3 verticies to draw
+    glDrawArrays(GL_TRIANGLES, 0, 3);   // tells prog that you want it to draw triangles, have 3 verticies to draw
     glDisableVertexAttribArray(program.positionAttribute);
 
-    SDL_GL_SwapWindow(displayWindow);       // push drawing to display on screen
+    SDL_GL_SwapWindow(displayWindow);   // push drawing to display on screen
 }
 
 void Shutdown() {
