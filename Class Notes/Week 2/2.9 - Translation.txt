@@ -4,8 +4,40 @@ Youtube link:
 https://www.youtube.com/watch?v=PiaOFpEyceE&list=PL_QmvmIfJvh16FRisoRmP8LlDgArHmG8V&index=9&ab_channel=ProfessorCarmineProfessorCarmine
 -----------
 
+-   move froms tarting point to somewhere else
+-   to move something, just need to add to it
 
+Homogenous Coordinates
+-   need to represent the 2D vector as a 3D vector
+    ___   ___                ___   ___
+    |   X   |    ------->    |   X   |
+    |__ Y __|                |   Y   |
+                             |__ 1 __|
 
+Translation Matrix
+    ___            ___       ___   ___       ___                      ___       ___          ___
+    |   1   0   Tx   |       |   X   |       |   1*X  +  0*Y  +  Tx*1   |       |   X  +  Tx   |
+    |   0   1   Ty   |   *   |   Y   |   =   |   0*X  +  1*Y  +  Ty*1   |   =   |   Y  +  Ty   |
+    |__ 0   0   1  __|       |__ 1 __|       |__ 0*X  +  0*Y  +  1*1  __|       |__ 1        __|
+                ^                ^
+                |                |
+        amount you want to    3D vector
+        translate by
 
+-----------
 
+Code (vertex shader code):
+
+    modelMatrix = glm::mat4(1.0f);      // start off with Identity Matrix
+
+    // translate what we have so far
+    // multiply the translation matrix
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(3.0f, 2.0f, 0.0f));
+                                                          ^     ^    ^
+                                                          |_____|    |___________________
+                                                             |                          |
+                                             shift 3 across to the right, 2 up          |
+                                                                                        |
+                                                                        is 0 because don't want object
+                                                                        to move towards us / away from us
 
