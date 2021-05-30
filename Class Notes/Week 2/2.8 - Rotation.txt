@@ -33,7 +33,6 @@ Code (vertex shader code):
                                                                                     ^
                                                                                     |
                                                                         do rotation on Z-axis
-
--   
+  
 
 
