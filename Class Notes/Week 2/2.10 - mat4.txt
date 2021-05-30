@@ -16,7 +16,11 @@ Why do we need mat4?
     |__ Z __|                |   Z   |
                              |__ 1 __|
 
+-   we are always using 3D vectors
+    -   when we want to translate it, need to take 3D vectors and turn them into 4D
+    -   then apply the 4x4 matricies
 
+-   everything in OpenGL is in 3D
 
 
 
