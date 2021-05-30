@@ -56,13 +56,11 @@ void ProcessInput() {
 
 void Update() {
     //modelMatrix = glm::mat4(1.0f);  // set modelMatrix to Identity Matrix, reset object to middle each time
-                                      // don't include if want object to continuously move
+                                    // don't include if want object to continuously move
 
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(1.0f, 0.0f, 0.0f));     // move object 1 unit to the right
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(3.0f, 0.0f, 0.0f));     // move object 3 units to the right
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 1.0f, 0.0f));     // move object 1 unit to the up
-
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.01f, 0.0f));    // move object 0.1 units to the up
+    //modelMatrix = glm::rotate(modelMatrix, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));    // rotate object 45 degrees on Z-axis
+                                                                                                 // looks like it rotates counterclockwise
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 }
 
