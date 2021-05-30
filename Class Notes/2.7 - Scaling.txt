@@ -4,3 +4,23 @@ Youtube link:
 https://www.youtube.com/watch?v=ySJ-RjxlwbA&list=PL_QmvmIfJvh16FRisoRmP8LlDgArHmG8V&index=7&ab_channel=ProfessorCarmineProfessorCarmine
 -------
 
+-   matrix * vector
+    ___        ___       ___   ___         ___              ___         ___      ___
+    |   Sx   0   |   x   |   X   |    =    |   Sx*X  +  0*Y   |    =    |   Sx*X   |
+    |__ 0   Sy __|       |__ Y __|         |__ 0*X  +  Sy*Y __|         |__ Sy*Y __|
+
+    -   ex.     ___       ___       ___   ___         ___             ___         ___   ___
+                |   2   0   |   x   |   4   |    =    |   2*4  +  0*3   |    =    |   8   |
+                |__ 0   2 __|       |__ 3 __|         |__ 0*4  +  2*3 __|         |__ 6 __|
+
+-------
+Uniform Scale
+
+
+Non-Uniform Scale
+
+
+-------
+
+
+
