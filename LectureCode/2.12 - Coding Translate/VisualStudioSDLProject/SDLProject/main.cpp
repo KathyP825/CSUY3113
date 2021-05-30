@@ -42,7 +42,7 @@ void Initialize() {
 
     glUseProgram(program.programID);
 
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);           // background color, when clear the window use this color
+    glClearColor(0.0f, 0.0f, 0.7f, 1.0f);           // background color, when clear the window use this color
 }
 
 void ProcessInput() {
@@ -54,7 +54,17 @@ void ProcessInput() {
     }
 }
 
-void Update() { }
+void Update() {
+    //modelMatrix = glm::mat4(1.0f);  // set modelMatrix to Identity Matrix, reset object to middle each time
+                                      // don't include if want object to continuously move
+
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(1.0f, 0.0f, 0.0f));     // move object 1 unit to the right
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(3.0f, 0.0f, 0.0f));     // move object 3 units to the right
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 1.0f, 0.0f));     // move object 1 unit to the up
+
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.01f, 0.0f));    // move object 0.1 units to the up
+
+}
 
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);   // uses glClearColor, clear background
