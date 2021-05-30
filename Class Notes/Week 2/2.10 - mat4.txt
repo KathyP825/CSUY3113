@@ -1,0 +1,25 @@
+What is mat4?
+-------------
+Youtube link:
+https://www.youtube.com/watch?v=n8Sqgv1ahFU&list=PL_QmvmIfJvh16FRisoRmP8LlDgArHmG8V&index=10&ab_channel=ProfessorCarmineProfessorCarmine
+-------------
+
+In our code:
+-   mat4 = create a 4x4 matrix
+
+Why do we need mat4?
+-   everything is really 3D
+-   we need Homogenous Coordinates to transform a 3D vector
+    ___   ___                ___   ___
+    |   X   |                |   X   |
+    |   Y   |    ------->    |   Y   |
+    |__ Z __|                |   Z   |
+                             |__ 1 __|
+
+
+
+
+
+
+
+
