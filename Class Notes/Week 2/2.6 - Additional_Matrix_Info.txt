@@ -17,7 +17,7 @@ Identity Matrix
 Multiplying by Identity Matrix
 -   has no effect / does not make a difference
 -   ex.         ___       ___           ___   ___        ___             ___
-                |   1   0   |     x     |   X   |    =   |   1*X  +  0*Y   |
+                |   1   0   |     *     |   X   |    =   |   1*X  +  0*Y   |
                 |__ 0   1 __|           |__ Y __|        |__ 0*X  +  1*Y __|
                                                     
                                                          ___   ___

@@ -8,10 +8,10 @@ https://www.youtube.com/watch?v=wPFv34Dcamg&list=PL_QmvmIfJvh16FRisoRmP8LlDgArHm
     -   ex. 
                 ___           ___           ___       ___        ___       ___
                 |   A   B   C   |           |   G   H   |        |   ?   ?   |
-                |__ D   E   F __|     x     |   I   J   |   =    |__ ?   ? __|
+                |__ D   E   F __|     *     |   I   J   |   =    |__ ?   ? __|
                                             |__ K   L __|
                     
-                      2 x 3           x         3 x 2       =        2 x 2
+                      2 * 3           *         3 * 2       =        2 * 2
                     ___                                                     ___
                 =   |   AxG  +  BxI  +  CxK             AxH  +  BxJ  +  CxL   |
                     |__ DxG  +  ExI  +  FxK             DxH  +  ExJ  +  FxL __|

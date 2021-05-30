@@ -40,7 +40,7 @@ Matrix Operations & Rules
     -   multiply each entry by S
         -   ex.                 ___           ___            ___           ___
                                 |   1   2   0   |            |   2   3   0   |
-                    2     x     |   2   3   4   |      =     |   4   6   8   |
+                    2     *     |   2   3   4   |      =     |   4   6   8   |
                                 |__ 1   0   2 __|            |__ 2   0   4 __|
 
 -   matrix multiplication in notes set 2.5
