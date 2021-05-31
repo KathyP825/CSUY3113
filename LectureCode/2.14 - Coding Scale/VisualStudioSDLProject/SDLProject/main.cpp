@@ -55,14 +55,14 @@ void ProcessInput() {
 }
 
 void Update() {
-    //modelMatrix = glm::mat4(1.0f);  // set modelMatrix to Identity Matrix, reset object to middle each time
+    modelMatrix = glm::mat4(1.0f);  // set modelMatrix to Identity Matrix, reset object to middle each time
                                       // don't include if want object to continuously move
 
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(1.0f, 0.0f, 0.0f));     // move object 1 unit to the right
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(3.0f, 0.0f, 0.0f));     // move object 3 units to the right
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 1.0f, 0.0f));     // move object 1 unit to the up
+    //modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));     // scale by 1 = stay the same
+    //modelMatrix = glm::scale(modelMatrix, glm::vec3(2.0f, 2.0f, 1.0f));     // triangle doubles in size
+    //modelMatrix = glm::scale(modelMatrix, glm::vec3(0.5f, 0.5f, 1.0f));     // triangle halves in size
 
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.01f, 0.0f));    // move object 0.1 units to the up
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0001f, 1.0001f, 1.0f));
 
 }
 
