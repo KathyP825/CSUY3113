@@ -4,4 +4,21 @@ Youtube link:
 https://www.youtube.com/watch?v=MBdif0i4wRg&list=PL_QmvmIfJvh0xiwroCZfP8NLORsMF2Sx1&index=2&ab_channel=ProfessorCarmineProfessorCarmine
 ---------------------------
 
+Matrix Multiplication
+-   multiplying matricies combines their transformations
+    -   ex.     ___               ___       ___               ___       ___               ___
+                |   1   0   0   4   |       |   2   0   0   0   |       |   2   0   0   4   |
+                |   0   1   0   3   |   *   |   0   2   0   0   |   =   |   0   2   0   3   |
+                |   0   0   1   0   |       |   0   0   1   0   |       |   0   0   1   0   |
+                |__ 0   0   0   1 __|       |__ 0   0   0   1 __|       |__ 0   0   0   1 __|
 
+-   can combine all transformations into 1 transformation matrix & apply it to all the vectors
+    -   ex. combine translation & rotation into 1 matrix, apply too all verticies 
+
+-   order matters (not Communative)
+    -   ex1.     M = T * R
+                start at Identity, then Translate, and then Rotate
+    -   ex2.     M = R * T
+                start at Identity, then Rotate, and then Translate
+    -   ex1 and ex2 have different endpoints
+                
