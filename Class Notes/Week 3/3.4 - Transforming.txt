@@ -4,8 +4,10 @@ Youtube link:
 https://www.youtube.com/watch?v=Lw_ixgQUzTo&list=PL_QmvmIfJvh0xiwroCZfP8NLORsMF2Sx1&index=3&ab_channel=ProfessorCarmineProfessorCarmine
 ------------
 
+-   games are not static scenes
+-   things need to translate, rotate, and scale over time
 
-
+How to Implement:
 
 
 
