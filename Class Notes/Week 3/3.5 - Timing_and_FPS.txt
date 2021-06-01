@@ -4,9 +4,14 @@ Youtube link:
 https://www.youtube.com/watch?v=ePXdtAANQrY&list=PL_QmvmIfJvh0xiwroCZfP8NLORsMF2Sx1&index=5&ab_channel=ProfessorCarmineProfessorCarmine
 --------------
 
+-   FPS = Frames Per Second
+-   things should happen at the same speed in the games regardless of how fast / slow the user's hardware is
+
+Problem:
+-   faster hardware does more updates than slower hardware
 
 
-
+--------------
 
 
 
