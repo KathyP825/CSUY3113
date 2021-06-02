@@ -9,9 +9,16 @@ https://www.youtube.com/watch?v=ePXdtAANQrY&list=PL_QmvmIfJvh0xiwroCZfP8NLORsMF2
 
 Problem:
 -   faster hardware does more updates than slower hardware
+-   ex.
+        void Update() {
+            player_x += 0.1f;   // if computer runs at 60fps, this addition happens 60 times in 1 second
+                                // if computer runs at 30fps, this addition happens 30 times in 1 second
+        }
+        void Render() {
+            playerMatrix = glm::mat4(1.0f);
+            playerMatrix = glm::translate(playerMatrix, glm::vec3(player_x, player_y, 0.0f));
+        }
 
-
---------------
-
-
+-   need to accomodate for this problem
+-   Answer: Delta time
 
