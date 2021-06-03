@@ -19,6 +19,7 @@ glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 // new code
 float player_x = 0;     // keeps track of player's x-position
+float player_rotate = 0;
 
 
 void Initialize() {
@@ -58,10 +59,30 @@ void ProcessInput() {
     }
 }
 
+// new code
+float lastTicks = 0.0f;   // ticks = amount of time since SDL was last initialized
+
 void Update() {
-    player_x += 1.0f;
+    //new code
+    float ticks = (float)SDL_GetTicks() / 1000.0f;      // SDL_GetTicks() gives the amount of milliseconds since SDL was initialized
+    float deltaTime = ticks - lastTicks;    // amount of time that has gone by =  curr amount of time that has gone by - time from the last frame
+                                            // if takes a large amount of time, code to check and say 1 second has gone by
+    lastTicks = ticks;
+
+    player_x += 1.0f * deltaTime;
+    //player_rotate += 90.0f * deltaTime;     // rotate counterclockwise
+    player_rotate += -90.0f * deltaTime;    // rotate clockwise
+
     modelMatrix = glm::mat4(1.0f);  // set modelMatrix to Identity Matrix, reset object to middle each time
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(player_x, 0.0f, 0.0f));
+
+    // triangle rotates as its moving to the right
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(player_x, 0.0f, 0.0f));     // move to the right
+    //modelMatrix = glm::rotate(modelMatrix, glm::radians(player_rotate), glm::vec3(0.0f, 0.0f, 1.0f));   // rotate on z-axis
+
+    // triangle rotates in a spiral outwards
+    //modelMatrix = glm::rotate(modelMatrix, glm::radians(player_rotate), glm::vec3(0.0f, 0.0f, 1.0f));   // rotate on z-axis
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(player_x, 0.0f, 0.0f));     // move to the right
+
 
 }
 
