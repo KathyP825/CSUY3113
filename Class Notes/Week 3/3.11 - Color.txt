@@ -24,5 +24,27 @@ OpenGL Colors
 
 -   each frame starts with a clear screen
 
+------------------
 
+glClearColor
+    -   sets the color to use when clearing the screen
+    -   only need to call this 1 time unless we're changing the color of the screen
+
+Code:
+glClearColor(float red, float green, float blue, float alpha);      // structure
+
+glClearColor(0.0f, 0.0f, 0.0f, 1.0f);       // use black when clearing the screen
+
+------------------
+
+glClear
+-   clears the screen using the last color set by glClearColor
+
+Code:
+void Initialize() {
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);   // clear screen with black
+}
+void Render() {
+    glClear(GL_COLOR_BUFFER_BIT);
+}
 
