@@ -17,6 +17,10 @@ bool gameIsRunning = true;
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
+// new code
+float player_x = 0;     // keeps track of player's x-position
+
+
 void Initialize() {
     SDL_Init(SDL_INIT_VIDEO);       // initialize SDL
     displayWindow = SDL_CreateWindow("Triangle!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);     // create window: name, centered, window size, use OpenGL
@@ -54,7 +58,12 @@ void ProcessInput() {
     }
 }
 
-void Update() { }
+void Update() {
+    player_x += 1.0f;
+    modelMatrix = glm::mat4(1.0f);  // set modelMatrix to Identity Matrix, reset object to middle each time
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(player_x, 0.0f, 0.0f));
+
+}
 
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);   // uses glClearColor, clear background
