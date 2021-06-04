@@ -4,4 +4,14 @@ Youtube link:
 https://www.youtube.com/watch?v=PDyVMjKxPvw&list=PL_QmvmIfJvh0xiwroCZfP8NLORsMF2Sx1&index=13&ab_channel=ProfessorCarmineProfessorCarmine
 --------
 
+Loading and Preparing Textures/Images
+-   buildings, people, spaceship, etc. = textures
+-   applying the textures onto the polygons
+-   need to load and prepare the textures/images
+    -   this is done during the setup, not every frame
+
+OpenGL Textures
+-   loading an image off our drive into our RAM, then gives Video Card the image
+-   Video Card gives back an ID number
+-   use ID number to refer to the texture when drawing
 
