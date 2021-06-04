@@ -4,11 +4,39 @@ Youtube link:
 https://www.youtube.com/watch?v=74Peh_J__DM&list=PL_QmvmIfJvh0xiwroCZfP8NLORsMF2Sx1&index=17&ab_channel=ProfessorCarmineProfessorCarmine
 -------------------
 
+-   after texture is loaded, can apply it to the models as each frame is drawn
+
+Texture Coordinates
+-   is referred to as the UV coordinates (X, Y, and Z are already taken)
+-   range is from 0.0 to 1.0, and not by pixels
+    -   even if texture is 64x64 pixels, texture coordinates are still 0.0 to 1.0
+-   upper left = (0,0)
+    upper right = (1,0)
+    lower left = (0,1)
+    lower right = (1,1)
 
 
+-   2D Sprite is made of 2 Triangles
+-   need to match verticies to UV coordinates
 
+    (-0.5, 0.5) ----------------- (0.5, 0.5)                  (0.0, 0.0) ----------------- (1.0, 0.0)
+                |  Triangle   / |                                        |               |
+                |  1       /    |                                        |               |
+                |       /       |                 ----->                 |               |
+                |    / Triangle |                                        |               |
+                | /    2        |                                        |               |
+   (-0.5, -0.5) ----------------- (0.5, -0.5)                 (0.0, 1.0) ----------------- (1.0, 1.0)
 
+                 center = (0, 0)
 
+    Code:
+        float verticies[] = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5     ,     -0.5, -0.5, 0.5, -0.5, 0.5, 0.5}
+                                    Triangle 1                                  Triangle 2
+                               X     Y    X     Y    X    Y              X     Y    X     Y    X    Y
 
-
+                                                        |
+                                                        |   corresponding UV coordinates
+                                                        |
+                                                        V
+        float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0     ,     0.0, 1.0, 1.0, 0.0, 0.0, 0.0}
 
