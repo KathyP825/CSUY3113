@@ -4,7 +4,26 @@ Youtube link:
 https://www.youtube.com/watch?v=tYy1jMkL0M8&list=PL_QmvmIfJvh0xiwroCZfP8NLORsMF2Sx1&index=15&ab_channel=ProfessorCarmineProfessorCarmine
 ------------------
 
+Create a Texture in OpenGL
+-   Code:
+        GLuint textureID;
+        glGenTextures(1, &textureID);   // tells OpenGL to generate 1 texture ID
+-   generates texture ID for the following commands
 
+------------------
 
+Binding a Texture
+-   Code:
+        glBindTexture(GL_TEXTURE_2D, textureID); // for the commands after this, use this texture ID
 
+- GL_TEXTURE_2D = "target"
 
+------------------
+
+Setting the Texture Pixel Data
+-   this is what send the image from our memory to the graphics card
+-   images must be in RGBA format
+-   Code:
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+        // gives texture, width, height
+        // image at last parameter is pixel data
