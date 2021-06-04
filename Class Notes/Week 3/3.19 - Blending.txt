@@ -4,7 +4,20 @@ Youtube link:
 https://www.youtube.com/watch?v=R5UOIZuklPo&list=PL_QmvmIfJvh0xiwroCZfP8NLORsMF2Sx1&index=19&ab_channel=ProfessorCarmineProfessorCarmine
 --------
 
+-   the textures will have transparency to them
+-   might have things that are semi-transparent
+-   need to tell OpenGL how to deal with it
 
+--------
 
+Blending
+-   is OFF by default, need to enable it so the images are transparent
+    -   this is done in Initialization
 
+-   Code:
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // good setting for transparency
+
+-   more info:
+    https://learnopengl.com/Advanced-OpenGL/Blending
 
