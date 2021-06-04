@@ -31,6 +31,28 @@ Texture Filtering Settings
 
 -----------------
 
+Sample Function:
+// includes info from 3.14, 3.15
 
+// returns the ID number of a texture
+GLuint LoadTexture(const char* filePath){
+    int w, h, n;
+    unsigned char* image = stbi_load(filePath, &w, &h, &n, STBI_rgb_alpha);
+
+    if(image == NULL){
+        stf::cout << "Unable to load image. Make sure the path is correct\n";
+        assert(false);
+    }
+
+    GLuint textureID;
+    glGenTextures(1, &textureID);   // generate 1 texture ID 
+    glBindTexture(GL_TEXTURE_2D, textureID);    // ensure all commanda after uses this texture
+
+    glTexParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    stbi_image_free(image);
+    return textureID;
+}
 
 
