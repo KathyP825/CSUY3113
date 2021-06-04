@@ -19,4 +19,3 @@ Code:
 ShaderProgram::SetColor(float red, float green, float blue, float alpha);      // structure
 
 program.setColor(1.0f, 0.0f, 0.0f, 1.0f);   // set to red
-
