@@ -24,7 +24,7 @@ float player_rotate = 0;
 
 void Initialize() {
     SDL_Init(SDL_INIT_VIDEO);       // initialize SDL
-    displayWindow = SDL_CreateWindow("Triangle!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);     // create window: name, centered, window size, use OpenGL
+    displayWindow = SDL_CreateWindow("Textured!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);     // create window: name, centered, window size, use OpenGL
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);        // get OpenGL context
     SDL_GL_MakeCurrent(displayWindow, context);         // tells this is the current windows you want to draw to
 
@@ -34,7 +34,7 @@ void Initialize() {
 
     glViewport(0, 0, 640, 480);     // tells OpenGL want camera to draw from (0, 0) to (640, 480)
 
-    program.Load("shaders/vertex.glsl", "shaders/fragment.glsl");       // sets up Shader program
+    program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");       // sets up Shader program, loads a version of shader that can handle textured polygons
 
     viewMatrix = glm::mat4(1.0f);
     modelMatrix = glm::mat4(1.0f);      // set modelMatrix to Identity Matrix
@@ -43,11 +43,11 @@ void Initialize() {
 
     program.SetProjectionMatrix(projectionMatrix);
     program.SetViewMatrix(viewMatrix);
-    program.SetColor(1.0f, 0.0f, 0.0f, 1.0f);       // color of triangle = red
+    program.SetColor(1.0f, 1.0f, 0.0f, 1.0f);       // color of triangle = red
 
     glUseProgram(program.programID);
 
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);           // background color, when clear the window use this color
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);           // background color, when clear the window use this color
 }
 
 void ProcessInput() {
