@@ -1,3 +1,14 @@
+/*
+//////// NOTES ////////
+-   AVOID odd resolutions for images, and things that aren't multiples of 2 or 16
+
+//////// CHANGES FOR THIS SAVE ////////
+-   no code change
+-   copied sample image and moved into same folder as this project
+
+*/
+
+
 #define GL_SILENCE_DEPRECATION
 
 #ifdef _WINDOWS
