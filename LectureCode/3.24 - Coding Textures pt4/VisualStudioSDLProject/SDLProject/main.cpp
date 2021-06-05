@@ -3,8 +3,13 @@
 -   AVOID odd resolutions for images, and things that aren't multiples of 2 or 16
 
 //////// CHANGES FOR THIS SAVE ////////
--   no code change
--   copied sample image and moved into same folder as this project
+-   update Render() function
+    -   use the 2 triangles and the texture coordinates
+    -   draw the textures onto the 2 triangles
+-   replaced old code with code from 3.18 notes
+-   uncommented out the translate, then rotate code in Update() function
+
+-   Results = image is tumbling to the right as it rotates
 
 */
 
@@ -35,6 +40,9 @@ glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 // new code
 float player_x = 0;     // keeps track of player's x-position
 float player_rotate = 0;
+
+// new code -- 3.24
+GLuint playerTextureID;
 
 // new code -- taken from 3.16 Notes
 GLuint LoadTexture(const char* filePath) {
@@ -79,11 +87,13 @@ void Initialize() {
 
     program.SetProjectionMatrix(projectionMatrix);
     program.SetViewMatrix(viewMatrix);
-    program.SetColor(1.0f, 1.0f, 0.0f, 1.0f);       // color of triangle = red
+    //program.SetColor(1.0f, 1.0f, 0.0f, 1.0f);       // color of triangle = red        // comment out b/c won't do anything
 
     glUseProgram(program.programID);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);           // background color, when clear the window use this color
+
+    playerTextureID = LoadTexture("ctg.png");   // loads texture
 }
 
 void ProcessInput() {
@@ -112,8 +122,8 @@ void Update() {
     modelMatrix = glm::mat4(1.0f);  // set modelMatrix to Identity Matrix, reset object to middle each time
 
     // triangle rotates as its moving to the right
-    //modelMatrix = glm::translate(modelMatrix, glm::vec3(player_x, 0.0f, 0.0f));     // move to the right
-    //modelMatrix = glm::rotate(modelMatrix, glm::radians(player_rotate), glm::vec3(0.0f, 0.0f, 1.0f));   // rotate on z-axis
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(player_x, 0.0f, 0.0f));     // move to the right
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(player_rotate), glm::vec3(0.0f, 0.0f, 1.0f));   // rotate on z-axis
 
     // triangle rotates in a spiral outwards
     //modelMatrix = glm::rotate(modelMatrix, glm::radians(player_rotate), glm::vec3(0.0f, 0.0f, 1.0f));   // rotate on z-axis
@@ -122,6 +132,7 @@ void Update() {
 
 }
 
+/*
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);   // uses glClearColor, clear background
 
@@ -135,6 +146,31 @@ void Render() {
     glDisableVertexAttribArray(program.positionAttribute);
 
     SDL_GL_SwapWindow(displayWindow);   // push drawing to display on screen
+}
+*/
+
+void Render() {
+    glClear(GL_COLOR_BUFFER_BIT);   // clear background
+    program.SetModelMatrix(modelMatrix);    // set Model Matrix
+
+    // verticies & texture coordinates for the 2 triangles
+    float verticies[] = { -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5 };
+    float texCoords[] = { 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 };
+
+    // tell to use this list of coordinates
+    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, verticies);
+    glEnableVertexAttribArray(program.positionAttribute);
+    glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+    glEnableVertexAttribArray(program.texCoordAttribute);
+
+    // tell to use this texture & draw them
+    glBindTexture(GL_TEXTURE_2D, playerTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glDisableVertexAttribArray(program.positionAttribute);
+    glDisableVertexAttribArray(program.texCoordAttribute);
+
+    SDL_GL_SwapWindow(displayWindow);   // always do last
 }
 
 void Shutdown() {
