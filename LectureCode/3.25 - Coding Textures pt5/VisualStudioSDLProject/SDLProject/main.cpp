@@ -3,14 +3,11 @@
 -   AVOID odd resolutions for images, and things that aren't multiples of 2 or 16
 
 //////// CHANGES FOR THIS SAVE ////////
--   update Render() function
-    -   use the 2 triangles and the texture coordinates
-    -   draw the textures onto the 2 triangles
--   replaced old code with code from 3.18 notes
--   uncommented out the translate, then rotate code in Update() function
+-   change glClearColor from black to dark gray -- test for transparency in background
+-   Problem = didn't turn on Blending
+-   enables blending
 
--   Results = image is tumbling to the right as it rotates
-
+-   Result = black background on image is transparent, doesn't show black box around image anymore
 */
 
 
@@ -91,7 +88,12 @@ void Initialize() {
 
     glUseProgram(program.programID);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);           // background color, when clear the window use this color
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);           // background color, when clear the window use this color
+
+    // new code -- 3.25
+    // enables blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // good setting for transparency
 
     playerTextureID = LoadTexture("ctg.png");   // loads texture
 }
