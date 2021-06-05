@@ -8,3 +8,5 @@ C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.9 - Coding del
 C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.9 - Coding deltaTime\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
 C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.21 - Coding Textures pt1\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
 C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.21 - Coding Textures pt1\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.22 - Coding Textures pt2\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.22 - Coding Textures pt2\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb

@@ -11,6 +11,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
+// new code
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 SDL_Window* displayWindow;
 bool gameIsRunning = true;
 
@@ -21,6 +25,27 @@ glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 float player_x = 0;     // keeps track of player's x-position
 float player_rotate = 0;
 
+// new code -- taken from 3.16 Notes
+GLuint LoadTexture(const char* filePath) {
+    int w, h, n;
+    unsigned char* image = stbi_load(filePath, &w, &h, &n, STBI_rgb_alpha);
+
+    if (image == NULL) {
+        std::cout << "Unable to load image. Make sure the path is correct\n";
+        assert(false);
+    }
+
+    GLuint textureID;
+    glGenTextures(1, &textureID);   // generate 1 texture ID 
+    glBindTexture(GL_TEXTURE_2D, textureID);    // ensure all commanda after uses this texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    stbi_image_free(image);
+    return textureID;
+}
 
 void Initialize() {
     SDL_Init(SDL_INIT_VIDEO);       // initialize SDL
