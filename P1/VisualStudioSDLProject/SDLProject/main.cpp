@@ -171,12 +171,11 @@ void Update() {
 
     if ((ball_x <= -2.3f) || (ball_x >= 2.5f)) {
         if (ball_x >= 2.5f) {   // ERROR: ball gets stuck at dog for about 5 seconds, continues to roll back to cat in wrong direction
-            ball_rotate += 360.0f * deltaTime;      // rotate opposite direction, counterclockwise
+            ballMatrix = glm::rotate(ballMatrix, glm::radians(ball_rotate), glm::vec3(0.0f, 0.0f, -1.0f));      // rotate opposite direction, counterclockwise
         }
         else {
-            ball_rotate += -360.0f * deltaTime;
+            ballMatrix = glm::rotate(ballMatrix, glm::radians(ball_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
         }
-        ballMatrix = glm::rotate(ballMatrix, glm::radians(ball_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
 
         ball_speed = ball_speed * -1;   // ball translates to the left
     }
