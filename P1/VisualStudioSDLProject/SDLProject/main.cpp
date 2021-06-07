@@ -25,10 +25,11 @@ SDL_Window* displayWindow;
 bool gameIsRunning = true;
 
 ShaderProgram program;
-glm::mat4 viewMatrix, cloudMatrix, sunMatrix, groundMatrix, projectionMatrix, ballMatrix, catMatrix, dogMatrix;
+glm::mat4 viewMatrix, cloudMatrix, cloud2Matrix, sunMatrix, groundMatrix, projectionMatrix, ballMatrix, catMatrix, dogMatrix;
 
 // new code
 float cloud_x = 0;
+float cloud2_x = 0;
 float sun_rotate = 0.0f;
 float ground = 0.0f;
 float ball_x = 0;
@@ -39,7 +40,7 @@ float cat = 0;
 float dog = 0;
 float lastTicks = 0.0f;
 
-GLuint cloudTextureID, sunTextureID, groundTextureID, ballTextureID, catTextureID, dogTextureID;
+GLuint cloudTextureID, cloud2TextureID, sunTextureID, groundTextureID, ballTextureID, catTextureID, dogTextureID;
 
 // don't need to change
 GLuint LoadTexture(const char* filePath) {
@@ -79,6 +80,7 @@ void Initialize() {
 
     viewMatrix = glm::mat4(1.0f);
     cloudMatrix = glm::mat4(1.0f);      // cloud image
+    cloud2Matrix = glm::mat4(1.0f);     // cloud2 image
     sunMatrix = glm::mat4(1.0f);        // sun image
     groundMatrix = glm::mat4(1.0f);     // ground image
     ballMatrix = glm::mat4(1.0f);       // ball image
@@ -100,6 +102,7 @@ void Initialize() {
     
     // load textures, get texture IDs
     cloudTextureID = LoadTexture("cloud.png");
+    cloud2TextureID = LoadTexture("cloud.png");
     sunTextureID = LoadTexture("sun.png");
     groundTextureID = LoadTexture("dirt_grass_flowers.png");
     ballTextureID = LoadTexture("ball.png");
@@ -122,33 +125,45 @@ void Update() {
     float deltaTime = ticks - lastTicks;
     lastTicks = ticks;
 
-    cloud_x += 1.0f * deltaTime;
+    cloud_x += 0.7f * deltaTime;
+    cloud2_x += 1.0f * deltaTime;
     sun_rotate += -90.0f * deltaTime;
     ball_x += ball_speed * deltaTime;
     ball_rotate += (-360.0f * deltaTime * ball_rotate_dir);     // ball direction
 
     // set matrixes to Identity matrix
     cloudMatrix = glm::mat4(1.0f);
+    cloud2Matrix = glm::mat4(1.0f);
     sunMatrix = glm::mat4(1.0f);
     groundMatrix = glm::mat4(1.0f);
     ballMatrix = glm::mat4(1.0f);
     catMatrix = glm::mat4(1.0f);
     dogMatrix = glm::mat4(1.0f);
 
-    ///// CLOUD /////
-    cloudMatrix = glm::scale(cloudMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
-    cloudMatrix = glm::translate(cloudMatrix, glm::vec3(0.0f, 1.7f, 0.0f));
-    cloudMatrix = glm::translate(cloudMatrix, glm::vec3(cloud_x, 0.0f, 0.0f));     // cloud moves
-
-    // clouds leave window on right side, re-enter window on left side
-    if ((cloud_x <= -5.0f) || (cloud_x >= 5.0f)) {
-        cloud_x = cloud_x * -1;
-    }
 
     ///// SUN /////
     sunMatrix = glm::scale(sunMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
     sunMatrix = glm::translate(sunMatrix, glm::vec3(-2.8f, 2.0f, 0.0f));
     sunMatrix = glm::rotate(sunMatrix, glm::radians(sun_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+
+
+    ///// CLOUDS /////
+    cloudMatrix = glm::scale(cloudMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
+    cloudMatrix = glm::translate(cloudMatrix, glm::vec3(0.0f, 1.7f, 0.0f));
+    cloudMatrix = glm::translate(cloudMatrix, glm::vec3(cloud_x, 0.0f, 0.0f));     // cloud moves
+
+    //cloud2Matrix = glm::scale(cloud2Matrix, glm::vec3(1.0f, 1.0f, 1.0f));
+    cloud2Matrix = glm::translate(cloud2Matrix, glm::vec3(0.0f, 2.0f, 0.0f));
+    cloud2Matrix = glm::translate(cloud2Matrix, glm::vec3(cloud2_x, 0.0f, 0.0f));     // cloud moves
+
+    // clouds leave window on right side, re-enter window on left side
+    if ((cloud_x <= -5.0f) || (cloud_x >= 5.0f)) {
+        cloud_x = cloud_x * -1;
+    }
+    if ((cloud2_x <= -6.0f) || (cloud2_x >= 6.0f)) {
+        cloud2_x = cloud2_x * -1;
+    }
+
 
     ///// GROUND /////
     groundMatrix = glm::scale(groundMatrix, glm::vec3(10.0f, 2.0f, 1.0f));
@@ -167,9 +182,11 @@ void Update() {
         ball_rotate_dir = ball_rotate_dir * -1;
     }
 
+
     ///// CAT /////
     catMatrix = glm::scale(catMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
     catMatrix = glm::translate(catMatrix, glm::vec3(-2.2f, -1.2f, 0.0f));
+
 
     ///// DOG /////
     dogMatrix = glm::scale(dogMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
@@ -186,6 +203,12 @@ void displaySun() {
 
 void displayCloud() {
     program.SetModelMatrix(cloudMatrix);
+    glBindTexture(GL_TEXTURE_2D, cloudTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void displayCloud2() {
+    program.SetModelMatrix(cloud2Matrix);
     glBindTexture(GL_TEXTURE_2D, cloudTextureID);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -230,6 +253,7 @@ void Render() {
 
     displaySun();
     displayCloud();
+    displayCloud2();
     displayGround();
     displayBall();
     displayCat();
