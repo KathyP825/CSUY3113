@@ -34,6 +34,7 @@ float ground = 0.0f;
 float ball_x = 0;
 float ball_speed = 2.0f;
 float ball_rotate = 0.0f;
+float ball_rotate_dir = 1;      // takes care of the direction change
 float cat = 0;
 float dog = 0;
 float lastTicks = 0.0f;
@@ -124,7 +125,7 @@ void Update() {
     cloud_x += 1.0f * deltaTime;
     sun_rotate += -90.0f * deltaTime;
     ball_x += ball_speed * deltaTime;
-    ball_rotate += -360.0f * deltaTime;     // ball rotates clockwise
+    ball_rotate += (-360.0f * deltaTime * ball_rotate_dir);     // ball direction
 
     // set matrixes to Identity matrix
     cloudMatrix = glm::mat4(1.0f);
@@ -134,52 +135,46 @@ void Update() {
     catMatrix = glm::mat4(1.0f);
     dogMatrix = glm::mat4(1.0f);
 
-    // transform the images
+    ///// CLOUD /////
     cloudMatrix = glm::scale(cloudMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
     cloudMatrix = glm::translate(cloudMatrix, glm::vec3(0.0f, 1.7f, 0.0f));
     cloudMatrix = glm::translate(cloudMatrix, glm::vec3(cloud_x, 0.0f, 0.0f));     // cloud moves
 
-    sunMatrix = glm::scale(sunMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
-    sunMatrix = glm::translate(sunMatrix, glm::vec3(-2.8f, 2.0f, 0.0f));
-    sunMatrix = glm::rotate(sunMatrix, glm::radians(sun_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
-
-    groundMatrix = glm::scale(groundMatrix, glm::vec3(10.0f, 2.0f, 1.0f));
-    groundMatrix = glm::translate(groundMatrix, glm::vec3(0.0f, -1.375f, 0.0f));
-
-    ballMatrix = glm::translate(ballMatrix, glm::vec3(0.0f, -2.1f, 0.0f));
-    ballMatrix = glm::translate(ballMatrix, glm::vec3(ball_x, 0.0f, 0.0f));     // ball moves
-    ballMatrix = glm::rotate(ballMatrix, glm::radians(ball_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
-
-    catMatrix = glm::scale(catMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
-    catMatrix = glm::translate(catMatrix, glm::vec3(-2.2f, -1.2f, 0.0f));
-
-    dogMatrix = glm::scale(dogMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
-    dogMatrix = glm::translate(dogMatrix, glm::vec3(2.2f, -1.2f, 0.0f));
-
-    // images leave window on right side, re-enter window on left side
+    // clouds leave window on right side, re-enter window on left side
     if ((cloud_x <= -5.0f) || (cloud_x >= 5.0f)) {
         cloud_x = cloud_x * -1;
     }
 
+    ///// SUN /////
+    sunMatrix = glm::scale(sunMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
+    sunMatrix = glm::translate(sunMatrix, glm::vec3(-2.8f, 2.0f, 0.0f));
+    sunMatrix = glm::rotate(sunMatrix, glm::radians(sun_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    ///// GROUND /////
+    groundMatrix = glm::scale(groundMatrix, glm::vec3(10.0f, 2.0f, 1.0f));
+    groundMatrix = glm::translate(groundMatrix, glm::vec3(0.0f, -1.375f, 0.0f));
+
+    ///// BALL /////
+    ballMatrix = glm::translate(ballMatrix, glm::vec3(0.0f, -2.1f, 0.0f));
+    ballMatrix = glm::translate(ballMatrix, glm::vec3(ball_x, 0.0f, 0.0f));     // ball moves
+    ballMatrix = glm::rotate(ballMatrix, glm::radians(ball_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+
     // ball stays in window between cat and dog
-    //if ((ball_x <= -2.3f) || (ball_x >= 2.5f)) {
-    //    if (ball_x >= 2.5f) {   // ERROR: ball gets stuck at dog for about 5 seconds, continues to roll back to cat in wrong direction
-    //        ball_rotate += 360.0f * deltaTime;      // rotate opposite direction, counterclockwise
-    //    }
-    //    ball_speed = ball_speed * -1;     // ball translates to the left
-    //}
-
+    // changes the current direction the ball is translating in 
+    // changes the current direction the ball is rotating in
     if ((ball_x <= -2.3f) || (ball_x >= 2.5f)) {
-        if (ball_x >= 2.5f) {   // ERROR: ball gets stuck, continues to roll in wrong direction
-            ballMatrix = glm::rotate(ballMatrix, glm::radians(ball_rotate), glm::vec3(0.0f, 0.0f, -1.0f));      // rotate opposite direction, counterclockwise
-        }
-        else {
-            ballMatrix = glm::rotate(ballMatrix, glm::radians(ball_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
-        }
-
-        ball_speed = ball_speed * -1;   // ball translates to the left
+        ball_speed = ball_speed * -1;
+        ball_rotate_dir = ball_rotate_dir * -1;
     }
-    
+
+    ///// CAT /////
+    catMatrix = glm::scale(catMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
+    catMatrix = glm::translate(catMatrix, glm::vec3(-2.2f, -1.2f, 0.0f));
+
+    ///// DOG /////
+    dogMatrix = glm::scale(dogMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
+    dogMatrix = glm::translate(dogMatrix, glm::vec3(2.2f, -1.2f, 0.0f));
+
 }
 
 
