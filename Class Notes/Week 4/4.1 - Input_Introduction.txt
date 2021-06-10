@@ -1,0 +1,14 @@
+Input Introduction
+------------------
+Youtube link:
+https://www.youtube.com/watch?v=SUhXDOQYlfw&list=PL_QmvmIfJvh3OTbe9-AVrW8B9TB7qMHkD&index=2&ab_channel=ProfessorCarmine
+------------------
+
+Input
+-   need to consider keyboard & mouse, different controllers, dance pads, VR devices
+-   SDL has a lot of APIs for handling different kinds of controllers
+
+Our Games
+-   simple / minimal input
+-   move, shoot, jump
+-   mostly do keyboard input

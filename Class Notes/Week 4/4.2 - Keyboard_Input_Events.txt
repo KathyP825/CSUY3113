@@ -1,0 +1,112 @@
+Keyboard Input Events
+---------------------
+Youtube link:
+https://www.youtube.com/watch?v=9XzdAsA6csw&list=PL_QmvmIfJvh3OTbe9-AVrW8B9TB7qMHkD&index=2&ab_channel=ProfessorCarmineProfessorCarmine
+---------------------
+
+-   keyboard input = most common thing that will be added to our games
+    -   use to move our character around and make them do stuff
+
+---------------------
+
+Original Game Loop Code:
+    
+Startup();
+while (gameIsRunning) {
+    ProcessInput();
+    Update();
+    Render();
+}
+Shutdown();
+
+---------------------
+
+Original ProcessInput(); Code:
+
+SDL_Event event;
+while (SDL_PollEvent(&event)) {     // looking for events
+    if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {    // looking for quit / window close events
+        gameIsRunning = False;
+    }
+}
+
+---------------------
+
+Some Updated ProcessInput();
+
+-   use a switch / case for event types
+    -   Code:
+            switch (event.type) {     // looking for events
+                case SDL_QUIT:
+                case SDL_WINDOWEVENT_CLOSE:
+                    gameIsRunning = false;
+                    break;
+            }
+
+
+-   key is pressed = SDL_KEYDOWN
+-   key released = SDL_KEYUP
+
+-   need to check if a key is pressed
+    -   Code:
+            // checks if there is a key pressed
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym) {
+                    // ........
+                }
+                break;
+
+
+-   need to check which key is being pressed
+    -   list of SDL keyboard scancode & corresponding keys: https://wiki.libsdl.org/SDL_Scancode
+    -   Code:
+            // checks which key is pressed
+            switch (event.key.keysym.sym) {
+                case SDLK_RIGHT:
+                    player_x += 1;
+                    break;
+
+                case SDLK_SPACE:
+                    PlayerJump();
+                    break;
+            }
+            
+---------------------
+
+ProcessInput(); After Edits Code:
+
+void ProcessInput() {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {     // while there are events to process
+        switch (event.type) {   // checks types of events 
+            case SDL_QUIT:
+            case SDL_WINDOWEVENT_CLOSE:
+                gameIsRunning = false;
+                break;
+
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym) {
+                    case SDLK_LEFT:
+                        // Move the player left
+                        break;
+                    
+                    case SDLK_RIGHT:
+                        // Move the player right
+                        break;
+                    
+                    case SDLK_SPACE:
+                        // Some sort of action
+                        break;
+                }
+                break; // SDL_KEYDOWN
+        }
+    }
+}
+
+---------------------
+
+SDL_KEYDOWN and SDL_KEYUP
+-   great for knowing when a key is pressed or released
+-   useful for actions such as jumping or shooting
+-   but need something else for when a key is held down (long press)
+

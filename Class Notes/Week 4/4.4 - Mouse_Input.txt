@@ -1,0 +1,41 @@
+Mouse Input
+-----------
+Youtube link:
+https://www.youtube.com/watch?v=-qB3mpXRZFE&list=PL_QmvmIfJvh3OTbe9-AVrW8B9TB7qMHkD&index=4&ab_channel=ProfessorCarmineProfessorCarmine
+-----------
+
+SDL_MOUSEMOTION
+-   happens when mouse is moved
+-   if mouse is stationary, won't get triggered
+-   Code:
+        case SDL_MOUSEMOTION:
+            //event.motion.x        // x-position in pixels
+            //event.motion.y        // y-position in pixels
+            break;
+
+-----------
+
+SDL_MOUSEBUTTONDOWN
+-   this is when someone clicks the mouse button
+-   gets the x & y of where the mouse was click inside the window
+-   gets which button was clicked (button 1, 2, or 3)
+
+-   Code:
+        case SDL_MOUSEBUTTONDOWN:
+            //event.button.x        // x-position in pixels
+            //event.button.y        // y-position in pixels
+            //event.button.button   // button that was clicked (1,2,3)
+            break;
+
+-----------
+
+Polling the Mouse
+-   see where mouse is currently at / current position
+-   is different from an event
+-   is outside of the while loop
+-   keyboard polling is also outside of the while loop
+-   the coordinates are in the window that was made (not real life coordinates)
+-   Code:
+        // put this outside of "while (SDL_PollEvent(&event))"
+        int x, y;
+        SDL_GetMouseState(&x, &y);
