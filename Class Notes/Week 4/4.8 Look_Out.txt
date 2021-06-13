@@ -1,0 +1,50 @@
+Look Out
+--------
+Youtube link:
+https://www.youtube.com/watch?v=NhrB5JQragc&list=PL_QmvmIfJvh3OTbe9-AVrW8B9TB7qMHkD&index=8&ab_channel=ProfessorCarmineProfessorCarmine
+--------
+
+-   Joysticks are in a circle
+-   WASD keys make a square
+-   Pythagorean Theorem:    A^2 + B^2 = C^2
+
+-   pressing D movement vector = [1, 0]
+    -   move to the right
+    -   What is the magnitude / length of that?
+        -   Answer: 1
+
+-   pressing D movement vector = [0, 1]
+    -   move up
+    -   What is the magnitude / length of that?
+        -   Answer: 1
+
+-   pressing W and D movement vector at the same time = [1, 1]
+    -   move up and right at the same time
+    -   What is the magnitude / length of that?
+        -   Answer: 1.414
+
+--------
+
+Unit Vector
+-   a vector with a magnitude of 1
+-   can use a Unit Circle to find the units
+    -   everything on the perimeter has a magnitude of 1
+-   if hold down W and D on keyboard, vector is [1,1]
+-   if joystick is put into the same corner, value is [0.707, 0.707]
+-   need to normalize the value so the unit can't be moved more than 1 based on what key is pressed
+
+-   normalize a vector to get the unit vector
+    -   divide a vector by its magnitude
+    -   there is a glm::normalize function
+        -   don't use if magnitude = 0
+
+--------
+
+How do we code that?
+
+// check if length of how much we're trying to move is greater than 1
+// if yes, normalize
+if (glm::length(player_movement) > 1.0f) {
+    player_movement = glm::normalize(player_movement);
+}
+

@@ -1,0 +1,74 @@
+Movement
+--------
+Youtube link:
+https://www.youtube.com/watch?v=mUuyHlE6A_o&list=PL_QmvmIfJvh3OTbe9-AVrW8B9TB7qMHkD&index=7&ab_channel=ProfessorCarmineProfessorCarmine
+--------
+
+Original Game Loop
+-   Code:
+        Startup();
+        while (gameIsRunning) {
+            ProcessInput();
+            Update();
+            Render();
+        }
+    Shutdown();
+
+-   ProcessInput();
+    -   stores the player's intent to move / jump / etc.
+
+-   Update();
+    -   test / apply movement
+    -   players, enemies, moving platforms, etc.
+
+-   Render();
+    -   draws the current state of the game
+
+--------
+
+How do we do this?
+-   Answer: Vectors
+-   can store the player's position as a vector & as an intended movement
+-   Code:
+        // start at 0,0,0
+        // player_position = player's postion in our world
+        glm::vec3 player_position = glm::vec3(0, 0, 0);
+
+        // don't go anywhere (yet)
+        // player_movement = where the player wants to move / how much they want to move in a direction
+        glm::vec3 player_movement = glm::vec3(0, 0, 0);
+
+--------
+
+Set where we want to go in ProcessInputc
+-   Code:
+        player_movement = glm::vec3(0, 0, 0);   // sets player_movement to 0
+        const Uint8 *keys = SDL_GetKeyboardState(NULL);     // if player isn't touching any keys, they're not trying to move right now
+
+        if(keys[SDL_SCANCODE_A]) {      // if hold down A key
+            player_movement.x = -1.0f;
+        }
+        else if (keys[SDL_SCANCODE_D]) {    // if hold down D key
+            player_movement.x = 1.0f;
+        }
+
+--------
+
+All movement needs to consider timing
+-   Code:
+        float lastTicks = 0.0f;
+        void Update() {
+            float ticks = (float)SDL_GetTicks() / 1000.0f;
+            float deltaTime = ticks - lastTicks;
+            lastTicks = ticks;
+
+            // add (direction * units per second *elapsed time)
+            // add how much player wants to move / direction
+            player_position += player_movement * player_speed * deltaTime;
+
+            modelMatrix = glm::mat4(1.0f);      // set to Identity Matrix
+            modelMatrix = glm::translate(modelMatrix, player_position);
+        }
+
+
+

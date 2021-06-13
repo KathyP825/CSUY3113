@@ -1,0 +1,70 @@
+Box to Box Calculation
+----------------------
+Youtube link:
+https://www.youtube.com/watch?v=vd-ggR7zSAI&list=PL_QmvmIfJvh3OTbe9-AVrW8B9TB7qMHkD&index=16&ab_channel=ProfessorCarmineProfessorCarmine
+----------------------
+
+-   the boxes live on our world
+-   have 2 boxes
+    -   are located on the world somewhere (think on a grid)
+    -   have a center to each of them
+
+    -   ex1.
+            Box 1:                       Box 2:
+                Width1 = 5                  Width2 = 3
+                Height = 3                  Width2 = 5
+                P1 = -3, -3                 P2 = 3, 2
+            
+            -   not colliding
+
+            X diff = 6
+            -   get using fabs(x2 - x1)
+            -   looking for how far away are the x-coordinates of their centers
+
+            Y diff = 5
+            -   get using fabs(y2 - y1)
+            -   looking for how far away are the y-coordinates of their centers
+
+            X distance = Xdiff - (Width1 + Width2) / 2
+            Y distance = Ydiff - (Height1 + Height2) / 2
+
+            X distance = 2
+            Y distance = 1
+            -   both X distance and Y distance needs to be less than 0 to be colliding
+
+    -   ex2.
+            Box 1:                       Box 2:
+                Width1 = 5                  Width2 = 3
+                Height = 3                  Width2 = 5
+                P1 = 0, -1                 P2 = 3, 2
+            
+            -   not colliding
+
+            X diff = 3              fabs(x2 - x1)
+            Y diff = 3              fabs(y2 - y1)
+
+            X distance = Xdiff - (Width1 + Width2) / 2
+            Y distance = Ydiff - (Height1 + Height2) / 2
+
+            X distance = -1
+            Y distance = -1
+            -   both X distance and Y distance are less than 0
+            -   are colliding
+
+----------------------
+
+In our games:
+-   most of the time, Width & Height = 1
+-   make sure to not forget to set the Width & Height of each object so they collide properly
+
+----------------------
+
+How to Code:
+
+float xdist = fabs(x2 - x1) - ((w1 + w2) / 2.0f);
+float ydist = fabs(y2 - y1) - ((h1 + h2) / 2.0f);
+
+if(xdist < 0 && ydist < 0) {
+    // COLLIDING
+}
+

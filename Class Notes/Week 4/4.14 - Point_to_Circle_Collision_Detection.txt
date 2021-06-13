@@ -1,0 +1,12 @@
+Point to Circle Collision Detection
+-----------------------------------
+Youtube link:
+https://www.youtube.com/watch?v=5Q9qgTBdhKY&list=PL_QmvmIfJvh3OTbe9-AVrW8B9TB7qMHkD&index=14&ab_channel=ProfessorCarmineProfessorCarmine
+-----------------------------------
+
+-   want to check if a point is inside of a circle
+-   click on a UI (ex. menu icon, speaker), move the player, select the target
+-   check if the point is inside the circle
+
+-   if the distance between the point and the circle center is less than the radius, they are colliding
+

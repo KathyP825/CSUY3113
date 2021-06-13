@@ -1,0 +1,53 @@
+Mouse Coordinates
+-----------------
+Youtube link:
+https://www.youtube.com/watch?v=2KjpGTfUjlI&list=PL_QmvmIfJvh3OTbe9-AVrW8B9TB7qMHkD&index=5&ab_channel=ProfessorCarmineProfessorCarmine
+-----------------
+
+Mouse Coordinates
+-   are in pixels (not in world coordinates)
+-   ex.     window = 640 pixels x 480 pixels
+            top left = (0,0)
+            bottom right = (639, 479)
+
+                        640 pixels
+    x = 0   ____________________________________
+    y = 0   |                                  |
+            |                                  |
+            |                                  |
+            |                                  |    480 pixels
+            |                                  |
+            |                                  |
+            |                                  |
+            |                                  |
+            |                                  |
+            |                                  |
+            |__________________________________|    x = 639
+                                                    y = 479
+
+-   need to convert from pixel coordinates to OpenGL units
+    glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f)
+
+                        window           
+     (0,0)  ____________________________________                           (-5, 3.75)  ____________________________________
+            |                                  |                                       |                                  |
+            |                                  |        need to translate where        |                                  |
+            |                                  |        the mouse clicked inside       |                                  |
+            |                                  |        the window to where its        |                                  |
+            |                                  |        clicking on in our world       |                                  |
+            |                                  |        ---------------------->        |                                  |
+            |                                  |                                       |                                  |
+            |                                  |                                       |                                  |
+            |                                  |                                       |                                  |
+            |                                  |                                       |                                  |
+            |__________________________________|  (639, 479)                           |__________________________________|  (5.0, -3.75)
+                                                    
+
+-   Code:
+        // converts mouse x,y window coordinates to world unit x,y
+        // assumes we are looking at 0,0 in our world
+        // width = width of window
+        // ortho_width = width of the world we can see inside the window
+        unity_x = ((x / width) * ortho_width) - (ortho_width / 2.0);
+        unity_y = (((height - y) / height) * ortho_height) - (ortho_width / 2.0);
+

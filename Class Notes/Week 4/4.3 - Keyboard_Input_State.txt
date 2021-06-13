@@ -22,7 +22,7 @@ SDL_GetKeyboardState
             PlayerLeft();
         }
 
-        if SDL_SCANCODE_RIGHT]() {
+        if (keys[SDL_SCANCODE_RIGHT]() {
             PlayerRight();
         }
         // notice it's SDLSCANCODE_ and not SDLK_
