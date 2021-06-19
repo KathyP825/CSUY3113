@@ -48,7 +48,7 @@ if (animTime >= 0.25f) {        // when reach 1/4 of a second
 }
 
 // Inside of Render
-DrawSpriteFromTextureAtlas(program, playerTextureID, animIndices[animIndex]);
+DrawSpriteFromTextureAtlas(&program, playerTextureID, animIndices[animIndex]);
                                                             ^
                                                             |
                                                     index of sprite 
