@@ -1,0 +1,54 @@
+Texture Review
+--------------
+Youtube link:
+https://www.youtube.com/watch?v=x_JIO373l4A&list=PL_QmvmIfJvh2qHpanXvton8N3VZEujJQ8&index=1&ab_channel=ProfessorCarmineProfessorCarmine
+--------------
+
+Topics:
+-   Texture
+-   Texture Atlas
+-   Sprite Sheets
+-   Fonts
+
+--------------
+
+Texture (Review)
+-   Texture Coordinates
+    -   world coordinates               vs              texture coordinates
+        -   can be 512x512 pixels                       -   goes from (0,0) to (1,1)
+        -   (0,0) is at center of image                 -   top left = (0,0) & bottom right =(1,1)
+        -   uses X, Y, Z coordinates                    -   uses U, V coordinates
+
+
+-   2D Sprites Made of 2 Triangles
+    -   need to match world coordinate verticies to UV coordinates
+    -   mapping texture coordinates to the triangles that make up the object
+
+        (-0.5, 0.5) ----------------- (0.5, 0.5)                  (0.0, 0.0) ----------------- (1.0, 0.0)
+                    |  Triangle   / |                                        |               |
+                    |  1       /    |                                        |               |
+                    |       /       |                 ----->                 |               |
+                    |    / Triangle |                                        |               |
+                    | /    2        |                                        |               |
+       (-0.5, -0.5) ----------------- (0.5, -0.5)                 (0.0, 1.0) ----------------- (1.0, 1.0)
+
+                     center = (0, 0)
+
+        Code:
+            float verticies[] = {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5     ,     -0.5, -0.5, 0.5, -0.5, 0.5, 0.5}
+                                        Triangle 1                                  Triangle 2
+                                   X     Y    X     Y    X    Y              X     Y    X     Y    X    Y
+
+                                                                |
+                                                                |   corresponding UV coordinates
+                                                                |
+                                                                V
+            float texCoords[] = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0     ,     0.0, 1.0, 1.0, 0.0, 0.0, 0.0}
+
+
+-   Portion of Texture
+    -   can use a portion of a texture
+        -   isolate a window from the texture & apply that somewhere on the object
+        -   spaceship window example
+        -   3D robot example
+    -   map bits and pieces of the texture onto the triangles that make up the object

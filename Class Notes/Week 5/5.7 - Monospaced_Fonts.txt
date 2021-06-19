@@ -1,0 +1,28 @@
+Monospaced Fonts Rendering
+--------------------------
+Youtube link:
+https://www.youtube.com/watch?v=dg3lGhsyXLY&list=PL_QmvmIfJvh2qHpanXvton8N3VZEujJQ8&index=7&ab_channel=ProfessorCarmineProfessorCarmine
+--------------------------
+
+Monospaced Fonts
+-   fonts where all characters are the same width & same height
+-   ex. Courier = monospaced 
+        Arial = not monospaced
+
+--------------------------
+
+How to Draw a Font:
+-   go through each character in the string
+-   draw 2 triangles
+    -   each letter is actually 2 triangles 
+-   how to get U,V coordinates of the character:
+    -   need the index
+        -   can use the character's ASCII value
+    -   ex. letter 'a' ASCII = 65
+
+--------------------------
+
+Need to look out for:
+-   all fonts on prof Github follow the same format (letter 'a' ASCII = 65)
+-   other fonts online might have a different order
+    -   need to shift the order of the values of where certain characters are

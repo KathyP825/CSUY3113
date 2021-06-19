@@ -1,0 +1,96 @@
+Texture Wrap Mode
+-----------------
+Youtube link:
+https://www.youtube.com/watch?v=8WCJDgZibkk&list=PL_QmvmIfJvh2qHpanXvton8N3VZEujJQ8&index=2&ab_channel=ProfessorCarmineProfessorCarmine
+-----------------
+
+-   can be used when loading the textures
+-   Normally:
+    -   texture coordinates are from top left (0,0) to bottom right (1,1)
+    -   if map them to the 2 triangles, will have rectangular wall setup
+        (brink wall example)
+-   If have more than (1,1) as texture coordinates:
+    -   ex. have (2,2)
+        -   usual texture will be only a fraction of the new 
+    -   need to use Texture Wrap
+
+-----------------
+
+Texture Wrap Mode
+-   repeat
+    -   GL_REPEAT
+-   mirrored repeat
+    -   GL_MIRRORED_REPEAT
+-   clamp to edge
+    -   GL_CLAMP_TO_EDGE
+-   clamp to border
+    -   GL_CLAMP_TO_BORDER
+
+-----------------
+
+https://open.gl/textures
+
+GL_REPEAT
+-   repeats the texture
+-   useful for if you want to tile something (ex. brick wall)
+
+GL_MIRRORED_REPEAT
+-   when the texture gets to the end, will flip it and flip again
+-   give a mirrored repeating effect
+
+GL_CLAMP_TO_EDGE
+-   takes the last pixel / color and continues using that last color 
+-   gives a cross effect with the color
+
+GL_CLAMP_TO_BORDER
+-   will stop and just draw emptiness
+-   black frame around the image
+
+-----------------
+
+How to Code
+-   add 2 lines of code in LoadTexture()
+-   Code example: 
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+-   In LoadTexture(): 
+        GLuint LoadTexture(const char* filePath) {
+            int w, h, n;
+            unsigned char* image = stbi_load(filePath, &w, &h, &n, STBI_rgb_alpha);
+
+            if (image == NULL) {
+                std::cout << "Unable to load image. Make sure the path is correct\n";
+                assert(false);
+            }
+
+            GLuint textureID;
+            glGenTextures(1, &textureID);
+            glBindTexture(GL_TEXTURE_2D, textureID);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+ ------>    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+ ------>    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+            stbi_image_free(image);
+            return textureID;
+        }
+
+-   sets a parameter
+    -   is basically what to do whe you wrap along the X and Y 
+-   typically use GL_REPEAT because you would want to tile a texture
+    -   can add a parameter to LoadTexture() function
+        -   boolean for repeat
+            -   if repeat, then use this function
+-   basically tells OpenGL what to do if you use texture coordinates that are beyond 1.0
+
+-   if draw a wall in game
+    -   would be very time consuming to make an array / have a lot of data being passed just to draw the wall
+    -   could just draw 2 very large triangles
+        -   set texture coordinates to a number larger than 1.0
+        -   repeat the texture across those two triangles
+
+-   if find youself repeating a lot of stuff in a row, can optimize by using 2 triangles and spanning the texture or repeating the texture across 2 triangles

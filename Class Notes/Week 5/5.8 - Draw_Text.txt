@@ -1,0 +1,101 @@
+Draw Text
+---------
+Youtube link:
+https://www.youtube.com/watch?v=f2baTSWeVcE&list=PL_QmvmIfJvh2qHpanXvton8N3VZEujJQ8&index=8&ab_channel=ProfessorCarmineProfessorCarmine
+---------
+
+-   creating a strip of triangles in order to draw a list of characters
+-   size in DrawText() parameter can be 1.0f if same size as other objects
+    -   use 0.5f if want it to be 1/2 as tall as other objects
+
+---------
+
+Code for drawing text:
+
+// looping through each character in the string
+// create 2 triangles for each character
+// gets the coordinates that goes with the 2 triangles
+// size is not font size  -->  size = size of letter relative to the player
+// spacing = amount of space between characters
+// position = where in the game world should the strip of triangles be drawn
+
+void DrawText(ShaderProgram *program, GLuint fontTextureID, std::string text,
+    float size, float spacing, glm::vec3 position) 
+{
+    // calculate U,V coordinates
+    // 16 rows and columns
+    float width = 1.0f / 16.0f;
+    float height = 1.0f / 16.0f;
+
+    // vector = an array you can add to on the fly instead of a fixed length array
+    std::vector<float> vertices;
+    std::vector<float> texCoords;
+
+    // for each character
+    // get index
+    // get U,V coordinates 
+    for(int i = 0; i < text.size(); i++) {
+        int index = (int)text[i];
+        float offset = (size + spacing) * i;
+
+        float u = (float)(index % 16) / 16.0f;
+        float v = (float)(index / 16) / 16.0f;
+
+        //-----  Set up the vertices and texCoords  -----
+        vertices.insert(vertices.end(), {
+            offset + (-0.5f * size), 0.5f * size,
+            offset + (-0.5f * size), -0.5f * size,
+            offset + (0.5f * size), 0.5f * size,
+            offset + (0.5f * size), -0.5f * size,
+            offset + (0.5f * size), 0.5f * size,
+            offset + (-0.5f * size), -0.5f * size,
+        });
+
+        texCoords.insert(texCoords.end(), {
+            u, v,
+            u, v + height,
+            u + width, v,
+            u + width, v + height,
+            u + width, v,
+            u, v + height,
+        });
+
+    } // end of for loop
+
+    // draw using familiar code after vertices and texCoords are set up
+    // the string is a model like everything else
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::translate(modelMatrix, position);
+    program->SetModelMatrix(modelMatrix);
+
+    glUseProgram(program->programID);
+
+    // vertices.data() makes the vector into a normal array so it can be used
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices.data());
+    glEnableVertexAttribArray(program->positionAttribute);
+
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords.data());
+    glEnableVertexAttribArray(program->texCoordAttribute);
+
+    glBindTexture(GL_TEXTURE_2D, fontTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, (int)(text.size() * 6));  // (int)(text.size() * 6) == num of verticies we're trying to render
+
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
+
+
+}
+
+---------
+
+Example Usage:
+
+DrawText(&program, fontTextureID, "Lives: " + std::to_string(lives), 0.5f, -0.25f, glm::vec3(-4.75f, 3.3, 0));
+                                                               ^                                    ^
+                                                               |                                    |
+                                                int variable called lives           in the world, center is (0,0)
+                                                                                    this font is in top left corner
+
+
+---------
+

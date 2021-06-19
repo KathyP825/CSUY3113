@@ -1,0 +1,97 @@
+Drawing a Single Sprite (from a Texture Atlas)
+----------------------------------------------
+Youtube link:
+https://www.youtube.com/watch?v=0BKBSwGT5Ag&list=PL_QmvmIfJvh2qHpanXvton8N3VZEujJQ8&index=5&ab_channel=ProfessorCarmineProfessorCarmine
+----------------------------------------------
+
+-   indexes of sprites on a Texture Atlas is numbered from left to right
+    -   ex. george_0.png
+            16 sprites on texture atlas: 4x4
+
+                0   1   2   3
+                4   5   6   7
+                8   9   10  11
+                12  13  14  15
+
+-   want to draw a sprite from one of these textures on the Texture Atlas
+    -   need to get the U,V coordinates of the individual sprites
+
+     (0, 0) _____________________________  (1, 0)
+            |  0   |  1   |  2   |  3   |
+  (0, 0.25) |______|______|______|______|  (1, 0.25)
+            |  4   |  5   |  6   |  7   |
+   (0, 0.5) |______|______|______|______|  (1, 0.5)
+            |  8   |  9   |  10  |  11  |
+  (0, 0.75) |______|______|______|______|  (1, 0.75)
+            |  12  |  13  |  14  |  15  |
+     (0, 1) |______|______|______|______|  (1, 1)
+
+
+-   if want texture #7
+    -   need to use code to find the top left corner (aka the U,V corner)
+
+----------------------------------------------
+
+How to Code:
+
+// index = index of the texture you are looking for     // in the example, index = 7
+// 4 rows, 4 columns
+
+// calculates the U,V coordinates for the upper left corner
+float u = (float)(index % columns) / (float)columns;
+float v = (float)(index / columns) / (float)rows;
+
+// calculates the width & height of the texture
+// helps get coordinates for bottom right corner
+float width = 1.0f / (float)columns;
+float width = 1.0f / (float)rows;
+
+// texture coordinates and verticies you are mapping to
+float texCoords[] = { u, v + height, u + height, v + height, u + width, v,
+                     u, v + height, u + width, v, u, v}
+
+float verticies[] = { -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5}
+
+----------------------------------------------
+
+Full Code for Drawing a Sprite from a Texture Atlas:
+
+void DrawSpriteFromTextureAtlas(ShaderProgram *program, GLuint textureID, int index) {
+    // get U,V coordinates
+    float u = (float)(index % cols) / (float)cols;
+    float v = (float)(index / cols) / (float)rows;
+
+    // get width & height of the texture
+    float width = 1.0f / (float)cols;
+    float height = 1.0f / (float)rows;
+
+    // texture coordinates and verticies you are mapping to
+    float texCoords[] = { u, v + height, u + width, v + height, u + width, v, u, v + height, u + width, v, u, v};
+    float vertices[] = { -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5 };
+    
+    // everything below this is the same as before
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices);
+    glEnableVertexAttribArray(program->positionAttribute);
+    
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+    glEnableVertexAttribArray(program->texCoordAttribute);
+    
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
+}
+
+
+void Render() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    program.SetModelMatrix(modelMatrix);
+    DrawSpriteFromTextureAtlas(program, playerTextureID, 7);    // calls DrawSpriteFromTextureAtlas()
+
+    SDL_GL_SwapWindow(displayWindow);
+}
+
+
