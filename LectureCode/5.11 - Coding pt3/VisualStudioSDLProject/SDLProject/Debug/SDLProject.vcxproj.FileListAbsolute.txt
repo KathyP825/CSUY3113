@@ -1,0 +1,30 @@
+C:\Users\kathy\Documents\NYU\IntroGameProg\Project Template\VisualStudioSDLProject\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\Project Template\VisualStudioSDLProject\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\1.16 - Coding Triangle\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\1.16 - Coding Triangle\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.8 - Coding player_x\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.8 - Coding player_x\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.9 - Coding deltaTime\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.9 - Coding deltaTime\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.21 - Coding Textures pt1\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.21 - Coding Textures pt1\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.22 - Coding Textures pt2\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.22 - Coding Textures pt2\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.23 - Coding Textures pt3\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.23 - Coding Textures pt3\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.24 - Coding Textures pt4\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.24 - Coding Textures pt4\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.25 - Coding Textures pt5\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.25 - Coding Textures pt5\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\4.9 - Coding Input and Movement pt1\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\4.9 - Coding Input and Movement pt1\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\4.10 - Coding Input and Movement pt2\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\4.10 - Coding Input and Movement pt2\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\4.11 - Coding Input and Movement pt3\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\4.11 - Coding Input and Movement pt3\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.9 - Coding pt1\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.9 - Coding pt1\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.10 - Coding pt2\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.10 - Coding pt2\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.11 - Coding pt3\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.11 - Coding pt3\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
