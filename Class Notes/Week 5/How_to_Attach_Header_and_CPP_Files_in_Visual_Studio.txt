@@ -1,0 +1,10 @@
+
+
+-   do not do File -> New Item
+    -   will create them as external items
+
+-   open Solution Explorer
+    -   in Source Code drop down, create new item to create .cpp
+    -   in Headers, create new item to create .h
+
+
