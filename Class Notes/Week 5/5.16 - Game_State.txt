@@ -1,0 +1,29 @@
+Game State (state bag)
+----------------------
+Youtube link:
+https://www.youtube.com/watch?v=y5In8dmvq0o&list=PL_QmvmIfJvh2qHpanXvton8N3VZEujJQ8&index=16&ab_channel=ProfessorCarmineProfessorCarmine
+----------------------
+
+-   is everything that is going on right now in your game
+    -   current list on entities
+    -   score
+    -   lives left
+    -   time left
+
+----------------------
+
+Game State Code:
+
+// have a struct
+// can pass a pointer to this struct to some of your other methods
+struct GameState {
+    Entity player;
+    Entity enemies[10];
+    Entity items[5];
+    int score;
+};
+
+GameState state;
+
+
+

@@ -1,0 +1,47 @@
+Objects Pool (optimizing for tons of objects)
+---------------------------------------------
+Youtube link:
+https://www.youtube.com/watch?v=cFuFfNbxJEQ&list=PL_QmvmIfJvh2qHpanXvton8N3VZEujJQ8&index=15&ab_channel=ProfessorCarmineProfessorCarmine
+---------------------------------------------
+
+-   if have many objects, don't want to allocate and deallocate memory each time
+    -   because is a lot of work, is very slow, or will cause problems
+
+
+Objects Pool
+-   maximum number of objects
+    -   how many objects the screen will need to display at one time
+    -   ex. 100 bullets, never more than that
+-   create/Allocate objects ahead of time
+    -   don't need to call new / ask for memory while the frames are running
+-   use a bool for active or not
+    -   tracks what is being used
+    -   when being used, the ones in use are turned on and the ones not used are kept off
+-   you can test with max amount of objects
+    -   when testing, can check if game can handle worse case scenario
+-   less prone to memory leaks
+    -   won't forget in the middle of doing too many tasks
+
+---------------------------------------------
+
+Objects Pool Code:
+(pseudocode)
+
+#define MAX_BULLETS 100;    // defines the max objects, 100 objects here
+
+int nextBullet = 0;
+Entity bullets[MAX_BULLETS];
+
+void initialize() {
+    for (int i = 0; i < MAX_BULLETS; i++) {
+        bullets[i].active = false;
+    }
+}
+
+void fire() {
+    bullet[nextBullet].position = // somewhere
+    bullet[nextBullet].active = true;
+    nextBullet++;
+    if (nextBullet == MAX_BULLETS) nextBullet = 0;
+}
+

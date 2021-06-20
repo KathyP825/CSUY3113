@@ -1,0 +1,80 @@
+Game Objects Entities
+---------------------
+Youtube link:
+https://www.youtube.com/watch?v=sGKi9rRnIVA&list=PL_QmvmIfJvh2qHpanXvton8N3VZEujJQ8&index=14&ab_channel=ProfessorCarmineProfessorCarmine
+---------------------
+
+Games Objects (Entities)
+-   anything in your game that you would interact with / move around
+-   ex. space ship
+        asteroid
+        player's character
+        collectible item / key
+        shots being fired by enemies
+-   would need a set of code for each entity (a lot of code)
+
+---------------------
+
+Code for Entity.h :
+
+class Entity {
+public:
+    glm::vec3 position;
+    glm::vec3 movement;
+    float speed;
+    
+    GLuint textureID;   // don't need to load the same texture multiple times
+
+    glm::mat4 modelMatrix;
+
+    Entity();
+
+    void Update(float deltaTime);
+    void Render(ShaderProgram *program);
+};
+
+---------------------
+
+Code for Entity.cpp :
+
+#include "Entity.h"
+
+// does the initilizing
+Entity::Entity() {
+    position = glm::vec3(0);
+    speed = 0;
+
+    modelMatrix = glm::mat4(1.0f);
+}
+
+// basic Update() because it might be the same for all entities
+void Entity::Update(float deltaTime) {
+    position += movement * speed * deltaTime;
+
+    modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::translate(modelMatrix, position);
+}
+
+void Entity::Render(ShaderProgram *program) {
+    program->SetModelMatrix(modelMatrix);
+
+    float vertices[] = { -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5 };
+    float texCoords[] = { 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 };
+    
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices);
+    glEnableVertexAttribArray(program->positionAttribute);
+    
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+    glEnableVertexAttribArray(program->texCoordAttribute);
+    
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
+}
+
+
+
+

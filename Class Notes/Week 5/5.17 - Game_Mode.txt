@@ -1,0 +1,138 @@
+Game Mode
+---------
+Youtube link:
+https://www.youtube.com/watch?v=XA8ap0ll1_g&list=PL_QmvmIfJvh2qHpanXvton8N3VZEujJQ8&index=17&ab_channel=ProfessorCarmineProfessorCarmine
+---------
+
+-   game can be in various different modes
+    -   ex. main menu
+            game selection screen
+            acutally playing the game
+
+-   in each mode:
+    -   gameplay can be handled differently
+    -   input is handled in different ways
+    -   entities and objects in the game are behaving differently or are missing
+    -   UI looks different
+
+-   need to write code to handle being in various modes
+
+---------
+
+Arcade Games
+-   typically feature an “attract” mode (“demo” mode)
+-   game plays itself, shows high scores, cut scenes, etc.
+-   modern console / PC games do not have attract/demo modes
+
+---------
+
+Angry Birds game modes example
+-   main menu
+-   chapter select
+-   level select, part of chapter select
+-   cut scene
+-   game level, acutally playing the game
+-   win scene
+
+---------
+
+Game Mode Code:
+
+enum GameMode { MAIN_MENU, GAME_LEVEL, GAME_OVER };
+GameMode mode = MAIN_MENU;      // initilize to main menu
+
+
+// might have seperate methods based on what mode you're currently in
+// ex. main menu  -->  wait for spacebar to be pressed to start
+void ProcessInput() {
+    switch (mode) {
+        case MAIN_MENU:
+            ProcessInputMainMenu();
+            break;
+        
+        case GAME_LEVEL:
+            ProcessInputGameLevel();
+            break;
+        
+        case GAME_OVER:
+            ProcessInputGameOver();
+            break;
+    }
+}
+
+
+void Update() {
+    float ticks = (float)SDL_GetTicks() / 1000.0f;
+    float deltaTime = ticks - lastTicks;
+    lastTicks = ticks;
+
+    switch (mode) {
+        case MAIN_MENU:
+            UpdateMainMenu(deltaTime);
+            break;
+        
+        case GAME_LEVEL:
+            UpdateGameLevel(deltaTime);
+            break;
+
+        case GAME_OVER:
+            UpdateGameOver(deltaTime);
+            break;
+    }
+}
+
+
+void Render() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    switch (mode) {
+        case MAIN_MENU:
+            RenderMainMenu();
+            break;
+        
+        case GAME_LEVEL:
+            RenderGameLevel();
+            break;
+
+        case GAME_OVER:
+            RenderGameOver();
+            break;
+    }
+
+    SDL_GL_SwapWindow(displayWindow);
+}
+
+---------
+
+Make a Class for each mode:
+
+
+class GameLevel {
+    GameState state;
+    public void Render() {
+        state.player.Render();
+        for (int i = 0; i < enemies.length; i++) {
+            state.enemies[i].Render();
+        }
+    }
+    // Other stuff
+}
+
+
+MainMenu mainMenu;      
+GameLevel gameLevel;
+GameOver gameOver;
+
+void Render() {
+    switch (mode) {
+        case GAME_LEVEL:
+            gameLevel.Render();
+        break;
+        // .. other modes
+    }
+}
+
+---------
+
+-   can have a class for each game mode
+-   main.cpp can be very bare bones
