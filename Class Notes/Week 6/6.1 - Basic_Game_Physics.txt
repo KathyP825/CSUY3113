@@ -1,0 +1,40 @@
+Basic Game Physics
+------------------
+Youtube link:
+https://www.youtube.com/watch?v=NjDpo2t0F8A&list=PL_QmvmIfJvh1puziUV_XSo9Jg4j3E9vOX&index=2&ab_channel=ProfessorCarmine
+------------------
+
+What basic physics will be added to our games:
+-   gravity
+-   jumping
+-   movement (in general)
+
+Topics:
+-   fixed timestep
+-   velocity
+-   acceleration (mostly used for gravity)
+
+------------------
+
+Current Timestep Code:
+-   is as fast as our computer can go
+-   is variable (time changes everytime)
+-   looking for time between frames and moving based on that difference in time
+
+void Update() {
+    float ticks = (float)SDL_GetTicks() / 1000.0f;
+    float deltaTime = ticks - lastTicks;
+    lastTicks = ticks;
+
+    // Add (direction * units per second * elapsed time)
+    player_position += player_movement * player_speed * deltaTime;
+}
+
+------------------
+
+Variable Timestep
+-   object is technically teleported (doesn't move every single bit across)
+-   collision might not happen properly if a frame happens faster and then slower because the ball might skip the wall
+    -   ball might go behind paddle in 1 big jump
+-   can't be used with physics
+
