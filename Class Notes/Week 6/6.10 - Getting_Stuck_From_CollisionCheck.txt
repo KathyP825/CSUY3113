@@ -1,0 +1,56 @@
+We Got Stuck
+------------
+Youtube link:
+https://www.youtube.com/watch?v=HOocsDSWWq4&list=PL_QmvmIfJvh1puziUV_XSo9Jg4j3E9vOX&index=10
+------------
+
+Problem
+-   currently getting stuck inside of platform and can't move left/right
+
+Solution
+-   check for overlap
+-   fix the little bit that gets inside of platform before Rendering
+
+------------
+
+Check for Overlap Code:
+
+// find how much was penetrated in the Y-direction
+float ydist = fabs(position.y - other->position.y);
+float penetrationY = fabs(ydist - height / 2 - other->height / 2);
+
+------------
+
+Updated Code for Update() :
+
+void Entity::Update(float deltaTime, Entity *platforms, int platformCount) {
+    velocity += acceleration * deltaTime;
+    position += velocity * deltaTime;
+
+    for (int i = 0; i < platformCount; i++) {
+        Entity *platform = &platforms[i];
+
+        // if collide with something
+        if (CheckCollision(platform)) {
+            float ydist = fabs(position.y - platform->position.y);      // get distance from centers
+            float penetrationY = fabs(ydist - (height / 2.0f) - (platform->height / 2.0f));     // how too far we went
+        
+            if (velocity.y > 0) {   // if going up and hit a platform, move self down
+                position.y -= penetrationY;
+                velocity.y = 0;
+            } else if (velocity.y < 0) {
+                position.y += penetrationY;     // if falling down and hit a platform, move self up
+                velocity.y = 0;
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
