@@ -1,8 +1,0 @@
-C:\Users\kathy\Documents\NYU\IntroGameProg\Project Template\VisualStudioSDLProject\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
-C:\Users\kathy\Documents\NYU\IntroGameProg\Project Template\VisualStudioSDLProject\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\1.16 - Coding Triangle\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\1.16 - Coding Triangle\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.8 - Coding player_x\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.8 - Coding player_x\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.9 - Coding deltaTime\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\3.9 - Coding deltaTime\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb

@@ -1,7 +1,0 @@
-﻿  main.cpp
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.19 - Coding pt2\VisualStudioSDLProject\SDLProject\main.cpp(262,21): error C2065: 'player_movement': undeclared identifier
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.19 - Coding pt2\VisualStudioSDLProject\SDLProject\main.cpp(282,5): error C2065: 'player_position': undeclared identifier
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.19 - Coding pt2\VisualStudioSDLProject\SDLProject\main.cpp(282,24): error C2065: 'player_movement': undeclared identifier
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.19 - Coding pt2\VisualStudioSDLProject\SDLProject\main.cpp(282,42): error C2065: 'player_speed': undeclared identifier
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.19 - Coding pt2\VisualStudioSDLProject\SDLProject\main.cpp(285,47): error C2065: 'player_position': undeclared identifier
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\5.19 - Coding pt2\VisualStudioSDLProject\SDLProject\main.cpp(315,42): error C2065: 'playerTextureID': undeclared identifier
