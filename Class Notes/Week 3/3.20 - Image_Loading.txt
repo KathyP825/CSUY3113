@@ -1,9 +1,0 @@
-Image Loading
--------------
-Youtube link:
-https://www.youtube.com/watch?v=sRAchHGNUng&list=PL_QmvmIfJvh0xiwroCZfP8NLORsMF2Sx1&index=20&ab_channel=ProfessorCarmineProfessorCarmine
--------------
-
-If image does not load:
--   use File Explorer to copy images into the project's folder (Visual Studio)
--   don't just drag the images into the folder because it might not work properly

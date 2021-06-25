@@ -1,9 +1,0 @@
-How to Upload to Github
------------------------
-Youtube link:
-https://www.youtube.com/watch?v=95WKIvf4Siw&list=PL_QmvmIfJvh08conK3PndW6EZaAot-Z2Y&index=5&ab_channel=ProfessorCarmine
------------------------
-
-git add --all               // loops to add everything to staging area for committing
-git commit -m "message"     // message about the new save
-git push                    // push everything in staging area to GitHub
