@@ -1,0 +1,33 @@
+Collision Flags
+---------------
+Youtube link:
+https://www.youtube.com/watch?v=X9zJVssX98o&list=PL_QmvmIfJvh1puziUV_XSo9Jg4j3E9vOX&index=19
+---------------
+
+-   when collide with something, want to know where the collide
+
+-   if player's bottom collide with enemy's top, that's okay
+-   if player's left/right collides with enemy, that's not okay
+
+-   if enemy collides with wall, make them move in a different direction
+
+-   if player collides with block above them, can break the block
+-   if player collides with block below them, can only stand on block
+
+-   player should only be able to jump when touching the ground
+    -   when have collision below player, it's okay to jump
+    -   can't jump in midair
+
+---------------
+
+Code (Entity.h):
+
+class Entity {
+public:
+    bool collidedTop;
+    bool collidedBottom;
+    bool collidedLeft;
+    bool collidedRight;
+};
+
+-   also need to add in places where collisions occur

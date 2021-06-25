@@ -1,0 +1,85 @@
+Entity Type
+-----------
+Youtube link:
+https://www.youtube.com/watch?v=Geh176BYjbw&list=PL_QmvmIfJvh1puziUV_XSo9Jg4j3E9vOX&index=17
+-----------
+
+-   can have different types of Entities
+    -   ex. Super Mario:
+            -   coin
+            -   pipe
+            -   tiles on the ground
+    -   different things happen when the entities collide with each other
+        -   player collide with coin = get a point, coin disappears
+        -   enemy collide with coin = nothing happens
+        -   player collide with enemy on top = enemy disappears
+        -   2 enemy collide = maybe move in opposite direction or is ok to overlap
+
+-   need a way to know when a collision or interaction happens what is the:
+    1)  current entity
+    2)  what the current entity collided with
+
+-----------
+
+EntityType Code:
+
+enum EntityType { PLAYER, PLATFORM, COIN, ENEMY };  // different types of entities we have
+
+class Entity {
+public:
+    EntityType entityType;  // can initialize the type of Enemy 
+
+    glm::vec3 position;
+    glm::vec3 velocity;
+    glm::vec3 acceleration;
+};
+
+-----------
+
+Update() Code:
+
+Entity Type and Update
+void Entity::Update(float deltaTime, Entity *objects, int objectCount) {
+    if (entityType == WALL) {   // if wall, don't do anything
+        return;
+    }
+    else if (entityType == COIN) {  // if coin, just spin
+        // spin
+    }
+    else if (entityType == ENEMY) {
+        // Move left to right
+    }
+    else if (entityType == PLAYER) {    // if player, can climb / jump / etc.
+        // Do all the things
+    }
+}
+
+-----------
+
+Collision Code:
+
+bool Entity::CheckCollision(Entity *other) {
+    float xdist = fabs(position.x - other->position.x) - ((width + other->width) / 2.0f);
+    float ydist = fabs(position.y - other->position.y) - ((height + other->height) / 2.0f);
+
+    if (xdist < 0 && ydist < 0) {
+        lastCollision = other->entityType;
+        return true;
+    }
+    return false;
+}
+
+-----------
+
+Using collision results Code:
+-   check for other things
+
+// Somewhere in your code
+if (player->lastCollision == COIN) {
+    // get points
+}
+else if (player->lastCollision == ENEMY) {
+    // take damage
+}
+
+
