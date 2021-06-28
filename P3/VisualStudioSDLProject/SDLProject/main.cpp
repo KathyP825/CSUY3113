@@ -164,7 +164,7 @@ void Initialize() {
 
     glUseProgram(program.programID);
 
-    glClearColor(0.529f, 0.808f, 0.980f, 1.0f);       // background color
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);       // background color
     glEnable(GL_BLEND);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -175,9 +175,9 @@ void Initialize() {
     // Initialize Player
     state.player = new Entity();
     state.player->entityType = EntityType::PLAYER;
-    state.player->position = glm::vec3(0.0f, 0.0f, 0.0f);       // player starting position
+    state.player->position = glm::vec3(0.0f, 3.25f, 0.0f);       // player starting position
     state.player->movement = glm::vec3(0);
-    state.player->acceleration = glm::vec3(0, -0.50f, 0);   // 6.6 -- set acceleration and never changing this value
+    state.player->acceleration = glm::vec3(0, -0.01f, 0);   // 6.6 -- set acceleration and never changing this value
     state.player->speed = 2.0f;     // 6.13 -- increase player speed
     state.player->textureID = LoadTexture("comets.png");
 
@@ -199,7 +199,7 @@ void Initialize() {
     // 6.8 -- set up platforms
     state.platforms = new Entity[PLATFORM_COUNT];
     GLuint platformTextureID = LoadTexture("lava.png");
-    GLuint goalTextureID = LoadTexture("sand_tile.png");
+    GLuint goalTextureID = LoadTexture("goal_tile.png");
 
     // ----------- left wall
     state.platforms[0].textureID = platformTextureID;
@@ -280,7 +280,7 @@ void Initialize() {
     state.platforms[18].entityType = EntityType::PLATFORM;
     state.platforms[18].position = glm::vec3(-3.0f, -3.25f, 0);
 
-    state.platforms[19].textureID = platformTextureID;
+    state.platforms[19].textureID = platformTextureID;      // originally next to goal
     state.platforms[19].entityType = EntityType::PLATFORM;
     state.platforms[19].position = glm::vec3(3.0f, -3.25f, 0);
 
@@ -296,7 +296,7 @@ void Initialize() {
     state.platforms[22].entityType = EntityType::PLATFORM;
     state.platforms[22].position = glm::vec3(-1.0f, -3.25f, 0);
 
-    state.platforms[23].textureID = platformTextureID;
+    state.platforms[23].textureID = platformTextureID;      // originally next to goal
     state.platforms[23].entityType = EntityType::PLATFORM;
     state.platforms[23].position = glm::vec3(1.0f, -3.25f, 0);
 
@@ -352,11 +352,13 @@ void ProcessInput() {
     const Uint8* keys = SDL_GetKeyboardState(NULL);
 
     if (keys[SDL_SCANCODE_LEFT]) {
-        state.player->movement.x = -1.0f;
+        //state.player->movement.x = -1.0f;
+        state.player->acceleration.x -= 1.0f;
         state.player->animIndices = state.player->animLeft;
     }
     else if (keys[SDL_SCANCODE_RIGHT]) {
-        state.player->movement.x = 1.0f;
+        //state.player->movement.x = 1.0f;
+        state.player->acceleration.x += 1.0f;
         state.player->animIndices = state.player->animRight;
     }
 

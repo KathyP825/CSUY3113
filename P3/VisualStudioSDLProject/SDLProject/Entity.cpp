@@ -85,6 +85,11 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
 
                 collidedLeft = true;    // 6.21
             }
+
+            if (i != 21) {  // if touch side of tile
+                isWinner = 2;
+                velocity.y = 0;
+            }
         }
     }
 }
