@@ -23,7 +23,7 @@ Project 3: Lunar Lander
 
 #include "Entity.h"
 
-#define PLATFORM_COUNT 27    // 25 platforms
+#define PLATFORM_COUNT 27
 
 
 struct GameState {
@@ -63,11 +63,8 @@ GLuint LoadTexture(const char* filePath) {
 
 
 
-void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text,
-    float size, float spacing, glm::vec3 position)
-{
-    // calculate U,V coordinates
-    // 16 rows and columns
+void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, float size, float spacing, glm::vec3 position) {
+    // calculate U,V coordinates: 16 rows and columns
     float width = 1.0f / 16.0f;
     float height = 1.0f / 16.0f;
 
@@ -75,9 +72,7 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text,
     std::vector<float> vertices;
     std::vector<float> texCoords;
 
-    // for each character
-    // get index
-    // get U,V coordinates 
+    // for each character: get index & get U,V coordinates 
     for (int i = 0; i < text.size(); i++) {
         int index = (int)text[i];
         float offset = (size + spacing) * i;
@@ -104,10 +99,8 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text,
             u, v + height,
             });
 
-    } // end of for loop
+    }
 
-    // draw using familiar code after vertices and texCoords are set up
-    // the string is a model like everything else
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
     program->SetModelMatrix(modelMatrix);
@@ -122,12 +115,10 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text,
     glEnableVertexAttribArray(program->texCoordAttribute);
 
     glBindTexture(GL_TEXTURE_2D, fontTextureID);
-    glDrawArrays(GL_TRIANGLES, 0, (int)(text.size() * 6));  // (int)(text.size() * 6) == num of verticies we're trying to render
+    glDrawArrays(GL_TRIANGLES, 0, (int)(text.size() * 6));
 
     glDisableVertexAttribArray(program->positionAttribute);
     glDisableVertexAttribArray(program->texCoordAttribute);
-
-
 }
 
 
@@ -135,7 +126,7 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text,
 
 void Initialize() {
     SDL_Init(SDL_INIT_VIDEO);
-    displayWindow = SDL_CreateWindow("Lunar Lander!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
+    displayWindow = SDL_CreateWindow("Lunar Lander! - Falling into a Volcano", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
 
@@ -156,7 +147,7 @@ void Initialize() {
 
     glUseProgram(program.programID);
 
-    glClearColor(0.392f, 0.584f, 0.929f, 1.0f);       // background color
+    glClearColor(1.000f, 0.498f, 0.314f, 1.0f);
     glEnable(GL_BLEND);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -170,7 +161,7 @@ void Initialize() {
     state.player->movement = glm::vec3(0);
     state.player->acceleration = glm::vec3(0, -0.05f, 0);
     state.player->speed = 2.0f;
-    state.player->textureID = LoadTexture("earth.png");
+    state.player->textureID = LoadTexture("person.png");
 
 
     state.platforms = new Entity[PLATFORM_COUNT];
@@ -261,7 +252,7 @@ void Initialize() {
     state.platforms[25].position = glm::vec3(3.5f, 0.0f, 0);
 
     state.platforms[26].textureID = platformTextureID;
-    state.platforms[26].position = glm::vec3(1.5f, 0.0f, 0);
+    state.platforms[26].position = glm::vec3(1.25f, 0.0f, 0);
 
 
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {
