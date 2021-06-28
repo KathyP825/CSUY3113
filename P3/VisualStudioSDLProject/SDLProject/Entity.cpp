@@ -2,8 +2,6 @@
 
 Entity::Entity() {
     position = glm::vec3(0);
-
-    // 6.6 -- initialize movement, acceleration, and velocity
     movement = glm::vec3(0);
     acceleration = glm::vec3(0);
     velocity = glm::vec3(0);
@@ -52,6 +50,17 @@ void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
 
                 collidedBottom = true;  // 6.21
             }
+
+            if (i == 21) {  // if landed on goal tile
+                isWinner = 1;
+                velocity.x = 0;
+            }
+            else {
+                isWinner = 2;
+                velocity.x = 0;
+                
+            }
+
         }
     }
 }
@@ -116,25 +125,6 @@ void Entity::Update(float deltaTime, Entity * platforms, int platformCount) {
     }
 
 
-    /*
-    // 6.11 -- delete
-    // 6.9  -- check if colliding with platforms
-    // if collide with any platform, return and get out because don't need to update anything else
-    for (size_t i = 0; i < platformCount; i++) {
-        if (CheckCollision(&platforms[i])) {
-            return;
-        }
-    }
-    */
-
-
-    // 6.12 -- do jump
-    if (jump) {
-        jump = false;   // only jump 1x
-        velocity.y += jumpPower;    // does the jump up, acceleration does the back down part
-    }
-
-
 
     // 6.7
     velocity.x = movement.x * speed;    // when character starts moving left/right, have instant velocity
@@ -147,30 +137,6 @@ void Entity::Update(float deltaTime, Entity * platforms, int platformCount) {
     CheckCollisionsY(platforms, platformCount);
     position.x += velocity.x * deltaTime;
     CheckCollisionsX(platforms, platformCount);
-    
-
-    /*
-    // 6.16 -- replace and delete
-    // 6.11 -- after move the position but before update the position, check and fix collision
-    for (int i = 0; i < platformCount; i++) {
-        Entity* platform = &platforms[i];
-
-        // if collide with something
-        if (CheckCollision(platform)) {
-            float ydist = fabs(position.y - platform->position.y);      // get distance from centers
-            float penetrationY = fabs(ydist - (height / 2.0f) - (platform->height / 2.0f));     // how too far we went
-
-            if (velocity.y > 0) {   // if going up and hit a platform, move self down
-                position.y -= penetrationY;
-                velocity.y = 0;     // if hit platform, stop moving
-            }
-            else if (velocity.y < 0) {      // if falling down and hit a platform, move self up
-                position.y += penetrationY;
-                velocity.y = 0;     // if hit platform, stop moving
-            }
-        }
-    }
-    */
 
 
     modelMatrix = glm::mat4(1.0f);

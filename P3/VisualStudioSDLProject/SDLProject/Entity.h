@@ -11,12 +11,14 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
+enum EntityType { PLAYER, PLATFORM, LANDINGGOAL };
+
 class Entity {
 public:
+    EntityType entityType;
+
     glm::vec3 position;
     glm::vec3 movement;
-
-    // 6.6 -- add variables to keep track of acceleration and velocity
     glm::vec3 acceleration;
     glm::vec3 velocity;
 
@@ -26,8 +28,8 @@ public:
     float height = 1.0f;
 
     // 6.12 -- track if jump
-    bool jump = false;
-    float jumpPower = 0.0f;     // can jump higher sometimes
+    //bool jump = false;
+    //float jumpPower = 0.0f;     // can jump higher sometimes
 
     float speed;
 
@@ -37,8 +39,6 @@ public:
 
     int* animRight = NULL;
     int* animLeft = NULL;
-    int* animUp = NULL;
-    int* animDown = NULL;
 
     int* animIndices = NULL;
     int animFrames = 0;
@@ -47,8 +47,8 @@ public:
     int animCols = 0;
     int animRows = 0;
 
-    // 6.20
     bool isActive = true;
+    int isWinner = 0;       // default = 0, win = 1, lose = 2
 
     //6.21 -- collision flags
     bool collidedTop = false;
@@ -59,10 +59,8 @@ public:
     Entity();
 
     // 6.9 -- if collided with object, return TRUE
-    bool CheckCollision(Entity* other);
-
-    // 6.16 -- new collision detection prototype
     // objects = platforms, objectCount = platformCount
+    bool CheckCollision(Entity* other);
     void CheckCollisionsY(Entity* objects, int objectCount);
     void CheckCollisionsX(Entity* objects, int objectCount);
 
