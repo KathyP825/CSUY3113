@@ -246,7 +246,7 @@ void Initialize() {
     state.platforms[21].textureID = platformTextureID;
     state.platforms[21].position = glm::vec3(-1.0f, -3.25f, 0);
 
-    state.platforms[22].textureID = goalTextureID;  // MISSION GOAL
+    state.platforms[22].textureID = goalTextureID;      // MISSION GOAL
     state.platforms[22].position = glm::vec3(1.0f, -3.25f, 0);
 
 
@@ -335,7 +335,7 @@ void Update() {
     lastTicks = ticks;
 
     if (state.player->position.y < -3.25) {
-        state.player->isWinner = 3;     // falls out of window = fail
+        state.player->isWinner = 3;     // leaves window bounds = fail
     }
 
     deltaTime += accumulator;
@@ -358,7 +358,6 @@ void Render() {
 
     GLuint fontTextureID = LoadTexture("font.png");
 
-    // render and display all platforms
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {
         state.platforms[i].Render(&program);
     }

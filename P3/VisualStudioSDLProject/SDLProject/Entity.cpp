@@ -12,7 +12,7 @@ Entity::Entity() {
 }
 
 
-// 6.9 -- check if curr Entity will collide with another Entity
+
 bool Entity::CheckCollision(Entity* other) {
     if (isActive == false || other->isActive == false) {
         return false;
@@ -25,11 +25,10 @@ bool Entity::CheckCollision(Entity* other) {
         return true;
     }
     return false;
-
 }
 
 
-// 6.16 -- new collision check
+
 void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
     for (int i = 0; i < objectCount; i++) {
         Entity* object = &objects[i];
@@ -42,16 +41,16 @@ void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
                 position.y -= penetrationY;
                 velocity.y = 0;
 
-                collidedTop = true;     //6.21
+                collidedTop = true;
             }
             else if (velocity.y < 0) {
                 position.y += penetrationY;
                 velocity.y = 0;
 
-                collidedBottom = true;  // 6.21
+                collidedBottom = true;
             }
 
-            if (i == 22) {  // if landed on goal tile
+            if (i == 22) {      // landed on goal tile
                 isWinner = 1;
                 velocity.x = 0;
             }
@@ -65,6 +64,8 @@ void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
     }
 }
 
+
+
 void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
     for (int i = 0; i < objectCount; i++) {
         Entity* object = &objects[i];
@@ -77,16 +78,16 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
                 position.x -= penetrationX;
                 velocity.x = 0;
 
-                collidedRight = true;   // 6.21
+                collidedRight = true;
             }
             else if (velocity.x < 0) {
                 position.x += penetrationX;
                 velocity.x = 0;
 
-                collidedLeft = true;    // 6.21
+                collidedLeft = true;
             }
 
-            if (i != 22) {  // if touch side of tile
+            if (i != 22) {      // touch side of tile
                 isWinner = 2;
                 velocity.y = 0;
             }
@@ -96,10 +97,7 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
 
 
 
-
-// 6.9 -- update parameters for void Entity::Update(float deltaTime, Entity*)
 void Entity::Update(float deltaTime, Entity * platforms, int platformCount) {
-    // 6.20 -- check if entity is active
     if (isActive == false) {
         return;
     }
@@ -130,23 +128,19 @@ void Entity::Update(float deltaTime, Entity * platforms, int platformCount) {
     }
 
 
-
-    // 6.7
-    velocity.x = movement.x * speed;    // when character starts moving left/right, have instant velocity
+    velocity.x = movement.x * speed;
     velocity += acceleration * deltaTime;
-    //position += velocity * deltaTime;   // new way to calculate position      // 6.16 -- remove
 
-
-    // 6.16
     position.y += velocity.y * deltaTime;
     CheckCollisionsY(platforms, platformCount);
     position.x += velocity.x * deltaTime;
     CheckCollisionsX(platforms, platformCount);
 
-
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
 }
+
+
 
 void Entity::DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index) {
     float u = (float)(index % animCols) / (float)animCols;
@@ -173,6 +167,8 @@ void Entity::DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID
     glDisableVertexAttribArray(program->positionAttribute);
     glDisableVertexAttribArray(program->texCoordAttribute);
 }
+
+
 
 void Entity::Render(ShaderProgram* program) {
     if (isActive == false) {
