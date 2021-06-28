@@ -23,8 +23,7 @@ Project 3: Lunar Lander
 
 #include "Entity.h"
 
-#define PLATFORM_COUNT 25    // 25 platforms
-//#define LANDINGGOAL_COUNT 2
+#define PLATFORM_COUNT 27    // 25 platforms
 
 
 struct GameState {
@@ -63,13 +62,6 @@ GLuint LoadTexture(const char* filePath) {
 }
 
 
-
-// looping through each character in the string
-// create 2 triangles for each character
-// gets the coordinates that goes with the 2 triangles
-// size is not font size  -->  size = size of letter relative to the player
-// spacing = amount of space between characters
-// position = where in the game world should the strip of triangles be drawn
 
 void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text,
     float size, float spacing, glm::vec3 position)
@@ -164,148 +156,115 @@ void Initialize() {
 
     glUseProgram(program.programID);
 
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);       // background color
+    glClearColor(0.392f, 0.584f, 0.929f, 1.0f);       // background color
     glEnable(GL_BLEND);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-    //---------- Initialize Game Objects
+    //----------  Initialize Game Objects  ----------
 
     // Initialize Player
     state.player = new Entity();
-    state.player->entityType = EntityType::PLAYER;
-    state.player->position = glm::vec3(0.0f, 3.25f, 0.0f);       // player starting position
+    state.player->position = glm::vec3(0.0f, 3.25f, 0.0f);
     state.player->movement = glm::vec3(0);
-    state.player->acceleration = glm::vec3(0, -0.01f, 0);   // 6.6 -- set acceleration and never changing this value
-    state.player->speed = 2.0f;     // 6.13 -- increase player speed
-    state.player->textureID = LoadTexture("comets.png");
-
-    state.player->animRight = new int[1]{ 1 };
-    state.player->animLeft = new int[1]{ 2 };
-
-    state.player->animIndices = state.player->animRight;
-    state.player->animFrames = 1;
-    state.player->animIndex = 0;
-    state.player->animTime = 0;
-    state.player->animCols = 2;
-    state.player->animRows = 1;
-
-    //6.11 -- fix character hovering
-    state.player->height = 0.8f;    // num can vary
-    state.player->width = 0.8f;     // not necessary, but can if you want
+    state.player->acceleration = glm::vec3(0, -0.05f, 0);
+    state.player->speed = 2.0f;
+    state.player->textureID = LoadTexture("earth.png");
 
 
-    // 6.8 -- set up platforms
     state.platforms = new Entity[PLATFORM_COUNT];
     GLuint platformTextureID = LoadTexture("lava.png");
     GLuint goalTextureID = LoadTexture("goal_tile.png");
 
-    // ----------- left wall
+    //----------  Left Wall  ----------
     state.platforms[0].textureID = platformTextureID;
-    state.platforms[0].entityType = EntityType::PLATFORM;
     state.platforms[0].position = glm::vec3(-5.0f, 3.75f, 0);
 
     state.platforms[1].textureID = platformTextureID;
-    state.platforms[1].entityType = EntityType::PLATFORM;
     state.platforms[1].position = glm::vec3(-5.0f, 2.75f, 0);
 
     state.platforms[2].textureID = platformTextureID;
-    state.platforms[2].entityType = EntityType::PLATFORM;
     state.platforms[2].position = glm::vec3(-5.0f, 1.75f, 0);
 
     state.platforms[3].textureID = platformTextureID;
-    state.platforms[3].entityType = EntityType::PLATFORM;
     state.platforms[3].position = glm::vec3(-5.0f, 0.75f, 0);
 
     state.platforms[4].textureID = platformTextureID;
-    state.platforms[4].entityType = EntityType::PLATFORM;
     state.platforms[4].position = glm::vec3(-5.0f, -0.25f, 0);
 
     state.platforms[5].textureID = platformTextureID;
-    state.platforms[5].entityType = EntityType::PLATFORM;
     state.platforms[5].position = glm::vec3(-5.0f, -1.25f, 0);
 
     state.platforms[6].textureID = platformTextureID;
-    state.platforms[6].entityType = EntityType::PLATFORM;
     state.platforms[6].position = glm::vec3(-5.0f, -2.25f, 0);
 
-    // ------------- right wall
+    //----------  Right Wall  ----------
     state.platforms[7].textureID = platformTextureID;
-    state.platforms[7].entityType = EntityType::PLATFORM;
     state.platforms[7].position = glm::vec3(5.0f, 3.75f, 0);
 
     state.platforms[8].textureID = platformTextureID;
-    state.platforms[8].entityType = EntityType::PLATFORM;
     state.platforms[8].position = glm::vec3(5.0f, 2.75f, 0);
 
     state.platforms[9].textureID = platformTextureID;
-    state.platforms[9].entityType = EntityType::PLATFORM;
     state.platforms[9].position = glm::vec3(5.0f, 1.75f, 0);
 
     state.platforms[10].textureID = platformTextureID;
-    state.platforms[10].entityType = EntityType::PLATFORM;
     state.platforms[10].position = glm::vec3(5.0f, 0.75f, 0);
 
     state.platforms[11].textureID = platformTextureID;
-    state.platforms[11].entityType = EntityType::PLATFORM;
     state.platforms[11].position = glm::vec3(5.0f, -0.25f, 0);
 
     state.platforms[12].textureID = platformTextureID;
-    state.platforms[12].entityType = EntityType::PLATFORM;
     state.platforms[12].position = glm::vec3(5.0f, -1.25f, 0);
 
     state.platforms[13].textureID = platformTextureID;
-    state.platforms[13].entityType = EntityType::PLATFORM;
     state.platforms[13].position = glm::vec3(5.0f, -2.25f, 0);
 
-    //--------- bottom platform
+    //----------  Bottom Platforms  ----------
     state.platforms[14].textureID = platformTextureID;
-    state.platforms[14].entityType = EntityType::PLATFORM;
     state.platforms[14].position = glm::vec3(5.0f, -3.25f, 0);
 
     state.platforms[15].textureID = platformTextureID;
-    state.platforms[15].entityType = EntityType::PLATFORM;
     state.platforms[15].position = glm::vec3(-5.0f, -3.25f, 0);
 
     state.platforms[16].textureID = platformTextureID;
-    state.platforms[16].entityType = EntityType::PLATFORM;
     state.platforms[16].position = glm::vec3(4.0f, -3.25f, 0);
 
     state.platforms[17].textureID = platformTextureID;
-    state.platforms[17].entityType = EntityType::PLATFORM;
     state.platforms[17].position = glm::vec3(-4.0f, -3.25f, 0);
 
     state.platforms[18].textureID = platformTextureID;
-    state.platforms[18].entityType = EntityType::PLATFORM;
     state.platforms[18].position = glm::vec3(-3.0f, -3.25f, 0);
 
-    state.platforms[19].textureID = platformTextureID;      // originally next to goal
-    state.platforms[19].entityType = EntityType::PLATFORM;
+    state.platforms[19].textureID = platformTextureID;
     state.platforms[19].position = glm::vec3(3.0f, -3.25f, 0);
 
     state.platforms[20].textureID = platformTextureID;
-    state.platforms[20].entityType = EntityType::PLATFORM;
     state.platforms[20].position = glm::vec3(-2.0f, -3.25f, 0);
 
-    state.platforms[21].textureID = goalTextureID;  // MISSION GOAL
-    state.platforms[21].entityType = EntityType::LANDINGGOAL;
-    state.platforms[21].position = glm::vec3(2.0f, -3.25f, 0);
+    state.platforms[21].textureID = platformTextureID;
+    state.platforms[21].position = glm::vec3(-1.0f, -3.25f, 0);
 
-    state.platforms[22].textureID = platformTextureID;
-    state.platforms[22].entityType = EntityType::PLATFORM;
-    state.platforms[22].position = glm::vec3(-1.0f, -3.25f, 0);
+    state.platforms[22].textureID = goalTextureID;  // MISSION GOAL
+    state.platforms[22].position = glm::vec3(1.0f, -3.25f, 0);
 
-    state.platforms[23].textureID = platformTextureID;      // originally next to goal
-    state.platforms[23].entityType = EntityType::PLATFORM;
-    state.platforms[23].position = glm::vec3(1.0f, -3.25f, 0);
+
+    //----------  Obstacles  ----------
+    state.platforms[23].textureID = platformTextureID;
+    state.platforms[23].position = glm::vec3(-3.5f, 1.5f, 0);
 
     state.platforms[24].textureID = platformTextureID;
-    state.platforms[24].entityType = EntityType::PLATFORM;
-    state.platforms[24].position = glm::vec3(0.0f, -3.25f, 0);  // center
+    state.platforms[24].position = glm::vec3(-2.0f, 0.5f, 0);
+
+    state.platforms[25].textureID = platformTextureID;
+    state.platforms[25].position = glm::vec3(3.5f, 0.0f, 0);
+
+    state.platforms[26].textureID = platformTextureID;
+    state.platforms[26].position = glm::vec3(1.5f, 0.0f, 0);
 
 
-    for (size_t i = 0; i < PLATFORM_COUNT; i++) {   // only updates platforms 1x
+    for (size_t i = 0; i < PLATFORM_COUNT; i++) {
         state.platforms[i].Update(0, NULL, 0);
     
     }
@@ -337,12 +296,6 @@ void ProcessInput() {
 
             case SDLK_SPACE:
                 // jump
-                // 6.21 -- only jump if colliding on bottom
-                //if (state.player->collidedBottom){
-                //    state.player->jump = true;  // 6.12
-                //}
-                
-                //state.player->jump = true;  // 6.12
                 break;
             }
             break; // SDL_KEYDOWN
@@ -353,13 +306,13 @@ void ProcessInput() {
 
     if (keys[SDL_SCANCODE_LEFT]) {
         //state.player->movement.x = -1.0f;
+        //state.player->animIndices = state.player->animLeft;
         state.player->acceleration.x -= 1.0f;
-        state.player->animIndices = state.player->animLeft;
     }
     else if (keys[SDL_SCANCODE_RIGHT]) {
         //state.player->movement.x = 1.0f;
+        //state.player->animIndices = state.player->animRight;
         state.player->acceleration.x += 1.0f;
-        state.player->animIndices = state.player->animRight;
     }
 
 
@@ -371,8 +324,8 @@ void ProcessInput() {
 
 
 
-// 6.5 -- replace Update() to fixed timestate version
-#define FIXED_TIMESTEP 0.0166666f   // 60 times per second
+
+#define FIXED_TIMESTEP 0.0166666f
 float lastTicks = 0;
 float accumulator = 0.0f;
 
@@ -381,9 +334,12 @@ void Update() {
     float deltaTime = ticks - lastTicks;
     lastTicks = ticks;
 
+    if (state.player->position.y < -3.25) {
+        state.player->isWinner = 3;     // falls out of window = fail
+    }
+
     deltaTime += accumulator;
     if (deltaTime < FIXED_TIMESTEP) {
-        // if not enough time has passed, store into accumulator and don't do anything
         accumulator = deltaTime;
         return;
     }
@@ -397,7 +353,6 @@ void Update() {
 
 
 
-
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -408,18 +363,23 @@ void Render() {
         state.platforms[i].Render(&program);
     }
 
+    state.player->Render(&program);
+
+    // display WIN / LOSE message
     if (state.player->isWinner == 1) {
-        DrawText(&program, fontTextureID, "Mission Success!",0.5f, -0.25f, glm::vec3(-1.8f, 1.0f, 0));
+        DrawText(&program, fontTextureID, "Mission Success!", 0.5f, -0.25f, glm::vec3(-1.8f, 2.5f, 0));
     }
-    else if (state.player->isWinner == 2) {
-        DrawText(&program, fontTextureID, "Mission Failed! ", 0.5f, -0.25f, glm::vec3(-1.8f, 1.0f, 0));
+    else if (state.player->isWinner == 2 || state.player->isWinner == 3) {
+        DrawText(&program, fontTextureID, "Mission Failed! ", 0.5f, -0.25f, glm::vec3(-1.8f, 2.5f, 0));
+
+        if (state.player->isWinner == 3) {
+            DrawText(&program, fontTextureID, "Out of Bounds......", 0.5f, -0.25f, glm::vec3(-2.3f, 2.0f, 0));
+        }
     }
-
-
-    state.player->Render(&program);     // display player
 
     SDL_GL_SwapWindow(displayWindow);
 }
+
 
 
 void Shutdown() {

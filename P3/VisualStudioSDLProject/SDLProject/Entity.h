@@ -11,11 +11,11 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
-enum EntityType { PLAYER, PLATFORM, LANDINGGOAL };
+//enum EntityType { PLAYER, PLATFORM, LANDINGGOAL };
 
 class Entity {
 public:
-    EntityType entityType;
+    //EntityType entityType;
 
     glm::vec3 position;
     glm::vec3 movement;
@@ -48,7 +48,7 @@ public:
     int animRows = 0;
 
     bool isActive = true;
-    int isWinner = 0;       // default = 0, win = 1, lose = 2
+    int isWinner = 0;       // default = 0, win = 1, lose = 2, out of bounds lose = 3
 
     //6.21 -- collision flags
     bool collidedTop = false;

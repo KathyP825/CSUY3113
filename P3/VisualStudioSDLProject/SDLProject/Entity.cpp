@@ -51,7 +51,7 @@ void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
                 collidedBottom = true;  // 6.21
             }
 
-            if (i == 21) {  // if landed on goal tile
+            if (i == 22) {  // if landed on goal tile
                 isWinner = 1;
                 velocity.x = 0;
             }
@@ -86,7 +86,7 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
                 collidedLeft = true;    // 6.21
             }
 
-            if (i != 21) {  // if touch side of tile
+            if (i != 22) {  // if touch side of tile
                 isWinner = 2;
                 velocity.y = 0;
             }
