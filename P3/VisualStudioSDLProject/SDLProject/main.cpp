@@ -68,7 +68,6 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, fl
     float width = 1.0f / 16.0f;
     float height = 1.0f / 16.0f;
 
-    // vector = an array you can add to on the fly instead of a fixed length array
     std::vector<float> vertices;
     std::vector<float> texCoords;
 
@@ -88,7 +87,7 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, fl
             offset + (0.5f * size), -0.5f * size,
             offset + (0.5f * size), 0.5f * size,
             offset + (-0.5f * size), -0.5f * size,
-            });
+        });
 
         texCoords.insert(texCoords.end(), {
             u, v,
@@ -97,7 +96,7 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, fl
             u + width, v + height,
             u + width, v,
             u, v + height,
-            });
+        });
 
     }
 
@@ -123,10 +122,9 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, fl
 
 
 
-
 void Initialize() {
     SDL_Init(SDL_INIT_VIDEO);
-    displayWindow = SDL_CreateWindow("Lunar Lander! - Falling into a Volcano", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
+    displayWindow = SDL_CreateWindow("Lunar Lander! - Only Safe Spot in Volcano", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
 
@@ -155,7 +153,7 @@ void Initialize() {
 
     //----------  Initialize Game Objects  ----------
 
-    // Initialize Player
+    // ----------  Player  ----------
     state.player = new Entity();
     state.player->position = glm::vec3(0.0f, 3.25f, 0.0f);
     state.player->movement = glm::vec3(0);
@@ -315,7 +313,6 @@ void ProcessInput() {
 
 
 
-
 #define FIXED_TIMESTEP 0.0166666f
 float lastTicks = 0;
 float accumulator = 0.0f;
@@ -371,7 +368,7 @@ void Render() {
 }
 
 
-
+//----------  DO NOT TOUCH  ----------
 void Shutdown() {
     SDL_Quit();
 }
