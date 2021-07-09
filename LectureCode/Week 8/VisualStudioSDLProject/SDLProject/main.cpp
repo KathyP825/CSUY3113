@@ -1,13 +1,34 @@
 /*
 //////// CHANGES FOR THIS SAVE ////////
--   Entity.h -- set up collision flags
--   Entity.cpp -- add collision flags
--   main.cpp ProcessInput() -- only jump if originally standing
+-   create a floor at bottom, place player on left
+-   place an AI on right
+-   give the AI some basic behavior
 
--   Note:
-    -   can add code in Entity.cpp Update() where if collide in bottom/top, what was the last thing you collided with
-        -   can instead put in Entity.cpp CheckCollisionsY() and CheckCollisionsX()
-        -   can also put in main.cpp
+-   main.cpp
+    -   8.5
+        -   PLATFORM_COUNT = 10
+        -   Initialize()
+            -   for loop to initialize floor instead of making each tile 1 by 1
+            -   change player initial position, small drop to starting place
+    -   8.6
+        -   ENEMY_COUNT = 1
+        -   GameState struct
+            -   add enemy Entity
+        -   Initialize()
+            -   initialize enemy Entity
+        -   Update()
+            -   tell all enemies to update
+        -   Render()
+            -   render enemies
+
+-   Entity.h
+    -   //
+
+-   Entity.cpp
+    -   //
+
+-   Notes:
+
 */
 
 
@@ -29,14 +50,14 @@
 
 #include "Entity.h"
 
-//#define PLATFORM_COUNT 3    // 6.8 -- 3 platforms
-//#define PLATFORM_COUNT 4    // 6.13 -- 4 platforms
-#define PLATFORM_COUNT 5    // 6.14 -- 5 platforms
-
+//#define PLATFORM_COUNT 5    // 6.14 -- 5 platforms
+#define PLATFORM_COUNT 11    // 8.5 -- 11 platforms
+#define ENEMY_COUNT 1   // 8.6 -- 1 enemy
 
 struct GameState {
     Entity* player;
     Entity* platforms;
+    Entity* enemies;        // 8.6
 };
 
 GameState state;
@@ -103,7 +124,7 @@ void Initialize() {
 
     // Initialize Player
     state.player = new Entity();
-    state.player->position = glm::vec3(0);
+    state.player->position = glm::vec3(-4.0f, -1.0f, 0.0f);     // 8.5 -- initialize player at bottom left
     state.player->movement = glm::vec3(0);
     state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
     //state.player->speed = 1.0f;
@@ -134,7 +155,16 @@ void Initialize() {
     // 6.8 -- set up platforms
     state.platforms = new Entity[PLATFORM_COUNT];
     GLuint platformTextureID = LoadTexture("platformPack_tile001.png");
+
+    // 8.5 -- creates the bottom floor
+    for (size_t i = 0; i < PLATFORM_COUNT; i++) {
+        state.platforms[i].textureID = platformTextureID;
+        state.platforms[i].position = glm::vec3(-5.0f + i, -3.25f, 0);
+    }
     
+    /*
+    // 8.5 -- delete because will be initilized in for loop above
+
     state.platforms[0].textureID = platformTextureID;
     state.platforms[0].position = glm::vec3(-1, -3.25f, 0);
 
@@ -150,12 +180,20 @@ void Initialize() {
 
     state.platforms[4].textureID = platformTextureID;       // 6.14 -- add 5th platform
     state.platforms[4].position = glm::vec3(1.2, -2.25f, 0);
+    */
 
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {   // only updates platforms 1x
         //state.platforms[i].Update(0);     // 6.9 -- update to version with all parameters
         state.platforms[i].Update(0, NULL, 0);
     }
 
+
+    // 8.6 -- initialize Enemies
+    state.enemies = new Entity[ENEMY_COUNT];
+    GLuint enemyTextureID = LoadTexture("ctg.png");
+
+    state.enemies[0].textureID = enemyTextureID;
+    state.enemies[0].position = glm::vec3(4.0f, -2.25f, 0.0f);
 }
 
 
@@ -250,6 +288,12 @@ void Update() {
         // Update. Notice it's FIXED_TIMESTEP. Not deltaTime
         //state.player->Update(FIXED_TIMESTEP);     // 6.9 -- update to include all parameters
         state.player->Update(FIXED_TIMESTEP, state.platforms, PLATFORM_COUNT);
+
+        // 8.6
+        for (size_t i = 0; i < ENEMY_COUNT; i++) {
+            state.enemies[i].Update(FIXED_TIMESTEP, state.platforms, PLATFORM_COUNT);
+        }
+
         deltaTime -= FIXED_TIMESTEP;
     }
     accumulator = deltaTime;
@@ -264,6 +308,11 @@ void Render() {
     // render and display all platforms
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {
         state.platforms[i].Render(&program);
+    }
+
+    // 8.6 -- render and display all enemies
+    for (size_t i = 0; i < ENEMY_COUNT; i++) {
+        state.enemies[i].Render(&program);
     }
 
 
