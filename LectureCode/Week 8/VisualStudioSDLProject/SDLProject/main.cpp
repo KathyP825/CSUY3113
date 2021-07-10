@@ -20,12 +20,20 @@
             -   tell all enemies to update
         -   Render()
             -   render enemies
+    -   8.7
+        -   Initialize()
+            -   initilize entities with EntityType
+            -   initilize AIs with AIType and AIState
 
 -   Entity.h
-    -   //
+    -   8.7
+        -   create EntityType enum
+        -   create AIType enum
+        -   create AIState enum
+        -   add function prototypes for AI
 
 -   Entity.cpp
-    -   //
+    -   create AI() and AIWalker() functions
 
 -   Notes:
 
@@ -50,7 +58,6 @@
 
 #include "Entity.h"
 
-//#define PLATFORM_COUNT 5    // 6.14 -- 5 platforms
 #define PLATFORM_COUNT 11    // 8.5 -- 11 platforms
 #define ENEMY_COUNT 1   // 8.6 -- 1 enemy
 
@@ -124,6 +131,7 @@ void Initialize() {
 
     // Initialize Player
     state.player = new Entity();
+    state.player->entitytype = PLAYER;      // 8.7 -- initilize with PLAYER entity type
     state.player->position = glm::vec3(-4.0f, -1.0f, 0.0f);     // 8.5 -- initialize player at bottom left
     state.player->movement = glm::vec3(0);
     state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
@@ -158,6 +166,7 @@ void Initialize() {
 
     // 8.5 -- creates the bottom floor
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {
+        state.platforms[i].entitytype = PLATFORM;       // 8.7 -- initilize with PLATFORM entity type
         state.platforms[i].textureID = platformTextureID;
         state.platforms[i].position = glm::vec3(-5.0f + i, -3.25f, 0);
     }
@@ -192,8 +201,13 @@ void Initialize() {
     state.enemies = new Entity[ENEMY_COUNT];
     GLuint enemyTextureID = LoadTexture("ctg.png");
 
+    state.enemies[0].entitytype = ENEMY;        // 8.7 -- initilize with ENEMY entity type
     state.enemies[0].textureID = enemyTextureID;
     state.enemies[0].position = glm::vec3(4.0f, -2.25f, 0.0f);
+    state.enemies[0].speed = 1.0f;
+
+    state.enemies[0].aiType = WALKER;       // 8.7 -- initialize the AIType
+    state.enemies[0].aiState = WALKING;     // 8.7 -- initialize the AIState
 }
 
 

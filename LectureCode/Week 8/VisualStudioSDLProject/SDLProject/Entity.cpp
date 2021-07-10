@@ -82,6 +82,22 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
 
 
 
+// 8.7
+void Entity::AIWalker() {
+    movement = glm::vec3(-1.0f, 0.0f, 0.0f);
+}
+
+// 8.7 -- process input for an enemy
+// can set movement
+void Entity::AI() {
+    switch (aiType) {
+        case WALKER:
+            AIWalker();
+            break;
+    }
+}
+
+
 
 // 6.9 -- update parameters for void Entity::Update(float deltaTime, Entity*)
 void Entity::Update(float deltaTime, Entity * platforms, int platformCount) {
@@ -95,6 +111,13 @@ void Entity::Update(float deltaTime, Entity * platforms, int platformCount) {
     collidedBottom = false;
     collidedLeft = false;
     collidedRight = false;
+
+
+    // 8.7 -- if is enemy, call AI func
+    if (entitytype == ENEMY) {
+        AI();
+    }
+
 
     if (animIndices != NULL) {
         if (glm::length(movement) != 0) {

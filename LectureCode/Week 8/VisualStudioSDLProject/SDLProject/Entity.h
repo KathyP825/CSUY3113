@@ -11,8 +11,16 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
+enum EntityType {PLAYER, PLATFORM, ENEMY};      // 8.7 -- list of entity types
+enum AIType { WALKER };    // 8.7 -- list of AI types, what they do
+enum AIState { IDLE, WALKING, ATTACKING };      // 8.7 -- list of states AI can be in
+
 class Entity {
 public:
+    EntityType entitytype;      // 8.7
+    AIType aiType;      // 8.7
+    AIState aiState;    // 8.7
+
     glm::vec3 position;
     glm::vec3 movement;
 
@@ -70,4 +78,8 @@ public:
     void Update(float deltaTime, Entity* platforms, int platformCount);
     void Render(ShaderProgram* program);
     void DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index);
+    
+    // 8.7 -- add function prototypes for AI
+    void AI();
+    void AIWalker();
 };
