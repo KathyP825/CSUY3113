@@ -16,6 +16,8 @@ Entity::Entity() {
 
 // 6.9 -- check if curr Entity will collide with another Entity
 bool Entity::CheckCollision(Entity* other) {
+    if (other == this) return false;
+
     if (isActive == false || other->isActive == false) {
         return false;
     }
@@ -118,6 +120,20 @@ void Entity::AIWaitAndGo(Entity* player) {
     }
 }
 
+
+// patrols back and forth on platform
+// for Enemy 3 only
+void Entity::AIPatrol() {
+    if ((position.x <= -3.5f)) {    // needs to be same as starting position or won't work
+        movement = glm::vec3(1.0f, 0.0f, 0.0f);
+    }
+    else if (position.x >= -0.5f) {
+        movement = glm::vec3(-1.0f, 0.0f, 0.0f);
+    }
+}
+
+
+
 // 8.7 -- process input for an enemy
 // can set movement
 void Entity::AI(Entity* player) {
@@ -128,6 +144,10 @@ void Entity::AI(Entity* player) {
 
         case WAITANDGO:
             AIWaitAndGo(player);
+            break;
+
+        case PATROL:
+            AIPatrol();
             break;
     }
 }
@@ -206,31 +226,6 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
     position.x += velocity.x * deltaTime;
     CheckCollisionsX(platforms, platformCount);
     
-
-    /*
-    // 6.16 -- replace and delete
-    // 6.11 -- after move the position but before update the position, check and fix collision
-    for (int i = 0; i < platformCount; i++) {
-        Entity* platform = &platforms[i];
-
-        // if collide with something
-        if (CheckCollision(platform)) {
-            float ydist = fabs(position.y - platform->position.y);      // get distance from centers
-            float penetrationY = fabs(ydist - (height / 2.0f) - (platform->height / 2.0f));     // how too far we went
-
-            if (velocity.y > 0) {   // if going up and hit a platform, move self down
-                position.y -= penetrationY;
-                velocity.y = 0;     // if hit platform, stop moving
-            }
-            else if (velocity.y < 0) {      // if falling down and hit a platform, move self up
-                position.y += penetrationY;
-                velocity.y = 0;     // if hit platform, stop moving
-            }
-        }
-    }
-    */
-
-
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
 }

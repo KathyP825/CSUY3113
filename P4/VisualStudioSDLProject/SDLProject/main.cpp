@@ -1,61 +1,6 @@
 /*
-//////// CHANGES FOR THIS SAVE ////////
--   create a floor at bottom, place player on left
--   place an AI on right
--   give the AI some basic behavior
--   2nd AI has different behavior
--   AI change between states and waht they do when they are in a certain state
-
--   main.cpp
-    -   8.5
-        -   PLATFORM_COUNT = 10
-        -   Initialize()
-            -   for loop to initialize floor instead of making each tile 1 by 1
-            -   change player initial position, small drop to starting place
-    -   8.6
-        -   ENEMY_COUNT = 1
-        -   GameState struct
-            -   add enemy Entity
-        -   Initialize()
-            -   initialize enemy Entity
-        -   Update()
-            -   tell all enemies to update
-        -   Render()
-            -   render enemies
-    -   8.7
-        -   Initialize()
-            -   initilize entities with EntityType
-    -   8.8
-        -   Initialize()
-            -   initilize AIs with AIType and AIState
-        -   Update()
-            -   player and enemies recieve pointer to player
-
--   Entity.h
-    -   8.7
-        -   create EntityType enum
-        -   create AIType enum
-        -   create AIState enum
-        -   add function prototypes for AI
-    -   8.8
-        -   add 2nd AIType
-        -   create function prototype for new AI type, AIWaitAndGo()
-        -   update prototypes to include parameter Entity* player 
-
--   Entity.cpp
-    -   8.7
-        -   create AI() and AIWalker() functions
-    -   8.8
-        -   update AI() to have AIWaitAndGo()
-        -   include Entity* player parameter in Update(), AI()
-    -   8.9
-        -   update AIWaitAndGo() to move AI to player if player is close enough
-
--   Notes:
-    -   still need acceleration/gravity for AI
-    -   need to check collisions for player with things other than platforms
-        -   collision with AI
-    -   
+Kathy Pan
+Project 4: Rise of the AI
 */
 
 
@@ -77,8 +22,12 @@
 
 #include "Entity.h"
 
-#define PLATFORM_COUNT 11    // 8.5 -- 11 platforms
-#define ENEMY_COUNT 1   // 8.6 -- 1 enemy
+#define PLATFORM_COUNT 19    // total platforms
+int numLevel1_Platforms = 11;
+int numLevel2_Platforms = 4;
+int numLevel3_Platforms = 4;
+
+#define ENEMY_COUNT 3   // total enemies
 
 struct GameState {
     Entity* player;
@@ -176,7 +125,7 @@ void Initialize() {
 
 
     // 6.12 -- set up for jump
-    state.player->jumpPower = 5.0f;
+    state.player->jumpPower = 7.0f;
 
 
     // 6.8 -- set up platforms
@@ -184,35 +133,26 @@ void Initialize() {
     GLuint platformTextureID = LoadTexture("platformPack_tile001.png");
 
     // 8.5 -- creates the bottom floor
-    for (size_t i = 0; i < PLATFORM_COUNT; i++) {
-        state.platforms[i].entitytype = PLATFORM;       // 8.7 -- initilize with PLATFORM entity type
+    for (size_t i = 0; i < numLevel1_Platforms; i++) {      // start i = 0, end i = 10
+        state.platforms[i].entitytype = PLATFORM;
         state.platforms[i].textureID = platformTextureID;
         state.platforms[i].position = glm::vec3(-5.0f + i, -3.25f, 0);
     }
+
+    for (size_t i = (numLevel1_Platforms); i < (numLevel1_Platforms + numLevel2_Platforms); i++) {       // start i = 11, end i = 14
+        state.platforms[i].entitytype = PLATFORM;
+        state.platforms[i].textureID = platformTextureID;
+        state.platforms[i].position = glm::vec3(1.75f + i - numLevel1_Platforms, -1.15f, 0);
+    }
+
+    for (size_t i = (numLevel1_Platforms + numLevel2_Platforms); i < (numLevel1_Platforms + numLevel2_Platforms + numLevel3_Platforms); i++) {       // start i = 11, end i = 14
+        state.platforms[i].entitytype = PLATFORM;
+        state.platforms[i].textureID = platformTextureID;
+        state.platforms[i].position = glm::vec3(-3.5f + i - numLevel1_Platforms - numLevel2_Platforms, 0.9f, 0);
+    }
     
-    /*
-    // 8.5 -- delete because will be initilized in for loop above
-
-    state.platforms[0].textureID = platformTextureID;
-    state.platforms[0].position = glm::vec3(-1, -3.25f, 0);
-
-    state.platforms[1].textureID = platformTextureID;
-    state.platforms[1].position = glm::vec3(0, -3.25f, 0);
-    //state.platforms[1].isActive = false;      // 6.20 -- test for platform's isActive is false
-
-    state.platforms[2].textureID = platformTextureID;
-    state.platforms[2].position = glm::vec3(1, -3.25f, 0);
-
-    state.platforms[3].textureID = platformTextureID;       // 6.13 -- add 4th platform
-    state.platforms[3].position = glm::vec3(-3, -3.25f, 0);
-
-    state.platforms[4].textureID = platformTextureID;       // 6.14 -- add 5th platform
-    state.platforms[4].position = glm::vec3(1.2, -2.25f, 0);
-    */
 
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {   // only updates platforms 1x
-        //state.platforms[i].Update(0);     // 6.9 -- update to version with all parameters
-        //state.platforms[i].Update(0, NULL, 0);
         state.platforms[i].Update(0, state.player, NULL, 0);    // 8.8 -- update to include player pointer
     }
 
@@ -221,15 +161,34 @@ void Initialize() {
     state.enemies = new Entity[ENEMY_COUNT];
     GLuint enemyTextureID = LoadTexture("ctg.png");
 
-    state.enemies[0].entitytype = ENEMY;        // 8.7 -- initilize with ENEMY entity type
-    state.enemies[0].textureID = enemyTextureID;
-    state.enemies[0].position = glm::vec3(4.0f, -2.25f, 0.0f);
-    state.enemies[0].speed = 1.0f;
+    for (size_t i = 0; i < ENEMY_COUNT; i++) {       // start i = 11, end i = 14
+        state.enemies[i].entitytype = ENEMY;
+        state.enemies[i].textureID = enemyTextureID;
+
+        if (i == 0) {
+            state.enemies[i].position = glm::vec3(1.8f, -2.25f, 0.0f);
+        }
+        else if (i == 1) {
+            state.enemies[i].position = glm::vec3(3.0f, -0.15f, 0.0f);
+        }
+        else if (i == 2) {
+            state.enemies[i].position = glm::vec3(-3.5f, 1.9f, 0.0f);
+        }
+
+        state.enemies[i].speed = 1.0f;
+        state.player->acceleration = glm::vec3(0, -9.81f, 0);
+    }
 
     //state.enemies[0].aiType = WALKER;       // 8.7 -- initialize the AIType
     //state.enemies[0].aiState = WALKING;     // 8.7 -- initialize the AIState
-    state.enemies[0].aiType = WAITANDGO;    // 8.8 -- initialize the AIType to 2nd type
-    state.enemies[0].aiState = IDLE;        // 8.8 -- initialize the AIState
+    state.enemies[0].aiType = WAITANDGO;
+    state.enemies[0].aiState = IDLE;
+
+    state.enemies[1].aiType = WAITANDGO;
+    state.enemies[1].aiState = IDLE;
+
+    state.enemies[2].aiType = PATROL;
+    state.enemies[2].aiState = WALKING;
 }
 
 
@@ -288,18 +247,6 @@ void ProcessInput() {
 
 }
 
-
-
-/*
-float lastTicks = 0.0f;
-void Update() {
-    float ticks = (float)SDL_GetTicks() / 1000.0f;
-    float deltaTime = ticks - lastTicks;
-    lastTicks = ticks;
-
-    state.player->Update(deltaTime);
-}
-*/
 
 // 6.5 -- replace Update() to fixed timestate version
 #define FIXED_TIMESTEP 0.0166666f   // 60 times per second
