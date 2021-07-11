@@ -12,7 +12,7 @@
 #include "ShaderProgram.h"
 
 enum EntityType {PLAYER, PLATFORM, ENEMY};      // 8.7 -- list of entity types
-enum AIType { WALKER };    // 8.7 -- list of AI types, what they do
+enum AIType { WALKER, WAITANDGO };    // 8.7, 8.8 -- list of AI types, what they do
 enum AIState { IDLE, WALKING, ATTACKING };      // 8.7 -- list of states AI can be in
 
 class Entity {
@@ -75,11 +75,12 @@ public:
     void CheckCollisionsX(Entity* objects, int objectCount);
 
     //6.9 -- change prototype void Update(float deltaTime);
-    void Update(float deltaTime, Entity* platforms, int platformCount);
+    void Update(float deltaTime, Entity* player, Entity* platforms, int platformCount);
     void Render(ShaderProgram* program);
     void DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index);
     
-    // 8.7 -- add function prototypes for AI
-    void AI();
+    // 8.7, 8.8 -- add function prototypes for AI
+    void AI(Entity* player);
     void AIWalker();
+    void AIWaitAndGo(Entity* player);
 };

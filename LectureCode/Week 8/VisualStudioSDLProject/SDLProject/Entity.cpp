@@ -87,12 +87,47 @@ void Entity::AIWalker() {
     movement = glm::vec3(-1.0f, 0.0f, 0.0f);
 }
 
+// 8.8, 8.9
+// if player is close, AI wakes up ands starts walking
+void Entity::AIWaitAndGo(Entity* player) {
+    // uses multiple states
+    // need pointer to player to get player's position
+    switch (aiState) {
+        case IDLE:
+            // 8.9 -- want to know if player is close enough
+            // if player close enough, switch to walking
+            if (glm::distance(position, player->position) < 3.0f) {
+                aiState = WALKING;
+            }
+            break;
+
+        case WALKING:
+            // 8.9 -- if in walking state, only move
+            // is player is to the left of AI, move to left, else move to right
+            if (player->position.x < position.x) {
+                movement = glm::vec3(-1.0f, 0.0f, 0.0f);
+            }
+            else {
+                movement = glm::vec3(1.0f, 0.0f, 0.0f);
+            }
+            
+            break;
+
+        case ATTACKING:
+            break;
+    }
+}
+
 // 8.7 -- process input for an enemy
 // can set movement
-void Entity::AI() {
+void Entity::AI(Entity* player) {
     switch (aiType) {
         case WALKER:
             AIWalker();
+            break;
+
+        case WAITANDGO:
+            AIWaitAndGo(player);
             break;
     }
 }
@@ -100,7 +135,7 @@ void Entity::AI() {
 
 
 // 6.9 -- update parameters for void Entity::Update(float deltaTime, Entity*)
-void Entity::Update(float deltaTime, Entity * platforms, int platformCount) {
+void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int platformCount) {
     // 6.20 -- check if entity is active
     if (isActive == false) {
         return;
@@ -115,7 +150,7 @@ void Entity::Update(float deltaTime, Entity * platforms, int platformCount) {
 
     // 8.7 -- if is enemy, call AI func
     if (entitytype == ENEMY) {
-        AI();
+        AI(player);
     }
 
 

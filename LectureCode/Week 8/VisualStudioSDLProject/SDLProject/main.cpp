@@ -3,6 +3,8 @@
 -   create a floor at bottom, place player on left
 -   place an AI on right
 -   give the AI some basic behavior
+-   2nd AI has different behavior
+-   AI change between states and waht they do when they are in a certain state
 
 -   main.cpp
     -   8.5
@@ -23,7 +25,11 @@
     -   8.7
         -   Initialize()
             -   initilize entities with EntityType
+    -   8.8
+        -   Initialize()
             -   initilize AIs with AIType and AIState
+        -   Update()
+            -   player and enemies recieve pointer to player
 
 -   Entity.h
     -   8.7
@@ -31,12 +37,25 @@
         -   create AIType enum
         -   create AIState enum
         -   add function prototypes for AI
+    -   8.8
+        -   add 2nd AIType
+        -   create function prototype for new AI type, AIWaitAndGo()
+        -   update prototypes to include parameter Entity* player 
 
 -   Entity.cpp
-    -   create AI() and AIWalker() functions
+    -   8.7
+        -   create AI() and AIWalker() functions
+    -   8.8
+        -   update AI() to have AIWaitAndGo()
+        -   include Entity* player parameter in Update(), AI()
+    -   8.9
+        -   update AIWaitAndGo() to move AI to player if player is close enough
 
 -   Notes:
-
+    -   still need acceleration/gravity for AI
+    -   need to check collisions for player with things other than platforms
+        -   collision with AI
+    -   
 */
 
 
@@ -193,7 +212,8 @@ void Initialize() {
 
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {   // only updates platforms 1x
         //state.platforms[i].Update(0);     // 6.9 -- update to version with all parameters
-        state.platforms[i].Update(0, NULL, 0);
+        //state.platforms[i].Update(0, NULL, 0);
+        state.platforms[i].Update(0, state.player, NULL, 0);    // 8.8 -- update to include player pointer
     }
 
 
@@ -206,8 +226,10 @@ void Initialize() {
     state.enemies[0].position = glm::vec3(4.0f, -2.25f, 0.0f);
     state.enemies[0].speed = 1.0f;
 
-    state.enemies[0].aiType = WALKER;       // 8.7 -- initialize the AIType
-    state.enemies[0].aiState = WALKING;     // 8.7 -- initialize the AIState
+    //state.enemies[0].aiType = WALKER;       // 8.7 -- initialize the AIType
+    //state.enemies[0].aiState = WALKING;     // 8.7 -- initialize the AIState
+    state.enemies[0].aiType = WAITANDGO;    // 8.8 -- initialize the AIType to 2nd type
+    state.enemies[0].aiState = IDLE;        // 8.8 -- initialize the AIState
 }
 
 
@@ -301,11 +323,12 @@ void Update() {
     while (deltaTime >= FIXED_TIMESTEP) {
         // Update. Notice it's FIXED_TIMESTEP. Not deltaTime
         //state.player->Update(FIXED_TIMESTEP);     // 6.9 -- update to include all parameters
-        state.player->Update(FIXED_TIMESTEP, state.platforms, PLATFORM_COUNT);
+        //state.player->Update(FIXED_TIMESTEP, state.platforms, PLATFORM_COUNT);
+        state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);    // 8.8 -- player gets pointer to self
 
         // 8.6
         for (size_t i = 0; i < ENEMY_COUNT; i++) {
-            state.enemies[i].Update(FIXED_TIMESTEP, state.platforms, PLATFORM_COUNT);
+            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);     // 8.8 -- enemies gets pointer to player
         }
 
         deltaTime -= FIXED_TIMESTEP;
