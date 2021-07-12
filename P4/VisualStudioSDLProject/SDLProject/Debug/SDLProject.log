@@ -1,2 +1,7 @@
 ﻿  Entity.cpp
+  main.cpp
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\main.cpp(135,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\main.cpp(141,46): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\main.cpp(147,68): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   SDLProject.vcxproj -> C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe

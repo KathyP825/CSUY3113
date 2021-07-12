@@ -96,7 +96,6 @@ void Entity::AIWaitAndGo(Entity* player) {
     // need pointer to player to get player's position
     switch (aiState) {
         case IDLE:
-            // 8.9 -- want to know if player is close enough
             // if player close enough, switch to walking
             if (glm::distance(position, player->position) < 3.0f) {
                 aiState = WALKING;
@@ -104,7 +103,6 @@ void Entity::AIWaitAndGo(Entity* player) {
             break;
 
         case WALKING:
-            // 8.9 -- if in walking state, only move
             // is player is to the left of AI, move to left, else move to right
             if (player->position.x < position.x) {
                 movement = glm::vec3(-1.0f, 0.0f, 0.0f);
@@ -134,6 +132,34 @@ void Entity::AIPatrol() {
 
 
 
+// Enemy 2 jumps up and down continuously
+void Entity::AIHopper() {
+    switch (aiState) {
+    case FALL:
+        if (position.y <= -0.15f) {      //if on floor
+            aiState = RISE;
+        }
+        else {
+            //movement = glm::vec3(0.0f, -4.0f, 0.0f);
+            velocity.y = -4.0f;
+        }
+        break;
+
+    case RISE:
+        //movement = glm::vec3(0.0f, 2.5f, 0.0f);
+        velocity.y = 2.5f;
+
+        if (position.y >= 2.5f) {   // jump to height limit, fall back down
+            aiState = FALL;
+        }
+
+        break;
+    }
+}
+
+
+
+
 // 8.7 -- process input for an enemy
 // can set movement
 void Entity::AI(Entity* player) {
@@ -149,13 +175,17 @@ void Entity::AI(Entity* player) {
         case PATROL:
             AIPatrol();
             break;
+
+        case HOPPER:
+            AIHopper();
+            break;
     }
 }
 
 
 
 // 6.9 -- update parameters for void Entity::Update(float deltaTime, Entity*)
-void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int platformCount) {
+void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int platformCount, Entity* enemies, int enemyCount) {
     // 6.20 -- check if entity is active
     if (isActive == false) {
         return;
@@ -192,18 +222,6 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
             animIndex = 0;
         }
     }
-
-
-    /*
-    // 6.11 -- delete
-    // 6.9  -- check if colliding with platforms
-    // if collide with any platform, return and get out because don't need to update anything else
-    for (size_t i = 0; i < platformCount; i++) {
-        if (CheckCollision(&platforms[i])) {
-            return;
-        }
-    }
-    */
 
 
     // 6.12 -- do jump

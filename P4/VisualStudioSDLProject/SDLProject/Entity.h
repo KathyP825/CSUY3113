@@ -12,8 +12,8 @@
 #include "ShaderProgram.h"
 
 enum EntityType {PLAYER, PLATFORM, ENEMY};      // 8.7 -- list of entity types
-enum AIType { WALKER, WAITANDGO, PATROL };    // 8.7, 8.8 -- list of AI types, what they do
-enum AIState { IDLE, WALKING, ATTACKING };      // 8.7 -- list of states AI can be in
+enum AIType { WALKER, WAITANDGO, PATROL, HOPPER };    // 8.7, 8.8 -- list of AI types, what they do
+enum AIState { IDLE, WALKING, ATTACKING, RISE, FALL };      // 8.7 -- list of states AI can be in
 
 class Entity {
 public:
@@ -55,7 +55,6 @@ public:
     int animCols = 0;
     int animRows = 0;
 
-    // 6.20
     bool isActive = true;
 
     //6.21 -- collision flags
@@ -75,7 +74,7 @@ public:
     void CheckCollisionsX(Entity* objects, int objectCount);
 
     //6.9 -- change prototype void Update(float deltaTime);
-    void Update(float deltaTime, Entity* player, Entity* platforms, int platformCount);
+    void Update(float deltaTime, Entity* player, Entity* platforms, int platformCount, Entity* enemies, int enemyCount);
     void Render(ShaderProgram* program);
     void DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index);
     
@@ -84,4 +83,5 @@ public:
     void AIWalker();
     void AIWaitAndGo(Entity* player);
     void AIPatrol();
+    void AIHopper();
 };

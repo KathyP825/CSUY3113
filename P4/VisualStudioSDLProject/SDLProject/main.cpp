@@ -103,7 +103,6 @@ void Initialize() {
     state.player->position = glm::vec3(-4.0f, -1.0f, 0.0f);     // 8.5 -- initialize player at bottom left
     state.player->movement = glm::vec3(0);
     state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
-    //state.player->speed = 1.0f;
     state.player->speed = 1.5f;     // 6.13 -- increase player speed
     state.player->textureID = LoadTexture("george_0.png");
 
@@ -153,7 +152,7 @@ void Initialize() {
     
 
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {   // only updates platforms 1x
-        state.platforms[i].Update(0, state.player, NULL, 0);    // 8.8 -- update to include player pointer
+        state.platforms[i].Update(0, state.player, NULL, 0, state.enemies, 3);    // 8.8 -- update to include player pointer
     }
 
 
@@ -165,6 +164,10 @@ void Initialize() {
         state.enemies[i].entitytype = ENEMY;
         state.enemies[i].textureID = enemyTextureID;
 
+        state.enemies[i].speed = 1.0f;
+        state.enemies->acceleration = glm::vec3(0, -9.81f, 0);
+        state.enemies->jumpPower = 5.0f;
+
         if (i == 0) {
             state.enemies[i].position = glm::vec3(1.8f, -2.25f, 0.0f);
         }
@@ -174,18 +177,13 @@ void Initialize() {
         else if (i == 2) {
             state.enemies[i].position = glm::vec3(-3.5f, 1.9f, 0.0f);
         }
-
-        state.enemies[i].speed = 1.0f;
-        state.player->acceleration = glm::vec3(0, -9.81f, 0);
     }
 
-    //state.enemies[0].aiType = WALKER;       // 8.7 -- initialize the AIType
-    //state.enemies[0].aiState = WALKING;     // 8.7 -- initialize the AIState
     state.enemies[0].aiType = WAITANDGO;
     state.enemies[0].aiState = IDLE;
 
-    state.enemies[1].aiType = WAITANDGO;
-    state.enemies[1].aiState = IDLE;
+    state.enemies[1].aiType = HOPPER;
+    state.enemies[1].aiState = RISE;
 
     state.enemies[2].aiType = PATROL;
     state.enemies[2].aiState = WALKING;
@@ -271,11 +269,11 @@ void Update() {
         // Update. Notice it's FIXED_TIMESTEP. Not deltaTime
         //state.player->Update(FIXED_TIMESTEP);     // 6.9 -- update to include all parameters
         //state.player->Update(FIXED_TIMESTEP, state.platforms, PLATFORM_COUNT);
-        state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);    // 8.8 -- player gets pointer to self
+        state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT, state.enemies, ENEMY_COUNT);    // 8.8 -- player gets pointer to self
 
         // 8.6
         for (size_t i = 0; i < ENEMY_COUNT; i++) {
-            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);     // 8.8 -- enemies gets pointer to player
+            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT, state.enemies, ENEMY_COUNT);     // 8.8 -- enemies gets pointer to player
         }
 
         deltaTime -= FIXED_TIMESTEP;
