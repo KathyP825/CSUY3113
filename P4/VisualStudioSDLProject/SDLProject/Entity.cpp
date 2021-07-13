@@ -274,7 +274,6 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
     // 6.7
     velocity.x = movement.x * speed;    // when character starts moving left/right, have instant velocity
     velocity += acceleration * deltaTime;
-    //position += velocity * deltaTime;   // new way to calculate position      // 6.16 -- remove
 
 
     // 6.16
@@ -302,13 +301,18 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
         CheckCollisionsY(enemies, enemyCount);
     }
 
-    // player dies, remaining enemies stop moving
+    // if player dies, remaining enemies stop moving
+    // else if player wins, player stops moving left/right/jump
     if ((entitytype == PLAYER) && (isAlive == false)) {
         for (size_t i = 0; i < enemyCount; i++) {
             if (enemies[i].isActive == true) {
                 enemies[i].aiState = IDLE;
             }
         }
+    }
+    else if ((entitytype == PLAYER) && (numEnemiesKilled == 3)) {
+        speed = 0.0f;
+        jumpPower = 0.0f;
     }
     
     modelMatrix = glm::mat4(1.0f);
