@@ -46,26 +46,24 @@ void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
                 position.y -= penetrationY;
                 velocity.y = 0;
 
-                collidedTop = true;     //6.21
-                //collideObjectType = object->entitytype;
+                collidedTop = true;
             }
             else if (velocity.y < 0) {
                 position.y += penetrationY;
                 velocity.y = 0;
 
-                collidedBottom = true;  // 6.21
-                //collideObjectType = object->entitytype;
+                collidedBottom = true;
             }
 
             ////collide with enemy
 
             if ((entitytype == PLAYER && object->entitytype == ENEMY) && collidedBottom == true) {
                 // player kills enemy, enemy dies
-                object->isAlive = false;
                 numEnemiesKilled++;
+                object->isAlive = false;
                 object->isActive = false;
             }
-            else if ((entitytype == PLAYER && object->entitytype == ENEMY) && collidedTop == true) {
+            else if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedTop == true)) {
                 // player dies
                 isAlive = false;
                 isActive = false;
@@ -87,23 +85,18 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
             if (velocity.x > 0) {
                 position.x -= penetrationX;
                 velocity.x = 0;
-
-                collidedRight = true;   // 6.21
-                //collideObjectType = object->entitytype;
+                collidedRight = true;
             }
             else if (velocity.x < 0) {
                 position.x += penetrationX;
                 velocity.x = 0;
-
-                collidedLeft = true;    // 6.21
-                //collideObjectType = object->entitytype;
+                collidedLeft = true;
             }
 
             ////if ((entitytype == PLAYER && objects->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
             if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
                 // player dies if collide from left or right
                 isAlive = false;
-                numEnemiesKilled++;
                 isActive = false;
             }
         }
@@ -127,6 +120,11 @@ void Entity::AIWaitAndGo(Entity* player) {
             if (glm::distance(position, player->position) < 3.0f) {
                 aiState = WALKING;
             }
+
+            if (player->isAlive == false) {
+                speed = 0.0f;
+            }
+
             break;
 
         case WALKING:
@@ -149,11 +147,23 @@ void Entity::AIWaitAndGo(Entity* player) {
 // patrols back and forth on platform
 // for Enemy 3 only
 void Entity::AIPatrol() {
-    if ((position.x <= -3.5f)) {    // needs to be same as starting position or won't work
-        movement = glm::vec3(1.0f, 0.0f, 0.0f);
-    }
-    else if (position.x >= -0.5f) {
-        movement = glm::vec3(-1.0f, 0.0f, 0.0f);
+    //if ((position.x <= -3.5f)) {    // needs to be same as starting position or won't work
+    //    movement = glm::vec3(1.0f, 0.0f, 0.0f);
+    //}
+    //else if (position.x >= -0.5f) {
+    //    movement = glm::vec3(-1.0f, 0.0f, 0.0f);
+    //}
+
+    switch (aiState) {
+        case IDLE:
+            speed = 0.0f;
+        case WALKING:
+            if (position.x <= -3.5f) {    // needs to be same as starting position or won't work
+                movement = glm::vec3(1.0f, 0.0f, 0.0f);
+            }
+            else if (position.x >= -0.5f) {
+                movement = glm::vec3(-1.0f, 0.0f, 0.0f);
+            }
     }
 }
 
@@ -162,25 +172,28 @@ void Entity::AIPatrol() {
 // Enemy 2 jumps up and down continuously
 void Entity::AIHopper() {
     switch (aiState) {
-    case FALL:
-        if (position.y <= -0.15f) {      //if on floor
-            aiState = RISE;
-        }
-        else {
-            //movement = glm::vec3(0.0f, -4.0f, 0.0f);
-            velocity.y = -4.0f;
-        }
-        break;
+        case IDLE:
+            velocity.y = 0.0f;
+            acceleration.y = 0.0f;      // stops enemy from sliding down from gravity
+            break;
 
-    case RISE:
-        //movement = glm::vec3(0.0f, 2.5f, 0.0f);
-        velocity.y = 2.5f;
+        case FALL:
+            if (position.y <= -0.15f) {      //if on floor
+                aiState = RISE;
+            }
+            else {
+                velocity.y = -4.0f;
+            }
+            break;
 
-        if (position.y >= 2.5f) {   // jump to height limit, fall back down
-            aiState = FALL;
-        }
+        case RISE:
+            velocity.y = 2.5f;
 
-        break;
+            if (position.y >= 2.5f) {   // jump to height limit, fall back down
+                aiState = FALL;
+            }
+
+            break;
     }
 }
 
@@ -284,10 +297,18 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
     //    numEnemiesKilled++;
     //}
 
-    if (entitytype == PLAYER ) {
+    if (entitytype == PLAYER) {
         CheckCollisionsX(enemies, enemyCount);
         CheckCollisionsY(enemies, enemyCount);
-        
+    }
+
+    // player dies, remaining enemies stop moving
+    if ((entitytype == PLAYER) && (isAlive == false)) {
+        for (size_t i = 0; i < enemyCount; i++) {
+            if (enemies[i].isActive == true) {
+                enemies[i].aiState = IDLE;
+            }
+        }
     }
     
     modelMatrix = glm::mat4(1.0f);
