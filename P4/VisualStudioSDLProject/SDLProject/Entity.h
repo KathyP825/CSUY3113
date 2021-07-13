@@ -26,8 +26,6 @@ public:
 
     glm::vec3 position;
     glm::vec3 movement;
-
-    // 6.6 -- add variables to keep track of acceleration and velocity
     glm::vec3 acceleration;
     glm::vec3 velocity;
 

@@ -13,8 +13,10 @@ Entity::Entity() {
     modelMatrix = glm::mat4(1.0f);
 }
 
+/*
+--------------- Collision Check ---------------
+*/
 
-// 6.9 -- check if curr Entity will collide with another Entity
 bool Entity::CheckCollision(Entity* other) {
     if (other == this) return false;
 
@@ -33,7 +35,6 @@ bool Entity::CheckCollision(Entity* other) {
 }
 
 
-// 6.16 -- new collision check
 void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
     for (int i = 0; i < objectCount; i++) {
         Entity* object = &objects[i];
@@ -55,30 +56,27 @@ void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
                 collidedBottom = true;
             }
 
-            ////collide with enemy
-
+            // player kills enemy if player's top/bottom collides with enemy
             if ((entitytype == PLAYER && object->entitytype == ENEMY) && collidedBottom == true) {
-                // player kills enemy, enemy dies
                 numEnemiesKilled++;
                 object->isAlive = false;
                 object->isActive = false;
             }
             else if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedTop == true)) {
-                // player dies
-                isAlive = false;
-                isActive = false;
+                numEnemiesKilled++;
+                object->isAlive = false;
+                object->isActive = false;
             }
         }
     }
 }
+
 
 void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
     for (int i = 0; i < objectCount; i++) {
         Entity* object = &objects[i];
 
         if (CheckCollision(object)) {
-            //collideObject = object;
-
             float xdist = fabs(position.x - object->position.x);
             float penetrationX = fabs(xdist - (width / 2.0f) - (object->width / 2.0f));
 
@@ -93,18 +91,18 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
                 collidedLeft = true;
             }
 
-            ////if ((entitytype == PLAYER && objects->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
+            // player dies if collide from left/right
             if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
-                // player dies if collide from left or right
                 isAlive = false;
-                isActive = false;
             }
         }
     }
 }
 
 
-
+/*
+--------------- AI Controls ---------------
+*/
 
 void Entity::AIWalker() {
     movement = glm::vec3(-1.0f, 0.0f, 0.0f);
@@ -168,7 +166,6 @@ void Entity::AIPatrol() {
 }
 
 
-
 // Enemy 2 jumps up and down continuously
 void Entity::AIHopper() {
     switch (aiState) {
@@ -198,8 +195,6 @@ void Entity::AIHopper() {
 }
 
 
-
-
 // 8.7 -- process input for an enemy
 // can set movement
 void Entity::AI(Entity* player) {
@@ -223,25 +218,21 @@ void Entity::AI(Entity* player) {
 }
 
 
+/*
+--------------- General Controls ---------------
+*/
 
-// 6.9 -- update parameters for void Entity::Update(float deltaTime, Entity*)
 void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int platformCount, Entity* enemies, int enemyCount) {
-//void Entity::Update(float deltaTime, Entity* player, Entity* other, int otherCount) {
-    // 6.20 -- check if entity is active
     if (isActive == false) return;
 
-    // 6.21
     collidedTop = false;
     collidedBottom = false;
     collidedLeft = false;
     collidedRight = false;
 
-
-    // 8.7 -- if is enemy, call AI func
     if (entitytype == ENEMY) {
         AI(player);
     }
-
 
     if (animIndices != NULL) {
         if (glm::length(movement) != 0) {
@@ -263,15 +254,12 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
     }
 
 
-    // 6.12 -- do jump
     if (jump) {
         jump = false;   // only jump 1x
         velocity.y += jumpPower;    // does the jump up, acceleration does the back down part
     }
 
 
-
-    // 6.7
     velocity.x = movement.x * speed;    // when character starts moving left/right, have instant velocity
     velocity += acceleration * deltaTime;
 
@@ -282,19 +270,6 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
     position.x += velocity.x * deltaTime;
     CheckCollisionsX(platforms, platformCount);
 
-    ////if (collideObject->entitytype == ENEMY && (collidedLeft == true || collidedRight == true || collidedTop == true) && collidedBottom == false) {  // player dies
-    //if (other->aiType == ENEMY && (collidedLeft == true || collidedRight == true || collidedTop == true) && collidedBottom == false) {  // player dies
-    //    //CheckCollisionsX(other, otherCount);
-    //    //CheckCollisionsY(other, otherCount);
-    //    player->isActive = false;
-    //    player->isAlive = false;
-    //    //isActive = false;
-    //    //isAlive = false;
-    //}
-    //else if (other->aiType == ENEMY && collidedBottom){     // kill enemy
-    //    other->isActive = false;
-    //    numEnemiesKilled++;
-    //}
 
     if (entitytype == PLAYER) {
         CheckCollisionsX(enemies, enemyCount);
@@ -304,6 +279,9 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
     // if player dies, remaining enemies stop moving
     // else if player wins, player stops moving left/right/jump
     if ((entitytype == PLAYER) && (isAlive == false)) {
+        speed = 0.0f;
+        jumpPower = 0.0f;
+
         for (size_t i = 0; i < enemyCount; i++) {
             if (enemies[i].isActive == true) {
                 enemies[i].aiState = IDLE;
@@ -318,7 +296,6 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
 }
-
 
 
 void Entity::DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index) {

@@ -23,17 +23,17 @@ Project 4: Rise of the AI
 
 #include "Entity.h"
 
-#define PLATFORM_COUNT 19    // total platforms
-int numLevel1_Platforms = 11;
+#define PLATFORM_COUNT 18       // total platforms
+int numLevel1_Platforms = 10;
 int numLevel2_Platforms = 4;
 int numLevel3_Platforms = 4;
 
-#define ENEMY_COUNT 3   // total enemies
+#define ENEMY_COUNT 3           // total enemies
 
 struct GameState {
     Entity* player;
     Entity* platforms;
-    Entity* enemies;        // 8.6
+    Entity* enemies;
 };
 
 GameState state;
@@ -150,7 +150,7 @@ void Initialize() {
 
     glUseProgram(program.programID);
 
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClearColor(0.529f, 0.808f, 0.980f, 1.0f);       // Background Color
     glEnable(GL_BLEND);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -158,45 +158,30 @@ void Initialize() {
 
     // Initialize Game Objects
 
-    // Initialize Player
+    /* 
+    --------------- Initialize Player---------------
+    */
     state.player = new Entity();
     state.player->entitytype = PLAYER;      // 8.7 -- initilize with PLAYER entity type
     state.player->position = glm::vec3(-4.0f, -1.0f, 0.0f);     // 8.5 -- initialize player at bottom left
     state.player->movement = glm::vec3(0);
     state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
     state.player->speed = 1.5f;     // 6.13 -- increase player speed
-    state.player->textureID = LoadTexture("george_0.png");
-
-    state.player->animRight = new int[4]{ 3, 7, 11, 15 };
-    state.player->animLeft = new int[4]{ 1, 5, 9, 13 };
-    state.player->animUp = new int[4]{ 2, 6, 10, 14 };
-    state.player->animDown = new int[4]{ 0, 4, 8, 12 };
-
-    state.player->animIndices = state.player->animRight;
-    state.player->animFrames = 4;
-    state.player->animIndex = 0;
-    state.player->animTime = 0;
-    state.player->animCols = 4;
-    state.player->animRows = 4;
-
-    //6.11 -- fix character hovering
-    state.player->height = 0.8f;    // num can vary
-    state.player->width = 0.8f;     // not necessary, but can if you want
-
-
-    // 6.12 -- set up for jump
     state.player->jumpPower = 7.0f;
+    state.player->textureID = LoadTexture("chick.png");
 
 
-    // 6.8 -- set up platforms
+    /*
+    --------------- Initialize Platforms ---------------
+    */
     state.platforms = new Entity[PLATFORM_COUNT];
-    GLuint platformTextureID = LoadTexture("platformPack_tile001.png");
+    GLuint platformTextureID = LoadTexture("crate_42.png");
 
     // 8.5 -- creates the bottom floor
     for (size_t i = 0; i < numLevel1_Platforms; i++) {      // start i = 0, end i = 10
         state.platforms[i].entitytype = PLATFORM;
         state.platforms[i].textureID = platformTextureID;
-        state.platforms[i].position = glm::vec3(-5.0f + i, -3.25f, 0);
+        state.platforms[i].position = glm::vec3(-4.5f + i, -3.25f, 0);
     }
 
     for (size_t i = (numLevel1_Platforms); i < (numLevel1_Platforms + numLevel2_Platforms); i++) {       // start i = 11, end i = 14
@@ -217,9 +202,11 @@ void Initialize() {
     }
 
 
-    // 8.6 -- initialize Enemies
+    /*
+    --------------- Initialize Enemies ---------------
+    */
     state.enemies = new Entity[ENEMY_COUNT];
-    GLuint enemyTextureID = LoadTexture("ctg.png");
+    GLuint enemyTextureID = LoadTexture("snake.png");
 
     for (size_t i = 0; i < ENEMY_COUNT; i++) {       // start i = 11, end i = 14
         state.enemies[i].entitytype = ENEMY;
@@ -352,7 +339,7 @@ void Render() {
         state.platforms[i].Render(&program);
     }
 
-    // 8.6 -- render and display all enemies
+    // render and display all enemies
     for (size_t i = 0; i < ENEMY_COUNT; i++) {
         state.enemies[i].Render(&program);
     }
@@ -360,10 +347,10 @@ void Render() {
 
     // display WIN / LOSE message
     if (state.player->isAlive == false) {
-        DrawText(&program, fontTextureID, "You Lose!", 0.5f, -0.25f, glm::vec3(-0.5f, 0.0f, 0));
+        DrawText(&program, fontTextureID, "You Lose!", 0.5f, -0.25f, glm::vec3(-1.25f, -0.25f, 0));
     }
     else if (state.player->isAlive == true && state.player->numEnemiesKilled == 3) {
-        DrawText(&program, fontTextureID, "You Win!", 0.5f, -0.25f, glm::vec3(-0.5f, 0.0f, 0));
+        DrawText(&program, fontTextureID, "You Win!", 0.5f, -0.25f, glm::vec3(-1.22f, -0.25f, 0));
     }
 
     SDL_GL_SwapWindow(displayWindow);
