@@ -16,6 +16,7 @@ Project 4: Rise of the AI
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
+#include <vector>   // need for DrawText to work
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -63,6 +64,66 @@ GLuint LoadTexture(const char* filePath) {
     stbi_image_free(image);
     return textureID;
 }
+
+
+
+void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, float size, float spacing, glm::vec3 position) {
+    // calculate U,V coordinates: 16 rows and columns
+    float width = 1.0f / 16.0f;
+    float height = 1.0f / 16.0f;
+
+    std::vector<float> vertices;
+    std::vector<float> texCoords;
+
+    // for each character: get index & get U,V coordinates 
+    for (int i = 0; i < text.size(); i++) {
+        int index = (int)text[i];
+        float offset = (size + spacing) * i;
+
+        float u = (float)(index % 16) / 16.0f;
+        float v = (float)(index / 16) / 16.0f;
+
+        //-----  Set up the vertices and texCoords  -----
+        vertices.insert(vertices.end(), {
+            offset + (-0.5f * size), 0.5f * size,
+            offset + (-0.5f * size), -0.5f * size,
+            offset + (0.5f * size), 0.5f * size,
+            offset + (0.5f * size), -0.5f * size,
+            offset + (0.5f * size), 0.5f * size,
+            offset + (-0.5f * size), -0.5f * size,
+            });
+
+        texCoords.insert(texCoords.end(), {
+            u, v,
+            u, v + height,
+            u + width, v,
+            u + width, v + height,
+            u + width, v,
+            u, v + height,
+            });
+
+    }
+
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::translate(modelMatrix, position);
+    program->SetModelMatrix(modelMatrix);
+
+    glUseProgram(program->programID);
+
+    // vertices.data() makes the vector into a normal array so it can be used
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices.data());
+    glEnableVertexAttribArray(program->positionAttribute);
+
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords.data());
+    glEnableVertexAttribArray(program->texCoordAttribute);
+
+    glBindTexture(GL_TEXTURE_2D, fontTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, (int)(text.size() * 6));
+
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
+}
+
 
 
 
@@ -165,8 +226,8 @@ void Initialize() {
         state.enemies[i].textureID = enemyTextureID;
 
         state.enemies[i].speed = 1.0f;
-        state.enemies->acceleration = glm::vec3(0, -9.81f, 0);
-        state.enemies->jumpPower = 5.0f;
+        state.enemies[i].acceleration = glm::vec3(0, -9.81f, 0);
+        state.enemies[i].jumpPower = 5.0f;
 
         if (i == 0) {
             state.enemies[i].position = glm::vec3(1.8f, -2.25f, 0.0f);
@@ -266,16 +327,13 @@ void Update() {
     // when enough time has passed, update player with FIXED_TIMESTEP
     // if have extra time (accumulate 2x), update 2x
     while (deltaTime >= FIXED_TIMESTEP) {
-        // Update. Notice it's FIXED_TIMESTEP. Not deltaTime
-        //state.player->Update(FIXED_TIMESTEP);     // 6.9 -- update to include all parameters
-        //state.player->Update(FIXED_TIMESTEP, state.platforms, PLATFORM_COUNT);
-        state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT, state.enemies, ENEMY_COUNT);    // 8.8 -- player gets pointer to self
+        //state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);    // 8.8 -- player gets pointer to self
+        state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT, state.enemies, ENEMY_COUNT);
 
-        // 8.6
         for (size_t i = 0; i < ENEMY_COUNT; i++) {
-            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT, state.enemies, ENEMY_COUNT);     // 8.8 -- enemies gets pointer to player
+            //state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);     // 8.8 -- enemies gets pointer to player
+            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT, NULL, 0);
         }
-
         deltaTime -= FIXED_TIMESTEP;
     }
     accumulator = deltaTime;
@@ -287,6 +345,8 @@ void Update() {
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    GLuint fontTextureID = LoadTexture("font.png");
+
     // render and display all platforms
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {
         state.platforms[i].Render(&program);
@@ -296,9 +356,15 @@ void Render() {
     for (size_t i = 0; i < ENEMY_COUNT; i++) {
         state.enemies[i].Render(&program);
     }
-
-
     state.player->Render(&program);
+
+    // display WIN / LOSE message
+    if (state.player->isAlive == false) {
+        DrawText(&program, fontTextureID, "You Lose!", 0.5f, -0.25f, glm::vec3(-0.5f, 0.0f, 0));
+    }
+    else if (state.player->isAlive == true && state.player->numEnemiesKilled == 3) {
+        DrawText(&program, fontTextureID, "You Win!", 0.5f, -0.25f, glm::vec3(-0.5f, 0.0f, 0));
+    }
 
     SDL_GL_SwapWindow(displayWindow);
 }

@@ -47,12 +47,28 @@ void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
                 velocity.y = 0;
 
                 collidedTop = true;     //6.21
+                //collideObjectType = object->entitytype;
             }
             else if (velocity.y < 0) {
                 position.y += penetrationY;
                 velocity.y = 0;
 
                 collidedBottom = true;  // 6.21
+                //collideObjectType = object->entitytype;
+            }
+
+            ////collide with enemy
+
+            if ((entitytype == PLAYER && object->entitytype == ENEMY) && collidedBottom == true) {
+                // player kills enemy, enemy dies
+                object->isAlive = false;
+                numEnemiesKilled++;
+                object->isActive = false;
+            }
+            else if ((entitytype == PLAYER && object->entitytype == ENEMY) && collidedTop == true) {
+                // player dies
+                isAlive = false;
+                isActive = false;
             }
         }
     }
@@ -63,6 +79,8 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
         Entity* object = &objects[i];
 
         if (CheckCollision(object)) {
+            //collideObject = object;
+
             float xdist = fabs(position.x - object->position.x);
             float penetrationX = fabs(xdist - (width / 2.0f) - (object->width / 2.0f));
 
@@ -71,12 +89,22 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
                 velocity.x = 0;
 
                 collidedRight = true;   // 6.21
+                //collideObjectType = object->entitytype;
             }
             else if (velocity.x < 0) {
                 position.x += penetrationX;
                 velocity.x = 0;
 
                 collidedLeft = true;    // 6.21
+                //collideObjectType = object->entitytype;
+            }
+
+            ////if ((entitytype == PLAYER && objects->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
+            if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
+                // player dies if collide from left or right
+                isAlive = false;
+                numEnemiesKilled++;
+                isActive = false;
             }
         }
     }
@@ -84,12 +112,11 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
 
 
 
-// 8.7
+
 void Entity::AIWalker() {
     movement = glm::vec3(-1.0f, 0.0f, 0.0f);
 }
 
-// 8.8, 8.9
 // if player is close, AI wakes up ands starts walking
 void Entity::AIWaitAndGo(Entity* player) {
     // uses multiple states
@@ -186,10 +213,9 @@ void Entity::AI(Entity* player) {
 
 // 6.9 -- update parameters for void Entity::Update(float deltaTime, Entity*)
 void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int platformCount, Entity* enemies, int enemyCount) {
+//void Entity::Update(float deltaTime, Entity* player, Entity* other, int otherCount) {
     // 6.20 -- check if entity is active
-    if (isActive == false) {
-        return;
-    }
+    if (isActive == false) return;
 
     // 6.21
     collidedTop = false;
@@ -243,10 +269,32 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
     CheckCollisionsY(platforms, platformCount);
     position.x += velocity.x * deltaTime;
     CheckCollisionsX(platforms, platformCount);
+
+    ////if (collideObject->entitytype == ENEMY && (collidedLeft == true || collidedRight == true || collidedTop == true) && collidedBottom == false) {  // player dies
+    //if (other->aiType == ENEMY && (collidedLeft == true || collidedRight == true || collidedTop == true) && collidedBottom == false) {  // player dies
+    //    //CheckCollisionsX(other, otherCount);
+    //    //CheckCollisionsY(other, otherCount);
+    //    player->isActive = false;
+    //    player->isAlive = false;
+    //    //isActive = false;
+    //    //isAlive = false;
+    //}
+    //else if (other->aiType == ENEMY && collidedBottom){     // kill enemy
+    //    other->isActive = false;
+    //    numEnemiesKilled++;
+    //}
+
+    if (entitytype == PLAYER ) {
+        CheckCollisionsX(enemies, enemyCount);
+        CheckCollisionsY(enemies, enemyCount);
+        
+    }
     
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
 }
+
+
 
 void Entity::DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index) {
     float u = (float)(index % animCols) / (float)animCols;
@@ -273,6 +321,8 @@ void Entity::DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID
     glDisableVertexAttribArray(program->positionAttribute);
     glDisableVertexAttribArray(program->texCoordAttribute);
 }
+
+
 
 void Entity::Render(ShaderProgram* program) {
     if (isActive == false) {

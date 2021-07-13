@@ -21,6 +21,9 @@ public:
     AIType aiType;      // 8.7
     AIState aiState;    // 8.7
 
+    //Entity* collideObject = NULL;
+    //EntityType collideObjectType;
+
     glm::vec3 position;
     glm::vec3 movement;
 
@@ -57,6 +60,11 @@ public:
 
     bool isActive = true;
 
+    //
+    bool isAlive = true;
+    int numEnemiesKilled = 0;
+    int playerWin = -1;  // -1 = default, 0 = lose, 1 = win
+
     //6.21 -- collision flags
     bool collidedTop = false;
     bool collidedBottom = false;
@@ -73,8 +81,8 @@ public:
     void CheckCollisionsY(Entity* objects, int objectCount);
     void CheckCollisionsX(Entity* objects, int objectCount);
 
-    //6.9 -- change prototype void Update(float deltaTime);
     void Update(float deltaTime, Entity* player, Entity* platforms, int platformCount, Entity* enemies, int enemyCount);
+    //void Update(float deltaTime, Entity* player, Entity* other, int otherCount);
     void Render(ShaderProgram* program);
     void DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index);
     
