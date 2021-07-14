@@ -55,6 +55,12 @@ public:
     int numEnemiesKilled = 0;
     int playerWin = -1;  // -1 = default, 0 = lose, 1 = win
 
+    // replacement for hardcoding
+    int leftBarrier = 0.0;
+    int rightBarrier = 0.0f;
+    int topBarrier = 0.0f;
+    int bottomBarrier = 0.0f;
+
     // collision flags
     bool collidedTop = false;
     bool collidedBottom = false;

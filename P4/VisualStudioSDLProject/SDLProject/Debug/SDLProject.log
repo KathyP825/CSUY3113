@@ -1,6 +1,7 @@
-﻿  main.cpp
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\main.cpp(81,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\main.cpp(189,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\main.cpp(196,46): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\main.cpp(203,68): warning C4018: '<': signed/unsigned mismatch
+﻿  Entity.cpp
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\Entity.h(59,23): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\Entity.h(60,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\Entity.h(61,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\Entity.h(62,25): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\Entity.cpp(269,30): warning C4018: '<': signed/unsigned mismatch
   SDLProject.vcxproj -> C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P4\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe

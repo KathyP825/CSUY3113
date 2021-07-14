@@ -222,19 +222,26 @@ void Initialize() {
         state.enemies[i].entitytype = ENEMY;
         state.enemies[i].textureID = enemyTextureID;
 
-        state.enemies[i].speed = 1.0f;
         state.enemies[i].acceleration = glm::vec3(0, -9.81f, 0);
-        state.enemies[i].jumpPower = 5.0f;
+        state.enemies[i].speed = 1.0f;
+        state.enemies[i].jumpPower = 2.0f;
 
         if (i == 0) {
             state.enemies[i].position = glm::vec3(1.8f, -2.25f, 0.0f);
         }
         else if (i == 1) {
             state.enemies[i].position = glm::vec3(3.0f, -0.15f, 0.0f);
+            //state.enemies[i].speed = 2.0f;
         }
         else if (i == 2) {
             state.enemies[i].position = glm::vec3(-3.5f, 1.9f, 0.0f);
         }
+
+        state.enemies[i].leftBarrier = state.enemies[i].position.x;
+        state.enemies[i].rightBarrier = state.enemies[i].position.x + 2.0f;
+
+        state.enemies[i].topBarrier = state.enemies[i].position.y + 2.65f;
+        state.enemies[i].bottomBarrier = state.enemies[i].position.y;
     }
 
     state.enemies[0].aiType = WAITANDGO;
@@ -306,9 +313,9 @@ void Update() {
     float deltaTime = ticks - lastTicks;
     lastTicks = ticks;
 
+    // if not enough time has passed, store into accumulator and don't do anything
     deltaTime += accumulator;
     if (deltaTime < FIXED_TIMESTEP) {
-        // if not enough time has passed, store into accumulator and don't do anything
         accumulator = deltaTime;
         return;
     }

@@ -140,10 +140,10 @@ void Entity::AIPatrol() {
         case IDLE:
             speed = 0.0f;
         case WALKING:
-            if (position.x <= -3.5f) {    // needs to be same as starting position or won't work
+            if (position.x <= leftBarrier) {    // needs to be same as starting position or won't work
                 movement = glm::vec3(1.0f, 0.0f, 0.0f);
             }
-            else if (position.x >= -0.5f) {
+            else if (position.x >= rightBarrier) {
                 movement = glm::vec3(-1.0f, 0.0f, 0.0f);
             }
     }
@@ -160,18 +160,20 @@ void Entity::AIHopper() {
             break;
 
         case FALL:
-            if (position.y <= -0.15f) {      // if on platform level 2 floor
+            if (position.y <= bottomBarrier) {      // if on platform level 2 floor
                 aiState = RISE;
             }
             else {
-                velocity.y = -4.0f;
+                //velocity.y = -4.0f;
+                jump = false;
             }
             break;
 
         case RISE:
-            velocity.y = 2.5f;
+            velocity.y = 2.5f;  // makes sure enemy doesn't jump out of frame at each jump
+            jump = true;
 
-            if (position.y >= 2.5f) {   // jump to height limit, fall back down
+            if (position.y >= topBarrier) {   // jump to height limit, fall back down
                 aiState = FALL;
             }
 
