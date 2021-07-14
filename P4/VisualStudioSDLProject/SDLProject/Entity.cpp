@@ -108,7 +108,7 @@ void Entity::AIWalker() {
 void Entity::AIWaitAndGo(Entity* player) {
     switch (aiState) {
         case IDLE:
-            if (glm::distance(position, player->position) < 3.0f) {
+            if (glm::distance(position, player->position) < 4.0f) {
                 aiState = WALKING;
             }
 

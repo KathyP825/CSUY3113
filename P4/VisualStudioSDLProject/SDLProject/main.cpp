@@ -24,9 +24,10 @@ Project 4: Rise of the AI
 
 #include "Entity.h"
 
-#define PLATFORM_COUNT 18       // total platforms
+#define PLATFORM_COUNT 17       // total platforms
+// split number of platforms for each level for easier calculations
 int numLevel1_Platforms = 10;
-int numLevel2_Platforms = 4;
+int numLevel2_Platforms = 3;
 int numLevel3_Platforms = 4;
 
 #define ENEMY_COUNT 3           // total enemies

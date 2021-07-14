@@ -11,9 +11,9 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
-enum EntityType {PLAYER, PLATFORM, ENEMY};      // 8.7 -- list of entity types
-enum AIType { WALKER, WAITANDGO, PATROL, HOPPER };    // 8.7, 8.8 -- list of AI types, what they do
-enum AIState { IDLE, WALKING, ATTACKING, RISE, FALL };      // 8.7 -- list of states AI can be in
+enum EntityType {PLAYER, PLATFORM, ENEMY};
+enum AIType { WALKER, WAITANDGO, PATROL, HOPPER };
+enum AIState { IDLE, WALKING, ATTACKING, RISE, FALL };
 
 class Entity {
 public:
