@@ -17,31 +17,23 @@ enum AIState { IDLE, WALKING, ATTACKING, RISE, FALL };      // 8.7 -- list of st
 
 class Entity {
 public:
-    EntityType entitytype;      // 8.7
-    AIType aiType;      // 8.7
-    AIState aiState;    // 8.7
-
-    //Entity* collideObject = NULL;
-    //EntityType collideObjectType;
+    EntityType entitytype;
+    AIType aiType;
+    AIState aiState;
 
     glm::vec3 position;
     glm::vec3 movement;
     glm::vec3 acceleration;
     glm::vec3 velocity;
 
-    // 6.9 -- assume everything in game world has a width and height of 1 unit
-    // change if object is scaled
     float width = 1.0f;
     float height = 1.0f;
 
-    // 6.12 -- track if jump
     bool jump = false;
-    float jumpPower = 0.0f;     // can jump higher sometimes
-
+    float jumpPower = 0.0f;
     float speed;
 
     GLuint textureID;
-
     glm::mat4 modelMatrix;
 
     int* animRight = NULL;
@@ -58,12 +50,12 @@ public:
 
     bool isActive = true;
 
-    //
+    // used for tracking Win/Lose
     bool isAlive = true;
     int numEnemiesKilled = 0;
     int playerWin = -1;  // -1 = default, 0 = lose, 1 = win
 
-    //6.21 -- collision flags
+    // collision flags
     bool collidedTop = false;
     bool collidedBottom = false;
     bool collidedLeft = false;
@@ -71,20 +63,15 @@ public:
 
     Entity();
 
-    // 6.9 -- if collided with object, return TRUE
     bool CheckCollision(Entity* other);
-
-    // 6.16 -- new collision detection prototype
-    // objects = platforms, objectCount = platformCount
     void CheckCollisionsY(Entity* objects, int objectCount);
     void CheckCollisionsX(Entity* objects, int objectCount);
 
     void Update(float deltaTime, Entity* player, Entity* platforms, int platformCount, Entity* enemies, int enemyCount);
-    //void Update(float deltaTime, Entity* player, Entity* other, int otherCount);
     void Render(ShaderProgram* program);
     void DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index);
     
-    // 8.7, 8.8 -- add function prototypes for AI
+    // function prototypes for AI
     void AI(Entity* player);
     void AIWalker();
     void AIWaitAndGo(Entity* player);

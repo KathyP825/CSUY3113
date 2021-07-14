@@ -12,6 +12,7 @@ Project 4: Rise of the AI
 
 #define GL_GLEXT_PROTOTYPES 1
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <SDL_opengl.h>
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -44,6 +45,8 @@ bool gameIsRunning = true;
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
+Mix_Music* music;
+
 GLuint LoadTexture(const char* filePath) {
     int w, h, n;
     unsigned char* image = stbi_load(filePath, &w, &h, &n, STBI_rgb_alpha);
@@ -64,7 +67,6 @@ GLuint LoadTexture(const char* filePath) {
     stbi_image_free(image);
     return textureID;
 }
-
 
 
 void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, float size, float spacing, glm::vec3 position) {
@@ -91,7 +93,7 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, fl
             offset + (0.5f * size), -0.5f * size,
             offset + (0.5f * size), 0.5f * size,
             offset + (-0.5f * size), -0.5f * size,
-            });
+        });
 
         texCoords.insert(texCoords.end(), {
             u, v,
@@ -100,7 +102,7 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, fl
             u + width, v + height,
             u + width, v,
             u, v + height,
-            });
+        });
 
     }
 
@@ -125,22 +127,31 @@ void DrawText(ShaderProgram* program, GLuint fontTextureID, std::string text, fl
 }
 
 
-
-
 void Initialize() {
-    SDL_Init(SDL_INIT_VIDEO);
-    displayWindow = SDL_CreateWindow("Textured!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    displayWindow = SDL_CreateWindow("Rise of the AI: Birdie VS Snakes!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
 
 #ifdef _WINDOWS
     glewInit();
 #endif
-
     glViewport(0, 0, 640, 480);
-
     program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
 
+
+    /*
+    --------------- Initialize Audio ---------------
+    */
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+    music = Mix_LoadMUS("TeddyBearWaltz.mp3");
+    Mix_PlayMusic(music, -1);   // -1 = loop forever
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+
+
+    /*
+    --------------- Initialize World ---------------
+    */
     viewMatrix = glm::mat4(1.0f);
     modelMatrix = glm::mat4(1.0f);
     projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
@@ -156,20 +167,17 @@ void Initialize() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-    // Initialize Game Objects
-
     /* 
     --------------- Initialize Player---------------
     */
     state.player = new Entity();
-    state.player->entitytype = PLAYER;      // 8.7 -- initilize with PLAYER entity type
-    state.player->position = glm::vec3(-4.0f, -1.0f, 0.0f);     // 8.5 -- initialize player at bottom left
+    state.player->entitytype = PLAYER;
+    state.player->position = glm::vec3(-4.0f, -1.0f, 0.0f);
     state.player->movement = glm::vec3(0);
-    state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
-    state.player->speed = 1.5f;     // 6.13 -- increase player speed
+    state.player->acceleration = glm::vec3(0, -9.81f, 0);
+    state.player->speed = 1.5f;
     state.player->jumpPower = 7.0f;
     state.player->textureID = LoadTexture("chick.png");
-
 
     /*
     --------------- Initialize Platforms ---------------
@@ -177,28 +185,29 @@ void Initialize() {
     state.platforms = new Entity[PLATFORM_COUNT];
     GLuint platformTextureID = LoadTexture("crate_42.png");
 
-    // 8.5 -- creates the bottom floor
-    for (size_t i = 0; i < numLevel1_Platforms; i++) {      // start i = 0, end i = 10
+    // level 1 = bottom floor
+    for (size_t i = 0; i < numLevel1_Platforms; i++) {      // start i = 0, end i = 9
         state.platforms[i].entitytype = PLATFORM;
         state.platforms[i].textureID = platformTextureID;
         state.platforms[i].position = glm::vec3(-4.5f + i, -3.25f, 0);
     }
 
-    for (size_t i = (numLevel1_Platforms); i < (numLevel1_Platforms + numLevel2_Platforms); i++) {       // start i = 11, end i = 14
+    // level 2 = hopping enemy platform
+    for (size_t i = (numLevel1_Platforms); i < (numLevel1_Platforms + numLevel2_Platforms); i++) {       // start i = 10, end i = 13
         state.platforms[i].entitytype = PLATFORM;
         state.platforms[i].textureID = platformTextureID;
         state.platforms[i].position = glm::vec3(1.75f + i - numLevel1_Platforms, -1.15f, 0);
     }
 
-    for (size_t i = (numLevel1_Platforms + numLevel2_Platforms); i < (numLevel1_Platforms + numLevel2_Platforms + numLevel3_Platforms); i++) {       // start i = 11, end i = 14
+    // level 3 = patrol enemy platform
+    for (size_t i = (numLevel1_Platforms + numLevel2_Platforms); i < (numLevel1_Platforms + numLevel2_Platforms + numLevel3_Platforms); i++) {       // start i = 14, end i = 17
         state.platforms[i].entitytype = PLATFORM;
         state.platforms[i].textureID = platformTextureID;
         state.platforms[i].position = glm::vec3(-3.5f + i - numLevel1_Platforms - numLevel2_Platforms, 0.9f, 0);
     }
-    
 
-    for (size_t i = 0; i < PLATFORM_COUNT; i++) {   // only updates platforms 1x
-        state.platforms[i].Update(0, state.player, NULL, 0, state.enemies, 3);    // 8.8 -- update to include player pointer
+    for (size_t i = 0; i < PLATFORM_COUNT; i++) {
+        state.platforms[i].Update(0, state.player, NULL, 0, state.enemies, 3);
     }
 
 
@@ -240,7 +249,6 @@ void Initialize() {
 
 
 void ProcessInput() {
-
     state.player->movement = glm::vec3(0);
 
     SDL_Event event;
@@ -262,13 +270,10 @@ void ProcessInput() {
                 break;
 
             case SDLK_SPACE:
-                // jump
-                // 6.21 -- only jump if colliding on bottom
+                // only jump if colliding on bottom
                 if (state.player->collidedBottom){
                     state.player->jump = true;  // 6.12
                 }
-                
-                //state.player->jump = true;  // 6.12
                 break;
             }
             break; // SDL_KEYDOWN
@@ -279,22 +284,18 @@ void ProcessInput() {
 
     if (keys[SDL_SCANCODE_LEFT]) {
         state.player->movement.x = -1.0f;
-        state.player->animIndices = state.player->animLeft;
     }
     else if (keys[SDL_SCANCODE_RIGHT]) {
         state.player->movement.x = 1.0f;
-        state.player->animIndices = state.player->animRight;
     }
 
 
     if (glm::length(state.player->movement) > 1.0f) {
         state.player->movement = glm::normalize(state.player->movement);
     }
-
 }
 
 
-// 6.5 -- replace Update() to fixed timestate version
 #define FIXED_TIMESTEP 0.0166666f   // 60 times per second
 float lastTicks = 0;
 float accumulator = 0.0f;
@@ -314,12 +315,10 @@ void Update() {
     // when enough time has passed, update player with FIXED_TIMESTEP
     // if have extra time (accumulate 2x), update 2x
     while (deltaTime >= FIXED_TIMESTEP) {
-        //state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);    // 8.8 -- player gets pointer to self
         state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT, state.enemies, ENEMY_COUNT);
 
         for (size_t i = 0; i < ENEMY_COUNT; i++) {
-            //state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);     // 8.8 -- enemies gets pointer to player
-            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT, NULL, 0);
+            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT, state.enemies, ENEMY_COUNT);
         }
         deltaTime -= FIXED_TIMESTEP;
     }
@@ -327,30 +326,34 @@ void Update() {
 }
 
 
-
-
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     GLuint fontTextureID = LoadTexture("font.png");
 
-    // render and display all platforms
+    /*
+    --------------- Render & Display ---------------
+    */
     for (size_t i = 0; i < PLATFORM_COUNT; i++) {
         state.platforms[i].Render(&program);
     }
 
-    // render and display all enemies
     for (size_t i = 0; i < ENEMY_COUNT; i++) {
         state.enemies[i].Render(&program);
     }
+
     state.player->Render(&program);
 
-    // display WIN / LOSE message
+    /*
+    --------------- Display WIN/LOSE Message ---------------
+    */
     if (state.player->isAlive == false) {
-        DrawText(&program, fontTextureID, "You Lose!", 0.5f, -0.25f, glm::vec3(-1.25f, -0.25f, 0));
+        DrawText(&program, fontTextureID, "You Lose!", 0.5f, -0.25f, glm::vec3(-1.20f, -0.25f, 0));
+        Mix_HaltMusic();
     }
     else if (state.player->isAlive == true && state.player->numEnemiesKilled == 3) {
-        DrawText(&program, fontTextureID, "You Win!", 0.5f, -0.25f, glm::vec3(-1.22f, -0.25f, 0));
+        DrawText(&program, fontTextureID, "You Win!", 0.5f, -0.25f, glm::vec3(-1.18f, -0.25f, 0));
+        Mix_HaltMusic();
     }
 
     SDL_GL_SwapWindow(displayWindow);
@@ -360,6 +363,7 @@ void Render() {
 void Shutdown() {
     SDL_Quit();
 }
+
 
 int main(int argc, char* argv[]) {
     Initialize();

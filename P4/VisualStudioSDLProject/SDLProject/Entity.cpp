@@ -2,12 +2,9 @@
 
 Entity::Entity() {
     position = glm::vec3(0);
-
-    // 6.6 -- initialize movement, acceleration, and velocity
     movement = glm::vec3(0);
     acceleration = glm::vec3(0);
     velocity = glm::vec3(0);
-
     speed = 0;
 
     modelMatrix = glm::mat4(1.0f);
@@ -16,7 +13,6 @@ Entity::Entity() {
 /*
 --------------- Collision Check ---------------
 */
-
 bool Entity::CheckCollision(Entity* other) {
     if (other == this) return false;
 
@@ -110,15 +106,13 @@ void Entity::AIWalker() {
 
 // if player is close, AI wakes up ands starts walking
 void Entity::AIWaitAndGo(Entity* player) {
-    // uses multiple states
-    // need pointer to player to get player's position
     switch (aiState) {
         case IDLE:
-            // if player close enough, switch to walking
             if (glm::distance(position, player->position) < 3.0f) {
                 aiState = WALKING;
             }
 
+            // stops AI of this type from moving if player is dead
             if (player->isAlive == false) {
                 speed = 0.0f;
             }
@@ -135,23 +129,13 @@ void Entity::AIWaitAndGo(Entity* player) {
             }
             
             break;
-
-        case ATTACKING:
-            break;
     }
 }
 
 
 // patrols back and forth on platform
-// for Enemy 3 only
+// hardcoded for Enemy 3 only
 void Entity::AIPatrol() {
-    //if ((position.x <= -3.5f)) {    // needs to be same as starting position or won't work
-    //    movement = glm::vec3(1.0f, 0.0f, 0.0f);
-    //}
-    //else if (position.x >= -0.5f) {
-    //    movement = glm::vec3(-1.0f, 0.0f, 0.0f);
-    //}
-
     switch (aiState) {
         case IDLE:
             speed = 0.0f;
@@ -166,7 +150,8 @@ void Entity::AIPatrol() {
 }
 
 
-// Enemy 2 jumps up and down continuously
+// jumps up and down continuously
+// hardcoded for Enemy 2 only
 void Entity::AIHopper() {
     switch (aiState) {
         case IDLE:
@@ -175,7 +160,7 @@ void Entity::AIHopper() {
             break;
 
         case FALL:
-            if (position.y <= -0.15f) {      //if on floor
+            if (position.y <= -0.15f) {      // if on platform level 2 floor
                 aiState = RISE;
             }
             else {
@@ -195,8 +180,6 @@ void Entity::AIHopper() {
 }
 
 
-// 8.7 -- process input for an enemy
-// can set movement
 void Entity::AI(Entity* player) {
     switch (aiType) {
         case WALKER:
@@ -221,7 +204,6 @@ void Entity::AI(Entity* player) {
 /*
 --------------- General Controls ---------------
 */
-
 void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int platformCount, Entity* enemies, int enemyCount) {
     if (isActive == false) return;
 
@@ -256,11 +238,11 @@ void Entity::Update(float deltaTime, Entity* player, Entity * platforms, int pla
 
     if (jump) {
         jump = false;   // only jump 1x
-        velocity.y += jumpPower;    // does the jump up, acceleration does the back down part
+        velocity.y += jumpPower;
     }
 
 
-    velocity.x = movement.x * speed;    // when character starts moving left/right, have instant velocity
+    velocity.x = movement.x * speed;    // start moving left/right with instant velocity
     velocity += acceleration * deltaTime;
 
 
