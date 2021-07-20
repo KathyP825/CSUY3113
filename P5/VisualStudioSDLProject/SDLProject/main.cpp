@@ -19,8 +19,10 @@ Week 9
 #include "Entity.h"
 #include "Map.h"
 #include "Scene.h"
+#include "Menu.h"
 #include "Level1.h"
 #include "Level2.h"
+#include "Level3.h"
 
 SDL_Window* displayWindow;
 bool gameIsRunning = true;
@@ -29,7 +31,7 @@ ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 Scene* currentScene;
-Scene* sceneList[2];
+Scene* sceneList[4];
 
 void SwitchToScene(Scene* scene) {
     currentScene = scene;
@@ -65,8 +67,10 @@ void Initialize() {
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    sceneList[0] = new Level1();
-    sceneList[1] = new Level2();
+    sceneList[0] = new Menu();
+    sceneList[1] = new Level1();
+    sceneList[2] = new Level2();
+    sceneList[3] = new Level3();
     SwitchToScene(sceneList[0]);
 
 }
@@ -87,12 +91,13 @@ void ProcessInput() {
 
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
-            case SDLK_LEFT:
-                // Move the player left
-                break;
-
-            case SDLK_RIGHT:
-                // Move the player right
+            case SDLK_RETURN:
+                // Starts game at Level 1
+                // only works if in Main Menu
+                if (currentScene == sceneList[0]) {
+                    SwitchToScene(sceneList[1]);
+                }
+                
                 break;
 
             case SDLK_SPACE:
@@ -169,12 +174,23 @@ void Update() {
     // if player position more than 5, follow their position
     // else, keep view at fixed position
     viewMatrix = glm::mat4(1.0f);
+
     if (currentScene->state.player->position.x > 5) {
-        viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0));     // follow player's X position   // 3.75 = move up into view
+        //viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0.0f));     // follow player's X position   // 3.75 = move up into view
+        
+        // if main menu, limit right
+        // else scroll like normal
+        if (currentScene == sceneList[0]) {
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-5.0f, 3.75f, 0.0f));
+        }
+        else {
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0.0f));     // follow player's X position   // 3.75 = move up into view
+        }
     }
     else {
-        viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75, 0));
+        viewMatrix = glm::translate(viewMatrix, glm::vec3(-5.0f, 3.75, 0.0f));
     }
+
 }
 
 

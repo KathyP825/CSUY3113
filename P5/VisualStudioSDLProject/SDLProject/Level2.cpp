@@ -74,6 +74,10 @@ void Level2::Initialize() {
 
 void Level2::Update(float deltaTime) {
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL2_ENEMY_COUNT, state.map);
+
+    if (state.player->position.x >= 12.0f) {
+        state.nextScene = 3;
+    }
 }
 
 
