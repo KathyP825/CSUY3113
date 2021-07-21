@@ -244,18 +244,6 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
     }
 
 
-    /*
-    // 6.11 -- delete
-    // 6.9  -- check if colliding with platforms
-    // if collide with any platform, return and get out because don't need to update anything else
-    for (size_t i = 0; i < platformCount; i++) {
-        if (CheckCollision(&platforms[i])) {
-            return;
-        }
-    }
-    */
-
-
     // 6.12 -- do jump
     if (jump) {
         jump = false;   // only jump 1x

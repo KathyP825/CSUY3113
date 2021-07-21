@@ -5,22 +5,22 @@
 #define MENU_ENEMY_COUNT 1
 
 unsigned int menu_data[] = {
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,
-    3, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0, 0, 0,
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0
+    101,  36,  36,  36,  36,  36,  36,  36,  36,  36,  99,   0,   0,   0,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,   0,   0,   0,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,   0,   0,   0,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,   0,   0,   0,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,   0,   0,   0,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,   0,   0,   0,
+    100,  84,  84,  84,  84,  84,  84,  84,  84,  84, 100,   0,   0,   0,
+    100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,   0,   0,   0
 };
 
 
 void Menu::Initialize() {
     state.nextScene = -1;
 
-    GLuint mapTextureID = Util::LoadTexture("tileset.png");
-    state.map = new Map(MENU_WIDTH, MENU_HEIGHT, menu_data, mapTextureID, 1.0f, 4, 1);
+    GLuint mapTextureID = Util::LoadTexture("pixel_platform_01_tileset_final.png");
+    state.map = new Map(MENU_WIDTH, MENU_HEIGHT, menu_data, mapTextureID, 1.0f, 16, 10);
 
 
     /*
@@ -32,25 +32,23 @@ void Menu::Initialize() {
     state.player->movement = glm::vec3(0);
     state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
     state.player->speed = 2.0f;     // 6.13 -- increase player speed
-    state.player->textureID = Util::LoadTexture("george_0.png");
+    state.player->textureID = Util::LoadTexture("characters.png");
 
-    state.player->animRight = new int[4]{ 3, 7, 11, 15 };
-    state.player->animLeft = new int[4]{ 1, 5, 9, 13 };
-    state.player->animUp = new int[4]{ 2, 6, 10, 14 };
-    state.player->animDown = new int[4]{ 0, 4, 8, 12 };
+    state.player->animRight = new int[2]{ 4, 5 };
+    state.player->animLeft = new int[2]{ 4, 5 };
+    state.player->animUp = new int[2]{ 4, 5 };
+    state.player->animDown = new int[2]{ 4, 5 };
 
     state.player->animIndices = state.player->animRight;
-    state.player->animFrames = 4;
+    state.player->animFrames = 2;
     state.player->animIndex = 0;
     state.player->animTime = 0;
-    state.player->animCols = 4;
-    state.player->animRows = 4;
+    state.player->animCols = 9;
+    state.player->animRows = 3;
 
-    //6.11 -- fix character hovering
-    state.player->height = 0.8f;    // num can vary
-    state.player->width = 0.8f;     // not necessary, but can if you want
+    state.player->height = 0.9f;
+    state.player->width = 0.8f;
 
-    // 6.12 -- set up for jump
     state.player->jumpPower = 6.0f;
 
 }
@@ -68,9 +66,9 @@ void Menu::Update(float deltaTime) {
 void Menu::Render(ShaderProgram* program) {
     GLuint fontTextureID = Util::LoadTexture("pixel_font.png");
 
-    Util::DrawText(program, fontTextureID, "Game Name", 0.4f, 0.1f, glm::vec3(2.5f, -1.5f, 0.0f));
-    Util::DrawText(program, fontTextureID, "Press Enter to Start", 0.2f, 0.01f, glm::vec3(3.0f, -3.0f, 0.0f));
-
     state.map->Render(program);
     state.player->Render(program);
+
+    Util::DrawText(program, fontTextureID, "Lost Alien", 0.4f, 0.1f, glm::vec3(2.75f, -1.5f, 0.0f));
+    Util::DrawText(program, fontTextureID, "Press Enter to Start", 0.2f, 0.01f, glm::vec3(3.0f, -3.0f, 0.0f));
 }

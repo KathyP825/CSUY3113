@@ -178,10 +178,14 @@ void Update() {
     if (currentScene->state.player->position.x > 5) {
         //viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0.0f));     // follow player's X position   // 3.75 = move up into view
         
-        // if main menu, limit right
+        // if main menu, do not move view
         // else scroll like normal
         if (currentScene == sceneList[0]) {
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-5.0f, 3.75f, 0.0f));
+        }
+        else if (currentScene->state.player->position.x > 7.0) {
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-8.0f, 3.75f, 0.0f));
+            //viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x + 1.0f, 3.75, 0.0f));
         }
         else {
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0.0f));     // follow player's X position   // 3.75 = move up into view
@@ -190,6 +194,23 @@ void Update() {
     else {
         viewMatrix = glm::translate(viewMatrix, glm::vec3(-5.0f, 3.75, 0.0f));
     }
+
+    //// position Y scrolling
+    //if (currentScene->state.player->position.y > -2.0f) {
+    //    //viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, -currentScene->state.player->position.y - 2.0f, 0.0f));     // follow player's X position   // 3.75 = move up into view
+    //    viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, -currentScene->state.player->position.y - 2.0, 0.0f));
+    //    // upper barrier
+    //    //if (currentScene->state.player->position.y > -1.5f) {
+    //    //    //viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, -currentScene->state.player->position.y, 0.0f));
+    //    //}
+    //    //else {
+    //    //    
+    //    //}
+    //}
+    //else {
+    //    viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
+    //    //viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
+    //}
 
 }
 

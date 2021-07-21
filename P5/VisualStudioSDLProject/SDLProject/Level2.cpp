@@ -5,22 +5,22 @@
 #define LEVEL2_ENEMY_COUNT 1
 
 unsigned int level2_data[] = {
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3,
-    3, 1, 1, 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3,
-    3, 2, 2, 2, 2, 2, 2, 0, 3, 3, 3, 3, 3, 3
+    101,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,  99,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
+    100,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84, 100
 };
 
 
 void Level2::Initialize() {
     state.nextScene = -1;
 
-    GLuint mapTextureID = Util::LoadTexture("tileset.png");
-    state.map = new Map(LEVEL2_WIDTH, LEVEL2_HEIGHT, level2_data, mapTextureID, 1.0f, 4, 1);
+    GLuint mapTextureID = Util::LoadTexture("pixel_platform_02_tileset_final.png");
+    state.map = new Map(LEVEL2_WIDTH, LEVEL2_HEIGHT, level2_data, mapTextureID, 1.0f, 16, 10);
 
     // Initialize Game Objects
 
@@ -29,29 +29,27 @@ void Level2::Initialize() {
     */
     state.player = new Entity();
     state.player->entitytype = PLAYER;      // 8.7 -- initilize with PLAYER entity type
-    state.player->position = glm::vec3(5.0f, 0.0f, 0.0f);     // 8.5 -- initialize player at bottom left
+    state.player->position = glm::vec3(5.0f, -3.0f, 0.0f);     // 8.5 -- initialize player at bottom left
     state.player->movement = glm::vec3(0);
     state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
     state.player->speed = 2.0f;     // 6.13 -- increase player speed
-    state.player->textureID = Util::LoadTexture("george_0.png");
+    state.player->textureID = Util::LoadTexture("characters.png");
 
-    state.player->animRight = new int[4]{ 3, 7, 11, 15 };
-    state.player->animLeft = new int[4]{ 1, 5, 9, 13 };
-    state.player->animUp = new int[4]{ 2, 6, 10, 14 };
-    state.player->animDown = new int[4]{ 0, 4, 8, 12 };
+    state.player->animRight = new int[2]{ 4, 5 };
+    state.player->animLeft = new int[2]{ 4, 5 };
+    state.player->animUp = new int[2]{ 4, 5 };
+    state.player->animDown = new int[2]{ 4, 5 };
 
     state.player->animIndices = state.player->animRight;
-    state.player->animFrames = 4;
+    state.player->animFrames = 2;
     state.player->animIndex = 0;
     state.player->animTime = 0;
-    state.player->animCols = 4;
-    state.player->animRows = 4;
+    state.player->animCols = 9;
+    state.player->animRows = 3;
 
-    //6.11 -- fix character hovering
-    state.player->height = 0.8f;    // num can vary
-    state.player->width = 0.8f;     // not necessary, but can if you want
+    state.player->height = 0.9f;
+    state.player->width = 0.8f;
 
-    // 6.12 -- set up for jump
     state.player->jumpPower = 6.0f;
 
 
