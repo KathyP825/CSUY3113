@@ -5,14 +5,14 @@
 #define LEVEL1_ENEMY_COUNT 1
 
 unsigned int level1_data[] = {
-    101,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,  99,
-    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
-    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
-    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
-    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
-    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
-    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
-    100,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84, 100
+    101,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,  36,
+    101,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 141,   0,
+     17,   0,   0,   0,  35,  37,   0,   0,   0,  35,  36,  36,  36,  52,
+     49,  85,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
+    100, 101,   0,   0,   0,   0,  23,  52,   0,   0,   0,   0,   0,  99,
+    100, 100,  85,   0,   0,  83,  84, 100,  85,   0,   0,   0,  20,  99,
+    101,   0,   0,   0,  83, 100, 100, 100, 100,  85,   0,   0, 141, 133,
+    100,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84
 };
 
 
@@ -29,10 +29,12 @@ void Level1::Initialize() {
     */
     state.player = new Entity();
     state.player->entitytype = PLAYER;      // 8.7 -- initilize with PLAYER entity type
-    state.player->position = glm::vec3(1.0f, -3.0f, 0.0f);     // 8.5 -- initialize player at bottom left
+    //state.player->position = glm::vec3(1.0f, -6.0f, 0.0f);     // 8.5 -- initialize player at bottom left
+    state.player->position = glm::vec3(1.0f, -2.0f, 0.0f);
+
     state.player->movement = glm::vec3(0);
     state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
-    state.player->speed = 2.0f;     // 6.13 -- increase player speed
+    state.player->speed = 2.5f;     // 6.13 -- increase player speed
     state.player->textureID = Util::LoadTexture("characters.png");
 
     state.player->animRight = new int[2]{ 4, 5 };
@@ -57,16 +59,31 @@ void Level1::Initialize() {
     -----------------   Initialize Enemies    -----------------
     */
     state.enemies = new Entity[LEVEL1_ENEMY_COUNT];
-    GLuint enemyTextureID = Util::LoadTexture("ctg.png");
+    GLuint enemyTextureID = Util::LoadTexture("characters.png");
 
     state.enemies[0].entitytype = ENEMY;        // 8.7 -- initilize with ENEMY entity type
     state.enemies[0].textureID = enemyTextureID;
-    state.enemies[0].position = glm::vec3(9.0f, -6.0f, 0.0f);
+    state.enemies[0].position = glm::vec3(5.0f, -1.0f, 0.0f);
+    state.enemies[0].acceleration = glm::vec3(0, -9.81f, 0);
     state.enemies[0].speed = 1.0f;
+
+    state.enemies[0].animRight = new int[2]{ 9, 10 };
+    state.enemies[0].animLeft = new int[2]{ 9, 10 };
+    state.enemies[0].animUp = new int[2]{ 9, 10 };
+    state.enemies[0].animDown = new int[2]{ 9, 10 };
+
+    state.enemies[0].animIndices = state.enemies[0].animRight;
+    state.enemies[0].animFrames = 2;
+    state.enemies[0].animIndex = 0;
+    state.enemies[0].animCols = 9;
+    state.enemies[0].animRows = 3;
+
+    state.enemies[0].height = 0.9f;
+    state.enemies[0].width = 0.8f;
 
     state.enemies[0].aiType = WAITANDGO;    // 8.8 -- initialize the AIType to 2nd type
     state.enemies[0].aiState = IDLE;        // 8.8 -- initialize the AIState
-    state.enemies[0].isActive = false;      // 9.11 -- deactivate 
+    //state.enemies[0].isActive = false;      // 9.11 -- deactivate 
 }
 
 
@@ -78,7 +95,9 @@ void Level1::Update(float deltaTime) {
         state.enemies[i].Update(deltaTime, state.player, NULL, 0, state.map);
     }
 
-    if (state.player->position.x >= 12.0f) {
+    // player must reach the signboard to advance
+    // next to signboard triggers
+    if (state.player->position.x >= 11.0f && state.player->position.y >= -1.2f) {
         state.nextScene = 2;
         //state.enemies[0].isActive = false;
     }

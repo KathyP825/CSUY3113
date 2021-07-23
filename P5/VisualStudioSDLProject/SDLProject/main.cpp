@@ -30,6 +30,9 @@ bool gameIsRunning = true;
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
+//int numLives = 3;
+//int playerWin = -1;  // -1 = default, 0 = lose, 1 = win
+
 Scene* currentScene;
 Scene* sceneList[4];
 
@@ -95,6 +98,8 @@ void ProcessInput() {
                 // Starts game at Level 1
                 // only works if in Main Menu
                 if (currentScene == sceneList[0]) {
+                    //SwitchToScene(sceneList[1]); // need to change back to SwitchToScene(sceneList[1]);
+                                                 // was changed for testing
                     SwitchToScene(sceneList[1]);
                 }
                 
@@ -134,7 +139,6 @@ void ProcessInput() {
 
 
 
-// 6.5 -- replace Update() to fixed timestate version
 #define FIXED_TIMESTEP 0.0166666f   // 60 times per second
 float lastTicks = 0;
 float accumulator = 0.0f;
