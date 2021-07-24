@@ -10,7 +10,7 @@ unsigned int level1_data[] = {
      17,   0,   0,   0,  35,  37,   0,   0,   0,  35,  36,  36,  36,  52,
      49,  85,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,  99,
     100, 101,   0,   0,   0,   0,  23,  52,   0,   0,   0,   0,   0,  99,
-    100, 100,  85,   0,   0,  83,  84, 100,  85,   0,   0,   0,  20,  99,
+    100, 100,  85,   0,   0,  83,  84, 100,  85,   0,   0,   0,  35,  99,
     101,   0,   0,   0,  83, 100, 100, 100, 100,  85,   0,   0, 141, 133,
     100,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84,  84
 };
@@ -91,8 +91,7 @@ void Level1::Update(float deltaTime) {
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
 
     for (size_t i = 0; i < LEVEL1_ENEMY_COUNT; i++) {
-        //state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
-        state.enemies[i].Update(deltaTime, state.player, NULL, 0, state.map);
+        state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
     }
 
     // player must reach the signboard to advance

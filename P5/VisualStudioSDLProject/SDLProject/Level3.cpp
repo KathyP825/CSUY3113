@@ -99,14 +99,16 @@ void Level3::Update(float deltaTime) {
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
 
     for (size_t i = 0; i < LEVEL3_ENEMY_COUNT; i++) {
-        //state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
-        state.enemies[i].Update(deltaTime, state.player, NULL, 0, state.map);
+        state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
     }
 
+    // stop player movement if win
     if (state.player->position.x >= 11.0f && state.player->position.y <= -6.0f) {
         state.player->speed = 0.0f;
         state.player->jumpPower = 0.0f;
 
+        // remove enemies from sight if win
+        // can remove this code
         for (size_t i = 0; i < LEVEL3_ENEMY_COUNT; i++) {
             state.enemies[i].isActive = false;
 

@@ -91,8 +91,7 @@ void Level2::Update(float deltaTime) {
     state.player->Update(deltaTime, state.player, state.enemies, LEVEL2_ENEMY_COUNT, state.map);
 
     for (size_t i = 0; i < LEVEL2_ENEMY_COUNT; i++) {
-        //state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
-        state.enemies[i].Update(deltaTime, state.player, NULL, 0, state.map);
+        state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL2_ENEMY_COUNT, state.map);
     }
 
     if (state.player->position.x >= 11.0f && state.player->position.y <= -5.5f) {

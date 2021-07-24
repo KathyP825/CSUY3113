@@ -19,25 +19,22 @@ enum AIState { IDLE, WALKING, ATTACKING };      // 8.7 -- list of states AI can 
 
 class Entity {
 public:
-    EntityType entitytype;      // 8.7
-    AIType aiType;      // 8.7
-    AIState aiState;    // 8.7
+    EntityType entitytype;
+    AIType aiType;
+    AIState aiState;
 
     glm::vec3 position;
     glm::vec3 movement;
-
-    // 6.6 -- add variables to keep track of acceleration and velocity
     glm::vec3 acceleration;
     glm::vec3 velocity;
 
-    // 6.9 -- assume everything in game world has a width and height of 1 unit
+    // assume everything in game world has a width and height of 1 unit
     // change if object is scaled
     float width = 1.0f;
     float height = 1.0f;
 
-    // 6.12 -- track if jump
     bool jump = false;
-    float jumpPower = 0.0f;     // can jump higher sometimes
+    float jumpPower = 0.0f;
 
     float speed;
 
@@ -57,10 +54,10 @@ public:
     int animCols = 0;
     int animRows = 0;
 
-    // 6.20
     bool isActive = true;
+    //bool injured = false;
+    int tempLives = 0;
 
-    //6.21 -- collision flags
     bool collidedTop = false;
     bool collidedBottom = false;
     bool collidedLeft = false;
@@ -81,13 +78,11 @@ public:
     void CheckCollisionsX(Map* map);
     void CheckCollisionsY(Map* map);
 
-    //6.9 -- change prototype void Update(float deltaTime);
-    //void Update(float deltaTime, Entity* player, Entity* platforms, int platformCount);
     void Update(float deltaTime, Entity* player, Entity* objects, int objectCount, Map* map);
     void Render(ShaderProgram* program);
     void DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index);
 
-    // 8.7, 8.8 -- add function prototypes for AI
+    // prototypes for AI
     void AI(Entity* player);
     void AIWalker();
     void AIWaitAndGo(Entity* player);

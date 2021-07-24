@@ -1,5 +1,6 @@
 /*
-Week 9
+Kathy Pan
+Project 5
 */
 
 #define GL_SILENCE_DEPRECATION
@@ -30,7 +31,11 @@ bool gameIsRunning = true;
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
-//int numLives = 3;
+//// to display lives
+//glm::mat4 uiViewMatrix, uiProjectionMatrix;
+//GLuint fontTextureID;
+
+int numLives = 3;
 //int playerWin = -1;  // -1 = default, 0 = lose, 1 = win
 
 Scene* currentScene;
@@ -76,6 +81,8 @@ void Initialize() {
     sceneList[3] = new Level3();
     SwitchToScene(sceneList[0]);
 
+    // set scene with current lives
+    //currentScene->state.player->tempLives = numLives;
 }
 
 
@@ -189,7 +196,6 @@ void Update() {
         }
         else if (currentScene->state.player->position.x > 7.0) {
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-8.0f, 3.75f, 0.0f));
-            //viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x + 1.0f, 3.75, 0.0f));
         }
         else {
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0.0f));     // follow player's X position   // 3.75 = move up into view
@@ -199,22 +205,20 @@ void Update() {
         viewMatrix = glm::translate(viewMatrix, glm::vec3(-5.0f, 3.75, 0.0f));
     }
 
-    //// position Y scrolling
-    //if (currentScene->state.player->position.y > -2.0f) {
-    //    //viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, -currentScene->state.player->position.y - 2.0f, 0.0f));     // follow player's X position   // 3.75 = move up into view
-    //    viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, -currentScene->state.player->position.y - 2.0, 0.0f));
-    //    // upper barrier
-    //    //if (currentScene->state.player->position.y > -1.5f) {
-    //    //    //viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, -currentScene->state.player->position.y, 0.0f));
-    //    //}
-    //    //else {
-    //    //    
-    //    //}
+
+
+
+
+    // if need to change lives
+    //if (currentScene->state.player->injured == true) {
+    //    numLives -= 1;
+    //    currentScene->state.player->injured == false;
     //}
-    //else {
-    //    viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
-    //    //viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, 0.0f));
-    //}
+    //numLives = currentScene->state.player->tempLives;
+    numLives -= currentScene->state.player->tempLives;
+    if (numLives <= 0) {
+        currentScene->state.player->isActive = false;
+    }
 
 }
 

@@ -18,7 +18,7 @@ unsigned int menu_data[] = {
 
 void Menu::Initialize() {
     state.nextScene = -1;
-    glClearColor(0.2f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
     GLuint mapTextureID = Util::LoadTexture("pixel_platform_01_tileset_final.png");
     state.map = new Map(MENU_WIDTH, MENU_HEIGHT, menu_data, mapTextureID, 1.0f, 16, 10);

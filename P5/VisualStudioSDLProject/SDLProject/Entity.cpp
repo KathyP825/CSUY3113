@@ -16,6 +16,8 @@ Entity::Entity() {
 
 // 6.9 -- check if curr Entity will collide with another Entity
 bool Entity::CheckCollision(Entity* other) {
+    if (other == this) return false;
+
     if (isActive == false || other->isActive == false) {
         return false;
     }
@@ -52,6 +54,15 @@ void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
 
                 collidedBottom = true;  // 6.21
             }
+
+
+            if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedTop == true || collidedBottom == true)) {
+                //injured = true;
+                tempLives--;
+                object->isActive = false;
+            }
+
+
         }
     }
 }
@@ -76,6 +87,33 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
 
                 collidedLeft = true;    // 6.21
             }
+
+            /////////////////////// PROBLEM = numLives keeps resetting to 3
+            // if collide with enemy, lose a life, enemy dies
+            //if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
+            //    // if have at least 1 life
+            //    numLives -= 2;      // fix back to 1, using 2 for testing
+            //    if (numLives > 0) {
+            //        object->isActive = false;
+            //    }
+            //    else {
+            //        //isAlive = false;
+            //        isActive = false;
+            //    }
+            //    //numLives -= 1;
+            //    //object->isActive = false;
+            //}
+
+
+            if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
+                //injured = true;
+                tempLives--;
+                object->isActive = false;
+            }
+
+
+
+
         }
     }
 }
@@ -157,14 +195,11 @@ void Entity::AIWalker() {
     movement = glm::vec3(-1.0f, 0.0f, 0.0f);
 }
 
-// 8.8, 8.9
+
 // if player is close, AI wakes up ands starts walking
 void Entity::AIWaitAndGo(Entity* player) {
-    // uses multiple states
-    // need pointer to player to get player's position
     switch (aiState) {
     case IDLE:
-        // 8.9 -- want to know if player is close enough
         // if player close enough, switch to walking
         if (glm::distance(position, player->position) < 4.0f) {
             aiState = WALKING;
@@ -175,7 +210,7 @@ void Entity::AIWaitAndGo(Entity* player) {
         break;
 
     case WALKING:
-        // stops moving if too player is too far away
+        // stop moving if too player is too far away
         if (glm::distance(position, player->position) >= 4.0f) {
             aiState = IDLE;
         }
@@ -195,8 +230,7 @@ void Entity::AIWaitAndGo(Entity* player) {
     }
 }
 
-// 8.7 -- process input for an enemy
-// can set movement
+
 void Entity::AI(Entity* player) {
     switch (aiType) {
     case WALKER:
@@ -211,14 +245,11 @@ void Entity::AI(Entity* player) {
 
 
 
-// 6.9 -- update parameters for void Entity::Update(float deltaTime, Entity*)
 void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount, Map* map) {
     // 6.20 -- check if entity is active
-    if (isActive == false) {
-        return;
-    }
+    if (isActive == false) return;
 
-    // 6.21
+
     collidedTop = false;
     collidedBottom = false;
     collidedLeft = false;
@@ -263,16 +294,6 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
     velocity.x = movement.x * speed;    // when character starts moving left/right, have instant velocity
     velocity += acceleration * deltaTime;
 
-    //// 9.11 -- replace previous CollsionCheck calls
-    //position.y += velocity.y * deltaTime; // Move on Y
-    //CheckCollisionsY(map);
-    //CheckCollisionsY(objects, objectCount); // Fix if needed
-
-    //position.x += velocity.x * deltaTime; // Move on X
-    //CheckCollisionsX(map);
-    //CheckCollisionsX(objects, objectCount); // Fix if needed
-
-    // 9.11 -- replace previous CollsionCheck calls
     position.x += velocity.x * deltaTime; // Move on X
     CheckCollisionsX(map);
     CheckCollisionsX(objects, objectCount); // Fix if needed
@@ -280,29 +301,11 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
     CheckCollisionsY(map);
     CheckCollisionsY(objects, objectCount); // Fix if needed
 
-
-    /*
-    // 6.16 -- replace and delete
-    // 6.11 -- after move the position but before update the position, check and fix collision
-    for (int i = 0; i < platformCount; i++) {
-        Entity* platform = &platforms[i];
-
-        // if collide with something
-        if (CheckCollision(platform)) {
-            float ydist = fabs(position.y - platform->position.y);      // get distance from centers
-            float penetrationY = fabs(ydist - (height / 2.0f) - (platform->height / 2.0f));     // how too far we went
-
-            if (velocity.y > 0) {   // if going up and hit a platform, move self down
-                position.y -= penetrationY;
-                velocity.y = 0;     // if hit platform, stop moving
-            }
-            else if (velocity.y < 0) {      // if falling down and hit a platform, move self up
-                position.y += penetrationY;
-                velocity.y = 0;     // if hit platform, stop moving
-            }
-        }
-    }
-    */
+    //if (entitytype == PLAYER && objects->entitytype == ENEMY) {
+    //    if (collidedLeft == true || collidedRight == true) {
+    //        injured = true;
+    //    }
+    //}
 
 
     modelMatrix = glm::mat4(1.0f);

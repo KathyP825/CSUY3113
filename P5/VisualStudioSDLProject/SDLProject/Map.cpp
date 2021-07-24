@@ -25,8 +25,8 @@ void Map::Build() {
             float tileWidth = 1.0f / (float)tile_count_x;
             float tileHeight = 1.0f / (float)tile_count_y;
 
-            float xoffset = -(tile_size / 2); // From center of tile
-            float yoffset = (tile_size / 2); // From center of tile
+            float xoffset = -(tile_size / 2);   // From center of tile
+            float yoffset = (tile_size / 2);    // From center of tile
 
             vertices.insert(vertices.end(), {
                 xoffset + (tile_size * x), yoffset + -tile_size * y,
