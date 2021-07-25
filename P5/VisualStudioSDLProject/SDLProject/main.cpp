@@ -11,6 +11,7 @@ Project 5: Platformer -- Alien Escape!
 
 #define GL_GLEXT_PROTOTYPES 1
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <SDL_opengl.h>
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -42,6 +43,9 @@ int numLives = 3;
 Scene* currentScene;
 Scene* sceneList[6];
 
+Mix_Music* music;
+Mix_Chunk* squish;
+
 void SwitchToScene(Scene* scene) {
     currentScene = scene;
     currentScene->Initialize();
@@ -49,7 +53,7 @@ void SwitchToScene(Scene* scene) {
 
 
 void Initialize() {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     displayWindow = SDL_CreateWindow("Platformer: Alien Escape!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
@@ -61,6 +65,13 @@ void Initialize() {
     glViewport(0, 0, 640, 480);
 
     program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
+
+    // open channel, load music & sound
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+    music = Mix_LoadMUS("sneaky_adventure_music.mp3");
+    Mix_PlayMusic(music, -1);
+    //Mix_VolumeMusic(MIX_MAX_VOLUME / 4);
+    squish = Mix_LoadWAV("failure_death.wav");
 
     viewMatrix = glm::mat4(1.0f);
     modelMatrix = glm::mat4(1.0f);
@@ -178,7 +189,7 @@ void Update() {
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-8.0f, 3.75f, 0.0f));
         }
         else {
-            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0.0f));     // follow player's X position   // 3.75 = move up into view
+            viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0.0f));
         }
     }
     else {
@@ -193,6 +204,7 @@ void Update() {
     if (currentScene->state.player->injured == true) {
         numLives -= 1;
         currentScene->state.player->injured = false;
+        Mix_PlayChannel(-1, squish, 0);
     }
 
     // if no lives left, player dies
