@@ -36,7 +36,6 @@ glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 //GLuint fontTextureID;
 
 int numLives = 3;
-//int playerWin = -1;  // -1 = default, 0 = lose, 1 = win
 
 Scene* currentScene;
 Scene* sceneList[4];
@@ -80,9 +79,6 @@ void Initialize() {
     sceneList[2] = new Level2();
     sceneList[3] = new Level3();
     SwitchToScene(sceneList[0]);
-
-    // set scene with current lives
-    //currentScene->state.player->tempLives = numLives;
 }
 
 
@@ -157,15 +153,12 @@ void Update() {
 
     deltaTime += accumulator;
     if (deltaTime < FIXED_TIMESTEP) {
-        // if not enough time has passed, store into accumulator and don't do anything
         accumulator = deltaTime;
         return;
     }
 
-    // when enough time has passed, update player with FIXED_TIMESTEP
-    // if have extra time (accumulate 2x), update 2x
+    // time accumulator
     while (deltaTime >= FIXED_TIMESTEP) {
-        //state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);    // 8.8 -- player gets pointer to self
         currentScene->Update(FIXED_TIMESTEP);      // 9.7
 
         /*
@@ -180,17 +173,14 @@ void Update() {
     }
     accumulator = deltaTime;
 
-    // 9.13 -- add sidescrolling
-    // shows left limit
-    // if player position more than 5, follow their position
-    // else, keep view at fixed position
-    viewMatrix = glm::mat4(1.0f);
 
+    /*
+    -----------------   Sidescrolling    -----------------
+    */
+    // has left and right limits (don't see beyond map)
+    viewMatrix = glm::mat4(1.0f);
     if (currentScene->state.player->position.x > 5) {
-        //viewMatrix = glm::translate(viewMatrix, glm::vec3(-currentScene->state.player->position.x, 3.75, 0.0f));     // follow player's X position   // 3.75 = move up into view
-        
         // if main menu, do not move view
-        // else scroll like normal
         if (currentScene == sceneList[0]) {
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-5.0f, 3.75f, 0.0f));
         }
@@ -206,28 +196,37 @@ void Update() {
     }
 
 
+    /*
+    -----------------   Life Check    -----------------
+    */
+    // if player is injured, lose 1 life
+    if (currentScene->state.player->injured == true) {
+        numLives -= 1;
+        currentScene->state.player->injured = false;
+    }
 
-
-
-    // if need to change lives
-    //if (currentScene->state.player->injured == true) {
-    //    numLives -= 1;
-    //    currentScene->state.player->injured == false;
-    //}
-    //numLives = currentScene->state.player->tempLives;
-    numLives -= currentScene->state.player->tempLives;
+    // if no lives left, player dies
     if (numLives <= 0) {
         currentScene->state.player->isActive = false;
     }
-
 }
 
 
 
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
-
     program.SetViewMatrix(viewMatrix);  // 9.13 -- updates viewMatrix
+
+    //GLuint fontTextureID = Util::LoadTexture("pixel_font.png");
+    //if (numLives == 0) {
+    //    Util::DrawText(&program, fontTextureID, "You Lose!", 0.4f, 0.1f, glm::vec3(6.25f, -3.25f, 0.0f));
+    //}
+
+    GLuint fontTextureID = Util::LoadTexture("pixel_font.png");
+    if (numLives == 0) {
+        Util::DrawText(&program, fontTextureID, "You Lose!", 0.4f, 0.1f, glm::vec3(3.0f, -3.25f, 0.0f));
+    }
+
     
     currentScene->Render(&program);
 

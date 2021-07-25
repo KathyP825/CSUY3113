@@ -21,20 +21,18 @@ void Level1::Initialize() {
 
     GLuint mapTextureID = Util::LoadTexture("pixel_platform_03_tileset_final.png");
     state.map = new Map(LEVEL1_WIDTH, LEVEL1_HEIGHT, level1_data, mapTextureID, 1.0f, 16, 10);
-    
-    // Initialize Game Objects
+
 
     /*
     -----------------   Initialize Player    -----------------
     */
     state.player = new Entity();
-    state.player->entitytype = PLAYER;      // 8.7 -- initilize with PLAYER entity type
-    //state.player->position = glm::vec3(1.0f, -6.0f, 0.0f);     // 8.5 -- initialize player at bottom left
+    state.player->entitytype = PLAYER;
     state.player->position = glm::vec3(1.0f, -2.0f, 0.0f);
 
     state.player->movement = glm::vec3(0);
-    state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
-    state.player->speed = 2.5f;     // 6.13 -- increase player speed
+    state.player->acceleration = glm::vec3(0, -9.81f, 0);
+    state.player->speed = 2.5f;
     state.player->textureID = Util::LoadTexture("characters.png");
 
     state.player->animRight = new int[2]{ 4, 5 };
@@ -61,7 +59,7 @@ void Level1::Initialize() {
     state.enemies = new Entity[LEVEL1_ENEMY_COUNT];
     GLuint enemyTextureID = Util::LoadTexture("characters.png");
 
-    state.enemies[0].entitytype = ENEMY;        // 8.7 -- initilize with ENEMY entity type
+    state.enemies[0].entitytype = ENEMY;
     state.enemies[0].textureID = enemyTextureID;
     state.enemies[0].position = glm::vec3(5.0f, -1.0f, 0.0f);
     state.enemies[0].acceleration = glm::vec3(0, -9.81f, 0);
@@ -81,9 +79,8 @@ void Level1::Initialize() {
     state.enemies[0].height = 0.9f;
     state.enemies[0].width = 0.8f;
 
-    state.enemies[0].aiType = WAITANDGO;    // 8.8 -- initialize the AIType to 2nd type
-    state.enemies[0].aiState = IDLE;        // 8.8 -- initialize the AIState
-    //state.enemies[0].isActive = false;      // 9.11 -- deactivate 
+    state.enemies[0].aiType = WAITANDGO;
+    state.enemies[0].aiState = IDLE;
 }
 
 
@@ -98,7 +95,6 @@ void Level1::Update(float deltaTime) {
     // next to signboard triggers
     if (state.player->position.x >= 11.0f && state.player->position.y >= -1.2f) {
         state.nextScene = 2;
-        //state.enemies[0].isActive = false;
     }
 }
 

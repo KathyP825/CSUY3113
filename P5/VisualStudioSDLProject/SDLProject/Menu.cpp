@@ -28,11 +28,11 @@ void Menu::Initialize() {
     -----------------   Initialize Player    -----------------
     */
     state.player = new Entity();
-    state.player->entitytype = PLAYER;      // 8.7 -- initilize with PLAYER entity type
-    state.player->position = glm::vec3(5.0f, -3.0f, 0.0f);     // 8.5 -- initialize player at bottom left
+    state.player->entitytype = PLAYER;
+    state.player->position = glm::vec3(5.0f, -3.0f, 0.0f);
     state.player->movement = glm::vec3(0);
-    state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
-    state.player->speed = 2.0f;     // 6.13 -- increase player speed
+    state.player->acceleration = glm::vec3(0, -9.81f, 0);
+    state.player->speed = 2.5f;
     state.player->textureID = Util::LoadTexture("characters.png");
 
     state.player->animRight = new int[2]{ 4, 5 };

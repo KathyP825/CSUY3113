@@ -23,17 +23,16 @@ void Level3::Initialize() {
     GLuint mapTextureID = Util::LoadTexture("pixel_platform_01_tileset_final.png");
     state.map = new Map(LEVEL3_WIDTH, LEVEL3_HEIGHT, level3_data, mapTextureID, 1.0f, 16, 10);
 
-    // Initialize Game Objects
 
     /*
     -----------------   Initialize Player    -----------------
     */
     state.player = new Entity();
-    state.player->entitytype = PLAYER;      // 8.7 -- initilize with PLAYER entity type
-    state.player->position = glm::vec3(2.0f, -5.0f, 0.0f);     // 8.5 -- initialize player at bottom left
+    state.player->entitytype = PLAYER;
+    state.player->position = glm::vec3(2.0f, -5.0f, 0.0f);
     state.player->movement = glm::vec3(0);
-    state.player->acceleration = glm::vec3(0, -9.81f, 0);   // 6.6 -- set acceleration and never changing this value
-    state.player->speed = 2.5f;     // 6.13 -- increase player speed
+    state.player->acceleration = glm::vec3(0, -9.81f, 0);
+    state.player->speed = 2.5f;
     state.player->textureID = Util::LoadTexture("characters.png");
 
     state.player->animRight = new int[2]{ 4, 5 };
@@ -83,15 +82,10 @@ void Level3::Initialize() {
 
         state.enemies[i].aiType = WAITANDGO;
         state.enemies[i].aiState = IDLE;
-
-        //state.enemies[i].isActive = false;
-
     }
 
     state.enemies[0].position = glm::vec3(5.0f, -7.0f, 0.0f);
     state.enemies[1].position = glm::vec3(8.0f, -1.0f, 0.0f);
-
-
 }
 
 
@@ -102,7 +96,7 @@ void Level3::Update(float deltaTime) {
         state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
     }
 
-    // stop player movement if win
+    // if win, stop player movement
     if (state.player->position.x >= 11.0f && state.player->position.y <= -6.0f) {
         state.player->speed = 0.0f;
         state.player->jumpPower = 0.0f;
@@ -120,7 +114,6 @@ void Level3::Update(float deltaTime) {
 
 void Level3::Render(ShaderProgram* program) {
     GLuint fontTextureID = Util::LoadTexture("pixel_font.png");
-    //GLuint fontTextureID = Util::LoadTexture("font2.png");
 
     state.map->Render(program);
 
@@ -130,6 +123,8 @@ void Level3::Render(ShaderProgram* program) {
     
     state.player->Render(program);
 
+
+    // move to ending screen
     if (state.player->position.x >= 11.0f && state.player->position.y <= -6.0f) {
         Util::DrawText(program, fontTextureID, "You Win!", 0.4f, 0.1f, glm::vec3(6.25f, -3.25f, 0.0f));
     }

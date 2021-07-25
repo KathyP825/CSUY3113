@@ -13,17 +13,15 @@
 #include "ShaderProgram.h"
 
 class Map {
-    // number of tiles wide and number of tiles tall
-    // NOT width/height in pixels
+    // number of tiles across & tiles tall, NOT width/height in pixels
     int width;
     int height;
     unsigned int* levelData;    // array with map data in it
 
-    GLuint textureID;   // ID of texture with the tiles on it
-    float tile_size;    // how big on texture map the tile is
+    GLuint textureID;
+    float tile_size;    // how big the tile is on texture map
 
-    // how many tiles are there on the texture map
-    // related to that texture
+    // how many tiles there are on the texture map
     int tile_count_x;
     int tile_count_y;
 

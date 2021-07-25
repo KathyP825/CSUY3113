@@ -2,19 +2,18 @@
 
 Entity::Entity() {
     position = glm::vec3(0);
-
-    // 6.6 -- initialize movement, acceleration, and velocity
     movement = glm::vec3(0);
     acceleration = glm::vec3(0);
     velocity = glm::vec3(0);
-
     speed = 0;
 
     modelMatrix = glm::mat4(1.0f);
 }
 
 
-// 6.9 -- check if curr Entity will collide with another Entity
+/*
+    -----------------   Collision Check    -----------------
+*/
 bool Entity::CheckCollision(Entity* other) {
     if (other == this) return false;
 
@@ -33,7 +32,6 @@ bool Entity::CheckCollision(Entity* other) {
 }
 
 
-// 6.16 -- new collision check
 void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
     for (int i = 0; i < objectCount; i++) {
         Entity* object = &objects[i];
@@ -46,26 +44,25 @@ void Entity::CheckCollisionsY(Entity* objects, int objectCount) {
                 position.y -= penetrationY;
                 velocity.y = 0;
 
-                collidedTop = true;     //6.21
+                collidedTop = true;
             }
             else if (velocity.y < 0) {
                 position.y += penetrationY;
                 velocity.y = 0;
 
-                collidedBottom = true;  // 6.21
+                collidedBottom = true;
             }
 
 
+            // if collide with enemy left/right, player gets hurt but kills enemy
             if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedTop == true || collidedBottom == true)) {
-                //injured = true;
-                tempLives--;
+                injured = true;
                 object->isActive = false;
             }
-
-
         }
     }
 }
+
 
 void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
     for (int i = 0; i < objectCount; i++) {
@@ -88,39 +85,16 @@ void Entity::CheckCollisionsX(Entity* objects, int objectCount) {
                 collidedLeft = true;    // 6.21
             }
 
-            /////////////////////// PROBLEM = numLives keeps resetting to 3
-            // if collide with enemy, lose a life, enemy dies
-            //if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
-            //    // if have at least 1 life
-            //    numLives -= 2;      // fix back to 1, using 2 for testing
-            //    if (numLives > 0) {
-            //        object->isActive = false;
-            //    }
-            //    else {
-            //        //isAlive = false;
-            //        isActive = false;
-            //    }
-            //    //numLives -= 1;
-            //    //object->isActive = false;
-            //}
-
-
+            // if collide with enemy left/right, player gets hurt but kills enemy
             if ((entitytype == PLAYER && object->entitytype == ENEMY) && (collidedLeft == true || collidedRight == true)) {
-                //injured = true;
-                tempLives--;
+                injured = true;
                 object->isActive = false;
             }
-
-
-
-
         }
     }
 }
 
 
-
-// 9.11 -- new collision Y and X check
 void Entity::CheckCollisionsY(Map* map) {
     // 6 probes for tiles
     glm::vec3 top = glm::vec3(position.x, position.y + (height / 2), position.z);
@@ -134,7 +108,7 @@ void Entity::CheckCollisionsY(Map* map) {
     float penetration_x = 0;
     float penetration_y = 0;
 
-    // checks to see if any 1 of the sensors is touching something solid
+    // checks to see if any of the sensors is touching something solid
     if (map->IsSolid(top, &penetration_x, &penetration_y) && velocity.y > 0) {
         position.y -= penetration_y;
         velocity.y = 0;
@@ -168,6 +142,7 @@ void Entity::CheckCollisionsY(Map* map) {
     }
 }
 
+
 void Entity::CheckCollisionsX(Map* map) {
     // Probes for tiles
     glm::vec3 left = glm::vec3(position.x - (width / 2), position.y, position.z);
@@ -189,7 +164,9 @@ void Entity::CheckCollisionsX(Map* map) {
 }
 
 
-
+/*
+    -----------------   AI Behavior    -----------------
+*/
 // 8.7
 void Entity::AIWalker() {
     movement = glm::vec3(-1.0f, 0.0f, 0.0f);
@@ -244,11 +221,11 @@ void Entity::AI(Entity* player) {
 }
 
 
-
+/*
+    -----------------   General Functions    -----------------
+*/
 void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount, Map* map) {
-    // 6.20 -- check if entity is active
     if (isActive == false) return;
-
 
     collidedTop = false;
     collidedBottom = false;
@@ -256,7 +233,6 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
     collidedRight = false;
 
 
-    // 8.7 -- if is enemy, call AI func
     if (entitytype == ENEMY) {
         AI(player);
     }
@@ -281,36 +257,29 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
         }
     }
 
-
-    // 6.12 -- do jump
     if (jump) {
         jump = false;   // only jump 1x
-        velocity.y += jumpPower;    // does the jump up, acceleration does the back down part
+        velocity.y += jumpPower;    // does the jump up, acceleration handles gravity
     }
 
-
-
-    // 6.7
+    /*
+    -----------------   Collision Check    -----------------
+    */
     velocity.x = movement.x * speed;    // when character starts moving left/right, have instant velocity
     velocity += acceleration * deltaTime;
 
-    position.x += velocity.x * deltaTime; // Move on X
+    position.x += velocity.x * deltaTime;
     CheckCollisionsX(map);
-    CheckCollisionsX(objects, objectCount); // Fix if needed
-    position.y += velocity.y * deltaTime; // Move on Y
+    CheckCollisionsX(objects, objectCount);
+
+    position.y += velocity.y * deltaTime;
     CheckCollisionsY(map);
-    CheckCollisionsY(objects, objectCount); // Fix if needed
-
-    //if (entitytype == PLAYER && objects->entitytype == ENEMY) {
-    //    if (collidedLeft == true || collidedRight == true) {
-    //        injured = true;
-    //    }
-    //}
-
+    CheckCollisionsY(objects, objectCount);
 
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
 }
+
 
 void Entity::DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID, int index) {
     float u = (float)(index % animCols) / (float)animCols;
@@ -337,6 +306,7 @@ void Entity::DrawSpriteFromTextureAtlas(ShaderProgram* program, GLuint textureID
     glDisableVertexAttribArray(program->positionAttribute);
     glDisableVertexAttribArray(program->texCoordAttribute);
 }
+
 
 void Entity::Render(ShaderProgram* program) {
     if (isActive == false) {

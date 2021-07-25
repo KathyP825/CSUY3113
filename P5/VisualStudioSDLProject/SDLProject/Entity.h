@@ -13,9 +13,9 @@
 #include "ShaderProgram.h"
 #include "Map.h"    // 9.9
 
-enum EntityType { PLAYER, PLATFORM, ENEMY };      // 8.7 -- list of entity types
-enum AIType { WALKER, WAITANDGO };    // 8.7, 8.8 -- list of AI types, what they do
-enum AIState { IDLE, WALKING, ATTACKING };      // 8.7 -- list of states AI can be in
+enum EntityType { PLAYER, PLATFORM, ENEMY };
+enum AIType { WALKER, WAITANDGO };
+enum AIState { IDLE, WALKING, ATTACKING };
 
 class Entity {
 public:
@@ -55,7 +55,7 @@ public:
     int animRows = 0;
 
     bool isActive = true;
-    //bool injured = false;
+    bool injured = false;
     int tempLives = 0;
 
     bool collidedTop = false;
@@ -65,16 +65,11 @@ public:
 
     Entity();
 
-    // 6.9 -- if collided with object, return TRUE
     bool CheckCollision(Entity* other);
-
-    // 6.16 -- new collision detection prototype
-    // objects = platforms, objectCount = platformCount
     void CheckCollisionsY(Entity* objects, int objectCount);
     void CheckCollisionsX(Entity* objects, int objectCount);
 
-    // 9.11 -- collisions for Map
-    // check if collide with the map, not entities
+    // check if collide with the Map
     void CheckCollisionsX(Map* map);
     void CheckCollisionsY(Map* map);
 
