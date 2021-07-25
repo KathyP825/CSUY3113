@@ -5,6 +5,10 @@ Project 5: Platformer -- Alien Escape!
 
 #define GL_SILENCE_DEPRECATION
 
+#include <iostream>
+#include <string>
+using namespace std;
+
 #ifdef _WINDOWS
 #include <GL/glew.h>
 #endif
@@ -34,9 +38,9 @@ bool gameIsRunning = true;
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
-//// to display lives
-//glm::mat4 uiViewMatrix, uiProjectionMatrix;
-//GLuint fontTextureID;
+// to display lives
+glm::mat4 uiViewMatrix, uiProjectionMatrix;
+GLuint fontTextureID;
 
 int numLives = 3;
 
@@ -94,6 +98,11 @@ void Initialize() {
     sceneList[4] = new WinScreen();
     sceneList[5] = new LoseScreen();
     SwitchToScene(sceneList[0]);
+
+    // for displaying num lives
+    uiViewMatrix = glm::mat4(1.0);
+    uiProjectionMatrix = glm::ortho(-6.4f, 6.4f, -3.6f, 3.6f, -1.0f, 1.0f);
+    fontTextureID = Util::LoadTexture("pixel_font.png");
 }
 
 
@@ -217,7 +226,10 @@ void Update() {
 
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
-    program.SetViewMatrix(viewMatrix);  // 9.13 -- updates viewMatrix
+
+    // sets view matrix to 3d view matrix -- for displaying numLives
+    program.SetProjectionMatrix(projectionMatrix);
+    program.SetViewMatrix(viewMatrix);
 
     // if lose, send to Lose screen
     if (numLives == 0) {
@@ -225,6 +237,15 @@ void Render() {
     }
 
     currentScene->Render(&program);
+
+    program.SetProjectionMatrix(uiProjectionMatrix);
+    program.SetViewMatrix(uiViewMatrix);
+
+    // display num lives only on stage levels
+    if (currentScene != sceneList[0] && currentScene != sceneList[4] && currentScene != sceneList[5]) {
+        Util::DrawText(&program, fontTextureID, "Lives: " + to_string(numLives), 0.2f, 0.04f, glm::vec3(-5.5f, 3.0f, 0.0f));
+    }
+
     SDL_GL_SwapWindow(displayWindow);
 }
 
