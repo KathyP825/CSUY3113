@@ -1,6 +1,6 @@
 /*
 Kathy Pan
-Project 5
+Project 5: Platformer -- Alien Escape!
 */
 
 #define GL_SILENCE_DEPRECATION
@@ -24,6 +24,8 @@ Project 5
 #include "Level1.h"
 #include "Level2.h"
 #include "Level3.h"
+#include "WinScreen.h"
+#include "LoseScreen.h"
 
 SDL_Window* displayWindow;
 bool gameIsRunning = true;
@@ -38,7 +40,7 @@ glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 int numLives = 3;
 
 Scene* currentScene;
-Scene* sceneList[4];
+Scene* sceneList[6];
 
 void SwitchToScene(Scene* scene) {
     currentScene = scene;
@@ -48,7 +50,7 @@ void SwitchToScene(Scene* scene) {
 
 void Initialize() {
     SDL_Init(SDL_INIT_VIDEO);
-    displayWindow = SDL_CreateWindow("Textured!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
+    displayWindow = SDL_CreateWindow("Platformer: Alien Escape!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
 
@@ -78,6 +80,8 @@ void Initialize() {
     sceneList[1] = new Level1();
     sceneList[2] = new Level2();
     sceneList[3] = new Level3();
+    sceneList[4] = new WinScreen();
+    sceneList[5] = new LoseScreen();
     SwitchToScene(sceneList[0]);
 }
 
@@ -98,24 +102,19 @@ void ProcessInput() {
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
             case SDLK_RETURN:
-                // Starts game at Level 1
+                // starts game at Level 1
                 // only works if in Main Menu
                 if (currentScene == sceneList[0]) {
-                    //SwitchToScene(sceneList[1]); // need to change back to SwitchToScene(sceneList[1]);
-                                                 // was changed for testing
                     SwitchToScene(sceneList[1]);
                 }
                 
                 break;
 
             case SDLK_SPACE:
-                // jump
-                // 6.21 -- only jump if colliding on bottom
+                // only jump if colliding on bottom
                 if (currentScene->state.player->collidedBottom) {
-                    currentScene->state.player->jump = true;  // 6.12
+                    currentScene->state.player->jump = true;
                 }
-
-                //state.player->jump = true;  // 6.12
                 break;
             }
             break; // SDL_KEYDOWN
@@ -159,16 +158,7 @@ void Update() {
 
     // time accumulator
     while (deltaTime >= FIXED_TIMESTEP) {
-        currentScene->Update(FIXED_TIMESTEP);      // 9.7
-
-        /*
-        // 9.5 -- comment out
-        // 8.6
-        for (size_t i = 0; i < ENEMY_COUNT; i++) {
-            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);     // 8.8 -- enemies gets pointer to player
-        }
-        */
-
+        currentScene->Update(FIXED_TIMESTEP);
         deltaTime -= FIXED_TIMESTEP;
     }
     accumulator = deltaTime;
@@ -217,19 +207,12 @@ void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
     program.SetViewMatrix(viewMatrix);  // 9.13 -- updates viewMatrix
 
-    //GLuint fontTextureID = Util::LoadTexture("pixel_font.png");
-    //if (numLives == 0) {
-    //    Util::DrawText(&program, fontTextureID, "You Lose!", 0.4f, 0.1f, glm::vec3(6.25f, -3.25f, 0.0f));
-    //}
-
-    GLuint fontTextureID = Util::LoadTexture("pixel_font.png");
+    // if lose, send to Lose screen
     if (numLives == 0) {
-        Util::DrawText(&program, fontTextureID, "You Lose!", 0.4f, 0.1f, glm::vec3(3.0f, -3.25f, 0.0f));
+        SwitchToScene(sceneList[5]);
     }
 
-    
     currentScene->Render(&program);
-
     SDL_GL_SwapWindow(displayWindow);
 }
 

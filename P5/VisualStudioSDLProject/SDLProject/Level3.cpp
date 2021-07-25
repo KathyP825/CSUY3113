@@ -96,18 +96,9 @@ void Level3::Update(float deltaTime) {
         state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
     }
 
-    // if win, stop player movement
+    // if win, send to Win screen
     if (state.player->position.x >= 11.0f && state.player->position.y <= -6.0f) {
-        state.player->speed = 0.0f;
-        state.player->jumpPower = 0.0f;
-
-        // remove enemies from sight if win
-        // can remove this code
-        for (size_t i = 0; i < LEVEL3_ENEMY_COUNT; i++) {
-            state.enemies[i].isActive = false;
-
-        }
-        
+        state.nextScene = 4;
     }
 }
 
@@ -122,10 +113,4 @@ void Level3::Render(ShaderProgram* program) {
     }
     
     state.player->Render(program);
-
-
-    // move to ending screen
-    if (state.player->position.x >= 11.0f && state.player->position.y <= -6.0f) {
-        Util::DrawText(program, fontTextureID, "You Win!", 0.4f, 0.1f, glm::vec3(6.25f, -3.25f, 0.0f));
-    }
 }
