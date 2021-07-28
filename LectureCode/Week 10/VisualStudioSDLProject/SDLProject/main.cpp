@@ -16,6 +16,7 @@ Week 9
 #include "ShaderProgram.h"
 
 #include "Util.h"
+#include "Effects.h"    // 10.3 -- include Effects
 #include "Entity.h"
 #include "Map.h"
 #include "Scene.h"
@@ -30,6 +31,8 @@ glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 Scene* currentScene;
 Scene* sceneList[2];
+
+Effects* effects;   // 10.3
 
 void SwitchToScene(Scene* scene) {
     currentScene = scene;
@@ -69,6 +72,9 @@ void Initialize() {
     sceneList[1] = new Level2();
     SwitchToScene(sceneList[0]);
 
+    // 10.3
+    effects = new Effects(projectionMatrix, viewMatrix);
+    effects->Start(FADEIN);     // start FADEIN effect
 }
 
 
@@ -146,19 +152,11 @@ void Update() {
         return;
     }
 
-    // when enough time has passed, update player with FIXED_TIMESTEP
-    // if have extra time (accumulate 2x), update 2x
+    // accumulator
     while (deltaTime >= FIXED_TIMESTEP) {
-        //state.player->Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);    // 8.8 -- player gets pointer to self
         currentScene->Update(FIXED_TIMESTEP);      // 9.7
-
-        /*
-        // 9.5 -- comment out
-        // 8.6
-        for (size_t i = 0; i < ENEMY_COUNT; i++) {
-            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.platforms, PLATFORM_COUNT);     // 8.8 -- enemies gets pointer to player
-        }
-        */
+        
+        effects->Update(FIXED_TIMESTEP);    // 10.3
 
         deltaTime -= FIXED_TIMESTEP;
     }
@@ -184,7 +182,9 @@ void Render() {
 
     program.SetViewMatrix(viewMatrix);  // 9.13 -- updates viewMatrix
     
+    glUseProgram(program.programID);    // 10.3
     currentScene->Render(&program);
+    effects->Render();
 
     SDL_GL_SwapWindow(displayWindow);
 }

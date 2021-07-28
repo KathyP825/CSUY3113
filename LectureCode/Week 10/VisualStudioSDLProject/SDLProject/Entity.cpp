@@ -16,6 +16,8 @@ Entity::Entity() {
 
 // 6.9 -- check if curr Entity will collide with another Entity
 bool Entity::CheckCollision(Entity* other) {
+    if (other == this) return false;
+
     if (isActive == false || other->isActive == false) {
         return false;
     }
@@ -207,9 +209,7 @@ void Entity::AI(Entity* player) {
 // 6.9 -- update parameters for void Entity::Update(float deltaTime, Entity*)
 void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount, Map* map) {
     // 6.20 -- check if entity is active
-    if (isActive == false) {
-        return;
-    }
+    if (isActive == false) return;
 
     // 6.21
     collidedTop = false;
