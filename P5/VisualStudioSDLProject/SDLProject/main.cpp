@@ -152,7 +152,7 @@ void ProcessInput() {
         currentScene->state.player->animIndices = currentScene->state.player->animRight;
     }
 
-
+    // normalize
     if (glm::length(currentScene->state.player->movement) > 1.0f) {
         currentScene->state.player->movement = glm::normalize(currentScene->state.player->movement);
     }
@@ -194,6 +194,7 @@ void Update() {
         if (currentScene == sceneList[0]) {
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-5.0f, 3.75f, 0.0f));
         }
+        // limit right-side view of the screen to only the map
         else if (currentScene->state.player->position.x > 7.0) {
             viewMatrix = glm::translate(viewMatrix, glm::vec3(-8.0f, 3.75f, 0.0f));
         }

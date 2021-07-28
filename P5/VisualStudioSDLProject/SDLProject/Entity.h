@@ -11,7 +11,7 @@
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
-#include "Map.h"    // 9.9
+#include "Map.h"
 
 enum EntityType { PLAYER, PLATFORM, ENEMY };
 enum AIType { WALKER, WAITANDGO };

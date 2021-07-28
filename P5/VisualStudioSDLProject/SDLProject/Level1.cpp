@@ -91,8 +91,7 @@ void Level1::Update(float deltaTime) {
         state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
     }
 
-    // player must reach the signboard to advance
-    // next to signboard triggers
+    // player must reach the correct signboard to trigger level advance
     if (state.player->position.x >= 11.0f && state.player->position.y >= -1.2f) {
         state.nextScene = 2;
     }

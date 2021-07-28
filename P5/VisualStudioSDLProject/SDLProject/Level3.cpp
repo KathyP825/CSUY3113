@@ -96,7 +96,7 @@ void Level3::Update(float deltaTime) {
         state.enemies[i].Update(deltaTime, state.player, state.enemies, LEVEL3_ENEMY_COUNT, state.map);
     }
 
-    // if win, send to Win screen
+    // if win, switch to Win screen
     if (state.player->position.x >= 11.0f && state.player->position.y <= -6.0f) {
         state.nextScene = 4;
     }
