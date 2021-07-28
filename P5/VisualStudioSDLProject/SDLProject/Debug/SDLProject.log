@@ -1,2 +1,11 @@
-﻿  main.cpp
+﻿  Entity.cpp
+  Level1.cpp
+  Level2.cpp
+  Level3.cpp
+  LoseScreen.cpp
+  Menu.cpp
+  Scene.cpp
+  WinScreen.cpp
+  main.cpp
+  Generating Code...
   SDLProject.vcxproj -> C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P5\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
