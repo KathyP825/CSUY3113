@@ -13,17 +13,22 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
-enum EffectType { NONE, FADEIN };
+enum EffectType { NONE, FADEIN, FADEOUT, GROW, SHRINK, SHAKE };
 
 class Effects {
 	ShaderProgram program;
 	float alpha;
+	float speed;	// how fast the effect runs
+	float size;
+	float timeLeft;	// 10.7 -- need to know when camera shake is done
 	EffectType currentEffect;
 
 public:
+	glm::vec3 viewOffset;	// 10.7 -- for camera shake
+
 	Effects(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	void DrawOverlay();
-	void Start(EffectType effectType);
+	void Start(EffectType effectType, float effectSpeed);
 	void Update(float deltaTime);
 	void Render();
 };

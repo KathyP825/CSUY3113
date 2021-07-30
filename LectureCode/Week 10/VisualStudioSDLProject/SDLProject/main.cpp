@@ -52,7 +52,9 @@ void Initialize() {
 
     glViewport(0, 0, 640, 480);
 
-    program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
+    //program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");   // 10.10
+    //program.Load("shaders/vertex_textured.glsl", "shaders/effects_textured.glsl");  // 10.10 -- change from fragement to effects textured
+    program.Load("shaders/vertex_lit.glsl", "shaders/fragment_lit.glsl");  //10.13
 
     viewMatrix = glm::mat4(1.0f);
     modelMatrix = glm::mat4(1.0f);
@@ -72,9 +74,13 @@ void Initialize() {
     sceneList[1] = new Level2();
     SwitchToScene(sceneList[0]);
 
-    // 10.3
+    // 10.3 - 10.5
     effects = new Effects(projectionMatrix, viewMatrix);
-    effects->Start(FADEIN);     // start FADEIN effect
+    //effects->Start(FADEIN);     // start FADEIN effect
+    //effects->Start(FADEOUT, 0.5f);
+    //effects->Start(GROW, 5.0f);
+    //effects->Start(SHRINK, 5.0f);
+    //effects->Start(FADEIN, 5.0f);     // 10.10 -- comment out
 }
 
 
@@ -140,6 +146,8 @@ void ProcessInput() {
 float lastTicks = 0;
 float accumulator = 0.0f;
 
+bool lastCollidedBottom = false;
+
 void Update() {
     float ticks = (float)SDL_GetTicks() / 1000.0f;
     float deltaTime = ticks - lastTicks;
@@ -156,6 +164,14 @@ void Update() {
     while (deltaTime >= FIXED_TIMESTEP) {
         currentScene->Update(FIXED_TIMESTEP);      // 9.7
         
+        program.SetLightPosition(currentScene->state.player->position);     // 10.13 -- player emits light
+
+        // shake when player collides on bottom
+        if (lastCollidedBottom == false && currentScene->state.player->collidedBottom) {
+            //effects->Start(SHAKE, 2.0f);      // 10.10 -- comment out
+        }
+        lastCollidedBottom = currentScene->state.player->collidedBottom;
+
         effects->Update(FIXED_TIMESTEP);    // 10.3
 
         deltaTime -= FIXED_TIMESTEP;
@@ -173,6 +189,8 @@ void Update() {
     else {
         viewMatrix = glm::translate(viewMatrix, glm::vec3(-5, 3.75, 0));
     }
+
+    viewMatrix = glm::translate(viewMatrix, effects->viewOffset);
 }
 
 
