@@ -16,14 +16,52 @@
 #include "Util.h"
 #include "Entity.h"
 
+// 11.6
+float cubeVertices[] = {
+-0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
+-0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5,
+0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5,
+0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5,
+-0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5,
+-0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5,
+0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5,
+0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5,
+-0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5,
+-0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5,
+0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5,
+0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5
+};
+
+// 11.6
+float cubeTexCoords[] = {
+    0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f
+};
+
+
 SDL_Window* displayWindow;
 bool gameIsRunning = true;
 
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
+// 11.7
+#define OBJECT_COUNT 1
+
+
 struct GameState {
     Entity* player;
+    Entity* objects;    // 11.7
 };
 
 GameState state;
@@ -56,14 +94,39 @@ void Initialize() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    // 11.6 -- include Z-buffer
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LEQUAL);
+
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    /*
+    -----------------   Initialize Player  -----------------
+    */
 
     state.player = new Entity();
     state.player->entityType = PLAYER;
     state.player->position = glm::vec3(0, 1.5f, 0);
     state.player->acceleration = glm::vec3(0, 0, 0);
     state.player->speed = 1.0f;
+
+
+    /*
+    -----------------   Initialize Objects  -----------------
+    */
+    state.objects = new Entity[OBJECT_COUNT];
+
+    GLuint cubeTextureID = Util::LoadTexture("crate1_diffuse.png");
+
+    state.objects[0].textureID = cubeTextureID;
+    state.objects[0].position = glm::vec3(0.0f, 0.0f, -5.0f);   // 11.7 -- center of screen, 1 unit up, 5 units back into the screen
+    state.objects[0].vertices = cubeVertices;
+    state.objects[0].texCoords = cubeTexCoords;
+    state.objects[0].numVertices = 36;
+    //state.objects[0].rotation = glm::vec3(45.0f, 0.0f, 0.0f);   // 11.8 -- rotate box 45 degrees on X-axis
+    state.objects[0].entityType = CUBE;     // 11.8
 
 }
 
@@ -106,6 +169,11 @@ void Update() {
     while (deltaTime >= FIXED_TIMESTEP) {
         state.player->Update(FIXED_TIMESTEP);
 
+        // 11.7 -- update cube
+        for (size_t i = 0; i < OBJECT_COUNT; i++) {
+            state.objects[i].Update(FIXED_TIMESTEP);
+        }
+
         deltaTime -= FIXED_TIMESTEP;
     }
 
@@ -114,9 +182,15 @@ void Update() {
 
 
 void Render() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // 11.6 -- also clear depth buffer
 
-    state.player->Render(&program);
+    //state.player->Render(&program);   // 11.7 -- don't render b/c is 1st person game
+    
+    // 11.7 -- render objects
+    for (size_t i = 0; i < OBJECT_COUNT; i++) {
+        state.objects[0].Render(&program);
+    }
 
     SDL_GL_SwapWindow(displayWindow);
 }
