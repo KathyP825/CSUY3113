@@ -14,7 +14,7 @@
 #include "ShaderProgram.h"
 
 #include "Mesh.h"
-enum EntityType { PLAYER, PLATFORM, ENEMY, CUBE };
+enum EntityType { PLAYER, PLATFORM, ENEMY, CUBE, SHIP };
 
 class Entity {
 public:
@@ -24,6 +24,7 @@ public:
     glm::vec3 velocity;
     glm::vec3 acceleration;
     glm::vec3 rotation;     // 11.8
+    glm::vec3 scale;    // 11.13
 
     float speed;
 

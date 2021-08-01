@@ -59,7 +59,7 @@ ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 // 11.7
-#define OBJECT_COUNT 3
+#define OBJECT_COUNT 2
 
 
 struct GameState {
@@ -121,45 +121,66 @@ void Initialize() {
     */
     state.objects = new Entity[OBJECT_COUNT];
     
-    // Cube
-    GLuint cubeTextureID = Util::LoadTexture("crate1_diffuse.png");
+    // 11.14 -- comment out cube, Mario, and Pikachu -- replace with ship
+    GLuint shipTextureID = Util::LoadTexture("ship.png");
+    Mesh* shipMesh = new Mesh();
+    shipMesh->LoadOBJ("ship.obj");
 
-    // 11.11 -- replacement code for cube
-    Mesh* cubeMesh = new Mesh();
-    cubeMesh->LoadOBJ("cube.obj");
+    state.objects[0].textureID = shipTextureID;
+    state.objects[0].mesh = shipMesh;
+    //state.objects[0].position = glm::vec3(0.0f, 0.0f, -5.0f);     // ship starts infront of us
+    state.objects[0].position = glm::vec3(-5.0f, 0.0f, 10.0f);   // ship starts behind us and flies past us
+    state.objects[0].rotation = glm::vec3(0.0f, 180.0f, 0.0f);  // initially facing us, change to see back of ship
+    state.objects[0].acceleration = glm::vec3(0.0f, 0.0f, -10.0f);  // ship move forward away from us
+    state.objects[0].entityType = SHIP;
 
-    state.objects[0].textureID = cubeTextureID;
-    state.objects[0].mesh = cubeMesh;   // 11.11
-    state.objects[0].position = glm::vec3(0.0f, 0.0f, -5.0f);   // 11.7 -- center of screen, 1 unit up, 5 units back into the screen
-    state.objects[0].entityType = CUBE;     // 11.8
+    state.objects[1].textureID = shipTextureID;
+    state.objects[1].mesh = shipMesh;
+    state.objects[1].position = glm::vec3(5.0f, 0.0f, 10.0f);   // ship starts behind us and flies past us
+    state.objects[1].rotation = glm::vec3(0.0f, 180.0f, 0.0f);  // initially facing us, change to see back of ship
+    state.objects[1].acceleration = glm::vec3(0.0f, 0.0f, -10.0f);  // ship move forward away from us
+    state.objects[1].entityType = SHIP;
+    
+    //// Cube
+    //GLuint cubeTextureID = Util::LoadTexture("crate1_diffuse.png");
 
-    /*
-    // 11.11 -- remove cube code b/c its hardcode
-    state.objects[0].vertices = cubeVertices;
-    state.objects[0].texCoords = cubeTexCoords;
-    state.objects[0].numVertices = 36;
-    //state.objects[0].rotation = glm::vec3(45.0f, 0.0f, 0.0f);   // 11.8 -- rotate box 45 degrees on X-axis
-    */
+    //// 11.11 -- replacement code for cube
+    //Mesh* cubeMesh = new Mesh();
+    //cubeMesh->LoadOBJ("cube.obj");
 
-    // 11.12 -- Mario
-    GLuint marioTextureID = Util::LoadTexture("mario_body.png");
-    Mesh* marioMesh = new Mesh();
-    marioMesh->LoadOBJ("mario.obj");
+    //state.objects[0].textureID = cubeTextureID;
+    //state.objects[0].mesh = cubeMesh;   // 11.11
+    //state.objects[0].position = glm::vec3(0.0f, 0.0f, -5.0f);   // 11.7 -- center of screen, 1 unit up, 5 units back into the screen
+    //state.objects[0].entityType = CUBE;     // 11.8
 
-    state.objects[1].textureID = marioTextureID;
-    state.objects[1].mesh = marioMesh;
-    state.objects[1].position = glm::vec3(-10.0f, -20.0f, -80.0f);   // center for Mario = at its feet
-    state.objects[1].entityType = ENEMY;
+    ///*
+    //// 11.11 -- remove cube code b/c its hardcode
+    //state.objects[0].vertices = cubeVertices;
+    //state.objects[0].texCoords = cubeTexCoords;
+    //state.objects[0].numVertices = 36;
+    ////state.objects[0].rotation = glm::vec3(45.0f, 0.0f, 0.0f);   // 11.8 -- rotate box 45 degrees on X-axis
+    //*/
 
-    // 11.12 -- Pikachu
-    GLuint pikachuTextureID = Util::LoadTexture("pikachu.png");
-    Mesh* pikachuMesh = new Mesh();
-    pikachuMesh->LoadOBJ("pikachu.obj");
+    //// 11.12 -- Mario
+    //GLuint marioTextureID = Util::LoadTexture("mario_body.png");
+    //Mesh* marioMesh = new Mesh();
+    //marioMesh->LoadOBJ("mario.obj");
 
-    state.objects[2].textureID = pikachuTextureID;
-    state.objects[2].mesh = pikachuMesh;
-    state.objects[2].position = glm::vec3(2.0f, 0.0f, -4.0f);   // pikachu is much smaller than Mario
-    state.objects[2].entityType = ENEMY;
+    //state.objects[1].textureID = marioTextureID;
+    //state.objects[1].mesh = marioMesh;
+    //state.objects[1].position = glm::vec3(-10.0f, 0.0f, -40.0f);   // center for Mario = at its feet
+    //state.objects[1].scale = glm::vec3(0.25f, 0.25f, 0.25f);    // 11.13 -- scale Mario to 1/4 size
+    //state.objects[1].entityType = ENEMY;
+
+    //// 11.12 -- Pikachu
+    //GLuint pikachuTextureID = Util::LoadTexture("pikachu.png");
+    //Mesh* pikachuMesh = new Mesh();
+    //pikachuMesh->LoadOBJ("pikachu.obj");
+
+    //state.objects[2].textureID = pikachuTextureID;
+    //state.objects[2].mesh = pikachuMesh;
+    //state.objects[2].position = glm::vec3(2.0f, 0.0f, -4.0f);   // pikachu is much smaller than Mario
+    //state.objects[2].entityType = ENEMY;
 
 
 }

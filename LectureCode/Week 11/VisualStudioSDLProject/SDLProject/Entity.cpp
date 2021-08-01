@@ -6,6 +6,7 @@ Entity::Entity() {
     velocity = glm::vec3(0);
     modelMatrix = glm::mat4(1.0f);
     rotation = glm::vec3(0);    // 11.8
+    scale = glm::vec3(1);   // default scale = 1
 
     speed = 0.0f;
 }
@@ -44,6 +45,7 @@ void Entity::Update(float deltaTime) {
 
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
+    modelMatrix = glm::scale(modelMatrix, scale);    // 11.13 -- order = translate, scale, rotate
 
     /*
     -----------------   One Axis  -----------------
