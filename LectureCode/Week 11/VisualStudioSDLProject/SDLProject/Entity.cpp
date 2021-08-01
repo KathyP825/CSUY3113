@@ -37,7 +37,9 @@ void Entity::Update(float deltaTime) {
         rotation.y += 45 * deltaTime;
         rotation.z += 45 * deltaTime;
 
-
+    }
+    else if (entityType == ENEMY){
+        rotation.y += 30 * deltaTime;
     }
 
     modelMatrix = glm::mat4(1.0f);
@@ -72,6 +74,10 @@ void Entity::Render(ShaderProgram* program) {
 
     glBindTexture(GL_TEXTURE_2D, textureID);
 
+    mesh->Render(program);  // 11.11
+
+    /*
+    // 11.11 -- remove
     //glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices);
     glVertexAttribPointer(program->positionAttribute, 3, GL_FLOAT, false, 0, vertices);     // 11.7 -- change to 3 values
     glEnableVertexAttribArray(program->positionAttribute);
@@ -84,5 +90,6 @@ void Entity::Render(ShaderProgram* program) {
 
     glDisableVertexAttribArray(program->positionAttribute);
     glDisableVertexAttribArray(program->texCoordAttribute);
+    */
 }
 

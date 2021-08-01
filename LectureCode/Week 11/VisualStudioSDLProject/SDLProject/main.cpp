@@ -16,6 +16,8 @@
 #include "Util.h"
 #include "Entity.h"
 
+/*
+// 11.11 -- remove cube hardcode
 // 11.6
 float cubeVertices[] = {
 -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
@@ -47,6 +49,7 @@ float cubeTexCoords[] = {
     0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
     0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f
 };
+*/
 
 
 SDL_Window* displayWindow;
@@ -56,7 +59,7 @@ ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 // 11.7
-#define OBJECT_COUNT 1
+#define OBJECT_COUNT 3
 
 
 struct GameState {
@@ -117,16 +120,47 @@ void Initialize() {
     -----------------   Initialize Objects  -----------------
     */
     state.objects = new Entity[OBJECT_COUNT];
-
+    
+    // Cube
     GLuint cubeTextureID = Util::LoadTexture("crate1_diffuse.png");
 
+    // 11.11 -- replacement code for cube
+    Mesh* cubeMesh = new Mesh();
+    cubeMesh->LoadOBJ("cube.obj");
+
     state.objects[0].textureID = cubeTextureID;
+    state.objects[0].mesh = cubeMesh;   // 11.11
     state.objects[0].position = glm::vec3(0.0f, 0.0f, -5.0f);   // 11.7 -- center of screen, 1 unit up, 5 units back into the screen
+    state.objects[0].entityType = CUBE;     // 11.8
+
+    /*
+    // 11.11 -- remove cube code b/c its hardcode
     state.objects[0].vertices = cubeVertices;
     state.objects[0].texCoords = cubeTexCoords;
     state.objects[0].numVertices = 36;
     //state.objects[0].rotation = glm::vec3(45.0f, 0.0f, 0.0f);   // 11.8 -- rotate box 45 degrees on X-axis
-    state.objects[0].entityType = CUBE;     // 11.8
+    */
+
+    // 11.12 -- Mario
+    GLuint marioTextureID = Util::LoadTexture("mario_body.png");
+    Mesh* marioMesh = new Mesh();
+    marioMesh->LoadOBJ("mario.obj");
+
+    state.objects[1].textureID = marioTextureID;
+    state.objects[1].mesh = marioMesh;
+    state.objects[1].position = glm::vec3(-10.0f, -20.0f, -80.0f);   // center for Mario = at its feet
+    state.objects[1].entityType = ENEMY;
+
+    // 11.12 -- Pikachu
+    GLuint pikachuTextureID = Util::LoadTexture("pikachu.png");
+    Mesh* pikachuMesh = new Mesh();
+    pikachuMesh->LoadOBJ("pikachu.obj");
+
+    state.objects[2].textureID = pikachuTextureID;
+    state.objects[2].mesh = pikachuMesh;
+    state.objects[2].position = glm::vec3(2.0f, 0.0f, -4.0f);   // pikachu is much smaller than Mario
+    state.objects[2].entityType = ENEMY;
+
 
 }
 
@@ -189,7 +223,7 @@ void Render() {
     
     // 11.7 -- render objects
     for (size_t i = 0; i < OBJECT_COUNT; i++) {
-        state.objects[0].Render(&program);
+        state.objects[i].Render(&program);
     }
 
     SDL_GL_SwapWindow(displayWindow);

@@ -13,6 +13,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
+#include "Mesh.h"
 enum EntityType { PLAYER, PLATFORM, ENEMY, CUBE };
 
 class Entity {
@@ -28,11 +29,16 @@ public:
 
     GLuint textureID;
 
+    /*
+    // 11.11 -- delete, replace with Mesh class
     // 11.7
     float* vertices;
     float* texCoords;
     int numVertices;
+    */
 
+    Mesh* mesh;     // 11.11
+    
     glm::mat4 modelMatrix;
 
     Entity();
