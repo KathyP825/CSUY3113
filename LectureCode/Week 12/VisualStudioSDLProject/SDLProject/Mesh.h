@@ -24,7 +24,8 @@ class Mesh {
 public:
 
     void Render(ShaderProgram* program);
-    void LoadOBJ(const char* fileName);
+    //void LoadOBJ(const char* fileName);
+    void LoadOBJ(const char* fileName, float textureRepeat);    // 12.3 -- to make texture repeat
 
     std::vector<float> vertices;
     std::vector<float> uvs;

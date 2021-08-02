@@ -90,7 +90,8 @@ void Initialize() {
     // 11.14 -- comment out cube, Mario, and Pikachu -- replace with ship
     GLuint floorTextureID = Util::LoadTexture("sandfloor.jpg");
     Mesh* cubeMesh = new Mesh();
-    cubeMesh->LoadOBJ("cube.obj");
+    //cubeMesh->LoadOBJ("cube.obj");
+    cubeMesh->LoadOBJ("cube.obj", 10);  // 12.3 -- duplicate texture 10 times
 
     state.objects[0].textureID = floorTextureID;
     state.objects[0].mesh = cubeMesh;
