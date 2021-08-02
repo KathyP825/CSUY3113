@@ -76,7 +76,7 @@ void Initialize() {
 
     state.player = new Entity();
     state.player->entityType = PLAYER;
-    state.player->position = glm::vec3(0, 1.5f, 0);
+    state.player->position = glm::vec3(0, 0.5f, 0);
     state.player->acceleration = glm::vec3(0, 0, 0);
     state.player->speed = 1.0f;
 
@@ -124,6 +124,27 @@ void ProcessInput() {
             break;
         }
     }
+
+    // 12.5 -- A and D turns left/right
+    const Uint8* keys = SDL_GetKeyboardState(NULL);
+    if (keys[SDL_SCANCODE_A]) {
+        //state.player->rotation.y += 1.0f;
+        state.player->rotation.y += 0.1f;   // make slower
+    }
+    else if (keys[SDL_SCANCODE_D]) {
+        state.player->rotation.y -= 0.1f;   // make slower
+    }
+
+    state.player->velocity.x = 0;
+    state.player->velocity.z = 0;
+    if (keys[SDL_SCANCODE_W]) {
+        state.player->velocity.z = cos(glm::radians(state.player->rotation.y)) * -2.0f;
+        state.player->velocity.x = sin(glm::radians(state.player->rotation.y)) * -2.0f;
+    }
+    else if (keys[SDL_SCANCODE_S]) {
+        state.player->velocity.z = cos(glm::radians(state.player->rotation.y)) * 2.0f;
+        state.player->velocity.x = sin(glm::radians(state.player->rotation.y)) * 2.0f;
+    }
 }
 
 #define FIXED_TIMESTEP 0.0166666f
@@ -153,12 +174,19 @@ void Update() {
     }
 
     accumulator = deltaTime;
+
+    // 12.5 -- update viewMatrix
+    viewMatrix = glm::mat4(1.0f);
+    viewMatrix = glm::rotate(viewMatrix, glm::radians(state.player->rotation.y), glm::vec3(0, -1.0f, 0));
+    viewMatrix = glm::translate(viewMatrix, -state.player->position);
 }
 
 
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // 11.6 -- also clear depth buffer
     
+    program.SetViewMatrix(viewMatrix);  // 12.5
+
     // 11.7 -- render objects
     for (size_t i = 0; i < OBJECT_COUNT; i++) {
         state.objects[i].Render(&program);
