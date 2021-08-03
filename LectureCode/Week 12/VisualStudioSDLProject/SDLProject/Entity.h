@@ -28,6 +28,12 @@ public:
 
     float speed;
 
+    // 12.9 -- add collision
+    bool billboard;
+    float width;    // 12.9 -- need to change if scale
+    float height;   // 12.9 -- need to change if scale
+    float depth;    // 12.9 -- need to change if scale
+
     GLuint textureID;
 
     /*
@@ -44,7 +50,10 @@ public:
 
     Entity();
 
-    void Update(float deltaTime);
+    bool CheckCollision(Entity* other);
+    void Update(float deltaTime, Entity* player, Entity* objects, int objectCount);
+    
+    //void Update(float deltaTime);     // 12.9 -- new Update overwrite
     void Render(ShaderProgram* program);
 };
 

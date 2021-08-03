@@ -181,11 +181,11 @@ void Update() {
     }
 
     while (deltaTime >= FIXED_TIMESTEP) {
-        state.player->Update(FIXED_TIMESTEP);
+        state.player->Update(FIXED_TIMESTEP, state.player, state.objects, OBJECT_COUNT);
 
         // 11.7 -- update cube
         for (size_t i = 0; i < OBJECT_COUNT; i++) {
-            state.objects[i].Update(FIXED_TIMESTEP);
+            state.objects[i].Update(FIXED_TIMESTEP, state.player, state.objects, OBJECT_COUNT);
         }
 
         deltaTime -= FIXED_TIMESTEP;
