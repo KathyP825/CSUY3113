@@ -24,7 +24,7 @@ ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 // 11.7
-#define OBJECT_COUNT 1
+#define OBJECT_COUNT 4
 
 
 struct GameState {
@@ -76,7 +76,7 @@ void Initialize() {
 
     state.player = new Entity();
     state.player->entityType = PLAYER;
-    state.player->position = glm::vec3(0, 0.5f, 0);
+    state.player->position = glm::vec3(0, 0.75f, 0);
     state.player->acceleration = glm::vec3(0, 0, 0);
     state.player->speed = 1.0f;
 
@@ -91,17 +91,35 @@ void Initialize() {
     GLuint floorTextureID = Util::LoadTexture("sandfloor.jpg");
     Mesh* cubeMesh = new Mesh();
     //cubeMesh->LoadOBJ("cube.obj");
-    cubeMesh->LoadOBJ("cube.obj", 10);  // 12.3 -- duplicate texture 10 times
+    cubeMesh->LoadOBJ("cube.obj", 20);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
 
     state.objects[0].textureID = floorTextureID;
     state.objects[0].mesh = cubeMesh;
     state.objects[0].position = glm::vec3(0.0f, -0.25f, 0.0f);
     state.objects[0].rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     state.objects[0].acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
-    state.objects[0].scale = glm::vec3(10.0f, 0.5f, 10.0f);
+    state.objects[0].scale = glm::vec3(20.0f, 0.5f, 20.0f);
     state.objects[0].entityType = FLOOR;
 
+    // CRATES
+    GLuint crateTextureID = Util::LoadTexture("crate1_diffuse.png");
+    Mesh* crateMesh = new Mesh();   // 12.6 -- need a new one b/c floor one is duplicated
+    crateMesh->LoadOBJ("cube.obj", 1);  // 12.6 -- 1 = no duplicate
 
+    state.objects[1].textureID = crateTextureID;
+    state.objects[1].mesh = crateMesh;
+    state.objects[1].position = glm::vec3(0.0f, 0.5f, -5.0f);   // 12.6 -- crate is 1 unit tall, stop from sinking into floor
+    state.objects[1].entityType = CRATE;
+
+    state.objects[2].textureID = crateTextureID;
+    state.objects[2].mesh = crateMesh;
+    state.objects[2].position = glm::vec3(-1.0f, 0.5f, -5.0f);   // 12.7 -- next to 1st crate
+    state.objects[2].entityType = CRATE;
+
+    state.objects[3].textureID = crateTextureID;
+    state.objects[3].mesh = crateMesh;
+    state.objects[3].position = glm::vec3(0.0f, 1.5f, -5.0f);   // 12.7 -- on top of 1st crate
+    state.objects[3].entityType = CRATE;
 
 }
 
