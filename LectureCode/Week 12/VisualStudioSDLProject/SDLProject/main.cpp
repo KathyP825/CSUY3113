@@ -26,10 +26,14 @@ glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 // 11.7
 #define OBJECT_COUNT 4
 
+// 12.12 -- enemies
+#define ENEMY_COUNT 10
+
 
 struct GameState {
     Entity* player;
     Entity* objects;    // 11.7
+    Entity* enemies;    // 12.12
 };
 
 GameState state;
@@ -121,6 +125,21 @@ void Initialize() {
     state.objects[3].position = glm::vec3(0.0f, 1.5f, -5.0f);   // 12.7 -- on top of 1st crate
     state.objects[3].entityType = CRATE;
 
+    /*
+    -----------------   Initialize Enemies  -----------------
+    */
+    // 12.12
+    state.enemies = new Entity[ENEMY_COUNT];
+    GLuint enemyTextureID = Util::LoadTexture("ctg.png");
+
+    for (int i = 0; i < ENEMY_COUNT; i++) {
+        state.enemies[i].billboard = true;
+        state.enemies[i].textureID = enemyTextureID;
+        state.enemies[i].position = glm::vec3(rand() % 20 - 10, 0.5, rand() % 20 - 10); // 0.5 = edit to have enemies touch ground
+        state.enemies[i].rotation = glm::vec3(0, 0, 0);
+        state.enemies[i].acceleration = glm::vec3(0, 0, 0);
+    }
+
 }
 
 void ProcessInput() {
@@ -188,6 +207,11 @@ void Update() {
             state.objects[i].Update(FIXED_TIMESTEP, state.player, state.objects, OBJECT_COUNT);
         }
 
+        // 12.13 -- update enemies
+        for (size_t i = 0; i < ENEMY_COUNT; i++) {
+            state.enemies[i].Update(FIXED_TIMESTEP, state.player, state.objects, OBJECT_COUNT);
+        }
+
         deltaTime -= FIXED_TIMESTEP;
     }
 
@@ -208,6 +232,11 @@ void Render() {
     // 11.7 -- render objects
     for (size_t i = 0; i < OBJECT_COUNT; i++) {
         state.objects[i].Render(&program);
+    }
+
+    // 12.13 -- render enemies
+    for (size_t i = 0; i < ENEMY_COUNT; i++) {
+        state.enemies[i].Render(&program);
     }
 
     SDL_GL_SwapWindow(displayWindow);

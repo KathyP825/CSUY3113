@@ -55,6 +55,7 @@ public:
     
     //void Update(float deltaTime);     // 12.9 -- new Update overwrite
     void Render(ShaderProgram* program);
+    void DrawBillboard(ShaderProgram* program);
 };
 
 

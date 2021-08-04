@@ -31,6 +31,18 @@ bool Entity::CheckCollision(Entity* other) {
 // 12.9 -- new Update with parameters for collision check
 void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount) {
     glm::vec3 previousPosition = position;
+
+    // 12.12 -- ensure 2d enemy always face player
+    if (billboard) {
+        float directionX = position.x - player->position.x;
+        float directionZ = position.z - player->position.z;
+        rotation.y = glm::degrees(atan2f(directionX, directionZ));
+
+        // 12.13 -- billboard walks towards us
+        velocity.z = cos(glm::radians(rotation.y)) * -1.0f;
+        velocity.x = sin(glm::radians(rotation.y)) * -1.0f;
+    }
+
     velocity += acceleration * deltaTime;
     position += velocity * deltaTime;
 
@@ -101,28 +113,28 @@ void Entity::Render(ShaderProgram* program) {
     //modelMatrix = glm::translate(modelMatrix, position);
     program->SetModelMatrix(modelMatrix);
 
-    // 11.7 -- delete
-    //float vertices[] = { -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5 };
-    //float texCoords[] = { 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 };
-
+    // 12.12 -- replace previous code
     glBindTexture(GL_TEXTURE_2D, textureID);
-
-    mesh->Render(program);  // 11.11
-
-    /*
-    // 11.11 -- remove
-    //glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices);
-    glVertexAttribPointer(program->positionAttribute, 3, GL_FLOAT, false, 0, vertices);     // 11.7 -- change to 3 values
-    glEnableVertexAttribArray(program->positionAttribute);
-
-    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);    // 11.7 -- no change
-    glEnableVertexAttribArray(program->texCoordAttribute);
-
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawArrays(GL_TRIANGLES, 0, numVertices);     // 11.7 
-
-    glDisableVertexAttribArray(program->positionAttribute);
-    glDisableVertexAttribArray(program->texCoordAttribute);
-    */
+    if (billboard) {
+        DrawBillboard(program);
+    }
+    else {
+        mesh->Render(program);
+    }
 }
 
+void Entity::DrawBillboard(ShaderProgram* program) {
+    float vertices[] = { -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5 };
+    float texCoords[] = { 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 };
+    
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices);
+    glEnableVertexAttribArray(program->positionAttribute);
+    
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+    glEnableVertexAttribArray(program->texCoordAttribute);
+    
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
+}
