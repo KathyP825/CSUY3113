@@ -1,23 +1,2 @@
-﻿  Entity.cpp
-  main.cpp
-  Mesh.cpp
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\Mesh.cpp(21,48): warning C4244: 'argument': conversion from 'double' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\Mesh.cpp(28,47): warning C4244: 'argument': conversion from 'double' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\Mesh.cpp(38,59): warning C4244: 'argument': conversion from 'double' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=float
-          ]
-  ShaderProgram.cpp
-  Util.cpp
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\Util.cpp(35,23): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
+﻿  main.cpp
   SDLProject.vcxproj -> C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe

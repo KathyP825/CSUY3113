@@ -24,10 +24,10 @@ ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 // 11.7
-#define OBJECT_COUNT 4
+#define OBJECT_COUNT 6
 
 // 12.12 -- enemies
-#define ENEMY_COUNT 10
+#define ENEMY_COUNT 1
 
 
 struct GameState {
@@ -92,38 +92,88 @@ void Initialize() {
     
     // 12.2 -- remove commented out code, delete ships, replace with floor
     // 11.14 -- comment out cube, Mario, and Pikachu -- replace with ship
-    GLuint floorTextureID = Util::LoadTexture("sandfloor.jpg");
+    GLuint floorTextureID = Util::LoadTexture("grasstext.jpg");
     Mesh* cubeMesh = new Mesh();
     //cubeMesh->LoadOBJ("cube.obj");
-    cubeMesh->LoadOBJ("cube.obj", 20);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
+    cubeMesh->LoadOBJ("cube.obj", 30);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
 
     state.objects[0].textureID = floorTextureID;
     state.objects[0].mesh = cubeMesh;
     state.objects[0].position = glm::vec3(0.0f, -0.25f, 0.0f);
     state.objects[0].rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     state.objects[0].acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
-    state.objects[0].scale = glm::vec3(20.0f, 0.5f, 20.0f);
+    state.objects[0].scale = glm::vec3(30.0f, 0.5f, 30.0f);
     state.objects[0].entityType = FLOOR;
 
     // CRATES
-    GLuint crateTextureID = Util::LoadTexture("crate1_diffuse.png");
-    Mesh* crateMesh = new Mesh();   // 12.6 -- need a new one b/c floor one is duplicated
-    crateMesh->LoadOBJ("cube.obj", 1);  // 12.6 -- 1 = no duplicate
+    //GLuint crateTextureID = Util::LoadTexture("crate1_diffuse.png");
+    //Mesh* crateMesh = new Mesh();   // 12.6 -- need a new one b/c floor one is duplicated
+    //crateMesh->LoadOBJ("cube.obj", 1);  // 12.6 -- 1 = no duplicate
 
-    state.objects[1].textureID = crateTextureID;
-    state.objects[1].mesh = crateMesh;
-    state.objects[1].position = glm::vec3(0.0f, 0.5f, -5.0f);   // 12.6 -- crate is 1 unit tall, stop from sinking into floor
-    state.objects[1].entityType = CRATE;
+    //state.objects[1].textureID = crateTextureID;
+    //state.objects[1].mesh = crateMesh;
+    //state.objects[1].position = glm::vec3(0.0f, 0.5f, -5.0f);   // 12.6 -- crate is 1 unit tall, stop from sinking into floor
+    //state.objects[1].entityType = CRATE;
 
-    state.objects[2].textureID = crateTextureID;
-    state.objects[2].mesh = crateMesh;
-    state.objects[2].position = glm::vec3(-1.0f, 0.5f, -5.0f);   // 12.7 -- next to 1st crate
-    state.objects[2].entityType = CRATE;
+    //state.objects[2].textureID = crateTextureID;
+    //state.objects[2].mesh = crateMesh;
+    //state.objects[2].position = glm::vec3(-1.0f, 0.5f, -5.0f);   // 12.7 -- next to 1st crate
+    //state.objects[2].entityType = CRATE;
 
-    state.objects[3].textureID = crateTextureID;
-    state.objects[3].mesh = crateMesh;
-    state.objects[3].position = glm::vec3(0.0f, 1.5f, -5.0f);   // 12.7 -- on top of 1st crate
-    state.objects[3].entityType = CRATE;
+    //state.objects[3].textureID = crateTextureID;
+    //state.objects[3].mesh = crateMesh;
+    //state.objects[3].position = glm::vec3(0.0f, 1.5f, -5.0f);   // 12.7 -- on top of 1st crate
+    //state.objects[3].entityType = CRATE;
+
+    // Walls
+    GLuint wallTextureID = Util::LoadTexture("sampleWall.jpg");
+    Mesh* wallMesh = new Mesh();
+    wallMesh->LoadOBJ("cube.obj", 1);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
+
+    for (size_t i = 1; i < OBJECT_COUNT; i++) {
+        state.objects[i].textureID = wallTextureID;
+        state.objects[i].mesh = wallMesh;
+        state.objects[i].entityType = WALL;
+
+        //probably unneeded
+        state.objects[i].width = 0.5f;
+        state.objects[i].height = 4.0f;
+        state.objects[i].depth = 30.0f;
+
+        state.objects[i].acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
+        state.objects[1].rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    }
+
+    state.objects[1].scale = glm::vec3(0.5f, 4.0f, 30.0f);
+    state.objects[1].position = glm::vec3(15.0f, 1.5f, 0.0f);
+
+    state.objects[2].scale = glm::vec3(0.5f, 4.0f, 30.0f);
+    state.objects[2].position = glm::vec3(-15.0f, 1.5f, 0.0f);
+
+    state.objects[3].scale = glm::vec3(30.0f, 4.0f, 0.5f);
+    state.objects[3].position = glm::vec3(0.0f, 1.5f, 15.0f);
+
+    state.objects[4].scale = glm::vec3(30.0f, 4.0f, 0.5f);
+    state.objects[4].position = glm::vec3(0.0f, 1.5f, -15.0f);
+
+
+    // ceiling
+    GLuint ceilingTextureID = Util::LoadTexture("bricktext.jpg");
+    Mesh* ceilingMesh = new Mesh();
+    //cubeMesh->LoadOBJ("cube.obj");
+    ceilingMesh->LoadOBJ("cube.obj", 30);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
+
+    state.objects[5].textureID = ceilingTextureID;
+    state.objects[5].mesh = ceilingMesh;
+    state.objects[5].position = glm::vec3(0.0f, 3.75f, 0.0f);
+    state.objects[5].rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    state.objects[5].acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
+    state.objects[5].scale = glm::vec3(30.0f, 0.5f, 30.0f);
+    state.objects[5].entityType = CEILING;
+
+
+
+
 
     /*
     -----------------   Initialize Enemies  -----------------
@@ -138,6 +188,7 @@ void Initialize() {
         state.enemies[i].position = glm::vec3(rand() % 20 - 10, 0.5, rand() % 20 - 10); // 0.5 = edit to have enemies touch ground
         state.enemies[i].rotation = glm::vec3(0, 0, 0);
         state.enemies[i].acceleration = glm::vec3(0, 0, 0);
+        state.enemies[i].isActive = false;
     }
 
 }

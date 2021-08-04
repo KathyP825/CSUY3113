@@ -15,6 +15,8 @@ Entity::Entity() {
     width = 1.0f;
     height = 1.0f;
     depth = 1.0f;
+
+    isActive = true;
 }
 
 
@@ -30,6 +32,8 @@ bool Entity::CheckCollision(Entity* other) {
 
 // 12.9 -- new Update with parameters for collision check
 void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount) {
+    if (isActive == false) return;
+    
     glm::vec3 previousPosition = position;
 
     // 12.12 -- ensure 2d enemy always face player
@@ -49,8 +53,9 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
     // 12.9 -- only care about collisions if it's player colliding
     if (entityType == PLAYER) {
         for (int i = 0; i < objectCount; i++) {
-            // Ignore collisions with the floor
+            // Ignore collisions with the floor and wall
             if (objects[i].entityType == FLOOR) continue;
+            if (objects[i].entityType == WALL) continue;
             if (CheckCollision(&objects[i])) {
                 position = previousPosition;
                 break;
@@ -108,6 +113,7 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
 }
 
 void Entity::Render(ShaderProgram* program) {
+    if (isActive == false) return;
     // 11.8 -- remove because unnecessary
     //glm::mat4 modelMatrix = glm::mat4(1.0f);
     //modelMatrix = glm::translate(modelMatrix, position);

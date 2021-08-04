@@ -14,7 +14,7 @@
 #include "ShaderProgram.h"
 
 #include "Mesh.h"
-enum EntityType { PLAYER, PLATFORM, ENEMY, CUBE, SHIP, FLOOR, CRATE };
+enum EntityType { PLAYER, PLATFORM, ENEMY, CUBE, SHIP, FLOOR, WALL, CEILING, CRATE };
 
 class Entity {
 public:
@@ -34,17 +34,10 @@ public:
     float height;   // 12.9 -- need to change if scale
     float depth;    // 12.9 -- need to change if scale
 
+    bool isActive;
+
     GLuint textureID;
-
-    /*
-    // 11.11 -- delete, replace with Mesh class
-    // 11.7
-    float* vertices;
-    float* texCoords;
-    int numVertices;
-    */
-
-    Mesh* mesh;     // 11.11
+    Mesh* mesh;
     
     glm::mat4 modelMatrix;
 
@@ -53,7 +46,6 @@ public:
     bool CheckCollision(Entity* other);
     void Update(float deltaTime, Entity* player, Entity* objects, int objectCount);
     
-    //void Update(float deltaTime);     // 12.9 -- new Update overwrite
     void Render(ShaderProgram* program);
     void DrawBillboard(ShaderProgram* program);
 };
