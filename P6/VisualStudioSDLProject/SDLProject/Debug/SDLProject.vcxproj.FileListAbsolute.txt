@@ -1,0 +1,6 @@
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\Week 11\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\Week 11\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\Week 12\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\LectureCode\Week 12\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\Debug\SDLProject.pdb
