@@ -105,6 +105,23 @@ void Initialize() {
     state.objects[0].scale = glm::vec3(30.0f, 0.5f, 30.0f);
     state.objects[0].entityType = FLOOR;
 
+
+    // ceiling
+    GLuint ceilingTextureID = Util::LoadTexture("bricktext.jpg");
+    Mesh* ceilingMesh = new Mesh();
+    //cubeMesh->LoadOBJ("cube.obj");
+    ceilingMesh->LoadOBJ("cube.obj", 30);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
+
+    state.objects[1].textureID = ceilingTextureID;
+    state.objects[1].mesh = ceilingMesh;
+    state.objects[1].position = glm::vec3(0.0f, 3.75f, 0.0f);
+    state.objects[1].rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    state.objects[1].acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
+    state.objects[1].scale = glm::vec3(30.0f, 0.5f, 30.0f);
+    state.objects[1].entityType = CEILING;
+
+
+
     // CRATES
     //GLuint crateTextureID = Util::LoadTexture("crate1_diffuse.png");
     //Mesh* crateMesh = new Mesh();   // 12.6 -- need a new one b/c floor one is duplicated
@@ -125,51 +142,43 @@ void Initialize() {
     //state.objects[3].position = glm::vec3(0.0f, 1.5f, -5.0f);   // 12.7 -- on top of 1st crate
     //state.objects[3].entityType = CRATE;
 
-    // Walls
+    // Walls, i = [1] to i = [4]
     GLuint wallTextureID = Util::LoadTexture("sampleWall.jpg");
     Mesh* wallMesh = new Mesh();
     wallMesh->LoadOBJ("cube.obj", 1);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
 
-    for (size_t i = 1; i < OBJECT_COUNT; i++) {
+    for (size_t i = 2; i < OBJECT_COUNT; i++) {
         state.objects[i].textureID = wallTextureID;
         state.objects[i].mesh = wallMesh;
-        state.objects[i].entityType = WALL;
-
-        //probably unneeded
-        state.objects[i].width = 0.5f;
-        state.objects[i].height = 4.0f;
-        state.objects[i].depth = 30.0f;
 
         state.objects[i].acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
         state.objects[1].rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+        state.objects[i].entityType = WALL;
     }
 
-    state.objects[1].scale = glm::vec3(0.5f, 4.0f, 30.0f);
-    state.objects[1].position = glm::vec3(15.0f, 1.5f, 0.0f);
-
     state.objects[2].scale = glm::vec3(0.5f, 4.0f, 30.0f);
-    state.objects[2].position = glm::vec3(-15.0f, 1.5f, 0.0f);
+    state.objects[2].position = glm::vec3(15.0f, 1.5f, 0.0f);
+    state.objects[2].width = 0.5f;
+    state.objects[2].height = 4.0f;
+    state.objects[2].depth = 30.0f;
 
-    state.objects[3].scale = glm::vec3(30.0f, 4.0f, 0.5f);
-    state.objects[3].position = glm::vec3(0.0f, 1.5f, 15.0f);
+    state.objects[3].scale = glm::vec3(0.5f, 4.0f, 30.0f);
+    state.objects[3].position = glm::vec3(-15.0f, 1.5f, 0.0f);
+    state.objects[3].width = 0.5f;
+    state.objects[3].height = 4.0f;
+    state.objects[3].depth = 30.0f;
 
     state.objects[4].scale = glm::vec3(30.0f, 4.0f, 0.5f);
-    state.objects[4].position = glm::vec3(0.0f, 1.5f, -15.0f);
+    state.objects[4].position = glm::vec3(0.0f, 1.5f, 15.0f);
+    state.objects[4].width = 30.0f;
+    state.objects[4].height = 4.0f;
+    state.objects[4].depth = 0.5f;
 
-
-    // ceiling
-    GLuint ceilingTextureID = Util::LoadTexture("bricktext.jpg");
-    Mesh* ceilingMesh = new Mesh();
-    //cubeMesh->LoadOBJ("cube.obj");
-    ceilingMesh->LoadOBJ("cube.obj", 30);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
-
-    state.objects[5].textureID = ceilingTextureID;
-    state.objects[5].mesh = ceilingMesh;
-    state.objects[5].position = glm::vec3(0.0f, 3.75f, 0.0f);
-    state.objects[5].rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-    state.objects[5].acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
-    state.objects[5].scale = glm::vec3(30.0f, 0.5f, 30.0f);
-    state.objects[5].entityType = CEILING;
+    state.objects[5].scale = glm::vec3(30.0f, 4.0f, 0.5f);
+    state.objects[5].position = glm::vec3(0.0f, 1.5f, -15.0f);
+    state.objects[5].width = 30.0f;
+    state.objects[5].height = 4.0f;
+    state.objects[5].depth = 0.5f;
 
 
 

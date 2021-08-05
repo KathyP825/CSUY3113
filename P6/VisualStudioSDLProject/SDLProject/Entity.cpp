@@ -53,9 +53,8 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
     // 12.9 -- only care about collisions if it's player colliding
     if (entityType == PLAYER) {
         for (int i = 0; i < objectCount; i++) {
-            // Ignore collisions with the floor and wall
+            // Ignore collisions with the floor
             if (objects[i].entityType == FLOOR) continue;
-            if (objects[i].entityType == WALL) continue;
             if (CheckCollision(&objects[i])) {
                 position = previousPosition;
                 break;
