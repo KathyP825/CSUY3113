@@ -20,9 +20,9 @@
 //#include "Menu.h"
 #include "Level1.h"
 
-
-#define OBJECT_COUNT 6
-#define ENEMY_COUNT 1
+//
+//#define OBJECT_COUNT 6
+//#define ENEMY_COUNT 1
 
 
 SDL_Window* displayWindow;
@@ -30,6 +30,10 @@ bool gameIsRunning = true;
 
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
+
+
+int numLives = 3;
+
 
 Scene* currentScene;
 Scene* sceneList[1];    // only handle game level for now
@@ -86,7 +90,6 @@ void Initialize() {
 }
 
 void ProcessInput() {
-    //currentScene->state.player->velocity = glm::vec3(0);
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -119,10 +122,10 @@ void ProcessInput() {
     const Uint8* keys = SDL_GetKeyboardState(NULL);
     if (keys[SDL_SCANCODE_A]) {
         //currentScene->state.player->rotation.y += 1.0f;
-        currentScene->state.player->rotation.y += 0.1f;   // make slower
+        currentScene->state.player->rotation.y += 0.3f;   // make slower
     }
     else if (keys[SDL_SCANCODE_D]) {
-        currentScene->state.player->rotation.y -= 0.1f;   // make slower
+        currentScene->state.player->rotation.y -= 0.3f;   // make slower
     }
 
     currentScene->state.player->velocity.x = 0;
@@ -154,22 +157,9 @@ void Update() {
 
     // time accumulator
     while (deltaTime >= FIXED_TIMESTEP) {
-        //currentScene->state.player->Update(FIXED_TIMESTEP, currentScene->state.player, currentScene->state.objects, OBJECT_COUNT);
         currentScene->Update(FIXED_TIMESTEP);
-
-        //// 11.7 -- update cube
-        //for (size_t i = 0; i < OBJECT_COUNT; i++) {
-        //    currentScene->state.objects[i].Update(FIXED_TIMESTEP, currentScene->state.player, currentScene->state.objects, OBJECT_COUNT);
-        //}
-
-        //// 12.13 -- update enemies
-        //for (size_t i = 0; i < ENEMY_COUNT; i++) {
-        //    currentScene->state.enemies[i].Update(FIXED_TIMESTEP, currentScene->state.player, currentScene->state.objects, OBJECT_COUNT);
-        //}
-
         deltaTime -= FIXED_TIMESTEP;
     }
-
     accumulator = deltaTime;
 
     // 12.5 -- update viewMatrix

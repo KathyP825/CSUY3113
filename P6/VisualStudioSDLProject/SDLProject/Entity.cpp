@@ -31,7 +31,8 @@ bool Entity::CheckCollision(Entity* other) {
 
 
 // 12.9 -- new Update with parameters for collision check
-void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount) {
+//void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount) {
+void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount, Entity* enemies, int enemyCount) {
     if (isActive == false) return;
     
     glm::vec3 previousPosition = position;
@@ -60,6 +61,14 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
                 break;
             }
         }
+
+        for (int i = 0; i < enemyCount; i++) {
+            if (CheckCollision(&enemies[i])) {
+                injured = true;
+                enemies[i].isActive = false;
+            }
+        }
+
     }
 
     // 11.8 -- rotate every frame, causes continuous rotation

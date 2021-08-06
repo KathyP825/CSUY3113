@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Level1.cpp" />
+    <ClCompile Include="LoseScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -139,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Level1.h" />
+    <ClInclude Include="LoseScreen.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Scene.h" />

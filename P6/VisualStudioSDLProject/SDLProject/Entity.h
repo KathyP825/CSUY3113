@@ -14,7 +14,7 @@
 #include "ShaderProgram.h"
 
 #include "Mesh.h"
-enum EntityType { PLAYER, PLATFORM, ENEMY, CUBE, SHIP, FLOOR, WALL, CEILING, CRATE };
+enum EntityType { PLAYER, PLATFORM, ENEMY, CUBE, SHIP, FLOOR, WALL, CEILING, CRATE, HEALTH };
 
 class Entity {
 public:
@@ -35,6 +35,7 @@ public:
     float depth;    // 12.9 -- need to change if scale
 
     bool isActive;
+    bool injured;
 
     GLuint textureID;
     Mesh* mesh;
@@ -44,7 +45,7 @@ public:
     Entity();
 
     bool CheckCollision(Entity* other);
-    void Update(float deltaTime, Entity* player, Entity* objects, int objectCount);
+    void Update(float deltaTime, Entity* player, Entity* objects, int objectCount, Entity* enemies, int enemyCount);
     
     void Render(ShaderProgram* program);
     void DrawBillboard(ShaderProgram* program);

@@ -1,7 +1,7 @@
 #include "Level1.h"
 
-#define OBJECT_COUNT 6
-#define ENEMY_COUNT 1
+#define OBJECT_COUNT 7
+#define ENEMY_COUNT 3
 
 
 void Level1::Initialize() {
@@ -14,7 +14,7 @@ void Level1::Initialize() {
     state.player->entityType = PLAYER;
     state.player->position = glm::vec3(0, 0.75f, 0);
     state.player->acceleration = glm::vec3(0, 0, 0);
-    state.player->speed = 2.0f;
+    state.player->speed = 3.0f;
 
     /*
     -----------------   Initialize Objects  -----------------
@@ -22,7 +22,7 @@ void Level1::Initialize() {
     state.objects = new Entity[OBJECT_COUNT];
     
     // ----- FLOOR -----
-    GLuint floorTextureID = Util::LoadTexture("grasstext.jpg");
+    GLuint floorTextureID = Util::LoadTexture("diamondFloor.png");
     Mesh* cubeMesh = new Mesh();
     cubeMesh->LoadOBJ("cube.obj", 30);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
 
@@ -49,12 +49,12 @@ void Level1::Initialize() {
 
 
     // ----- WALLS ----- 
-    // i = [1] to [4]
+    // i = [2] to [5]
     GLuint wallTextureID = Util::LoadTexture("sampleWall.jpg");
     Mesh* wallMesh = new Mesh();
     wallMesh->LoadOBJ("cube.obj", 1);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
 
-    for (size_t i = 2; i < OBJECT_COUNT; i++) {
+    for (size_t i = 2; i < 6; i++) {
         state.objects[i].textureID = wallTextureID;
         state.objects[i].mesh = wallMesh;
 
@@ -87,15 +87,35 @@ void Level1::Initialize() {
     state.objects[5].height = 4.0f;
     state.objects[5].depth = 0.5f;
 
-    // CRATES
+    // Door
+    //GLuint doorTextureID = Util::LoadTexture("DoorWood.png");
+    //Mesh* doorMesh = new Mesh();   // 12.6 -- need a new one b/c floor one is duplicated
+    //doorMesh->LoadOBJ("door.obj", 1);  // 12.6 -- 1 = no duplicate
+
+    //state.objects[6].textureID = doorTextureID;
+    //state.objects[6].mesh = doorMesh;
+    //state.objects[6].position = glm::vec3(0.0f, 1.5f, 0.0f);   // 12.6 -- crate is 1 unit tall, stop from sinking into floor
+    //state.objects[6].entityType = CRATE;
+
     //GLuint crateTextureID = Util::LoadTexture("crate1_diffuse.png");
     //Mesh* crateMesh = new Mesh();   // 12.6 -- need a new one b/c floor one is duplicated
     //crateMesh->LoadOBJ("cube.obj", 1);  // 12.6 -- 1 = no duplicate
 
-    //state.objects[1].textureID = crateTextureID;
-    //state.objects[1].mesh = crateMesh;
-    //state.objects[1].position = glm::vec3(0.0f, 0.5f, -5.0f);   // 12.6 -- crate is 1 unit tall, stop from sinking into floor
-    //state.objects[1].entityType = CRATE;
+    //state.objects[6].textureID = crateTextureID;
+    //state.objects[6].mesh = crateMesh;
+    //state.objects[6].position = glm::vec3(0.0f, 0.5f, -5.0f);   // 12.6 -- crate is 1 unit tall, stop from sinking into floor
+    //state.objects[6].entityType = CRATE;
+
+    // Health 
+    GLuint healthTextureID = Util::LoadTexture("potion_blue.png");
+    Mesh* healthMesh = new Mesh();   // 12.6 -- need a new one b/c floor one is duplicated
+    healthMesh->LoadOBJ("potion_HighPoly.obj", 1);  // 12.6 -- 1 = no duplicate
+
+    state.objects[6].textureID = healthTextureID;
+    state.objects[6].mesh = healthMesh;
+    state.objects[6].scale = glm::vec3(0.03f, 0.03f, 0.03f);
+    state.objects[6].position = glm::vec3(0.0f, 0.5f, -5.0f);   // 12.6 -- crate is 1 unit tall, stop from sinking into floor
+    state.objects[6].entityType = HEALTH;
 
     //state.objects[2].textureID = crateTextureID;
     //state.objects[2].mesh = crateMesh;
@@ -112,16 +132,17 @@ void Level1::Initialize() {
     */
     // 12.12
     state.enemies = new Entity[ENEMY_COUNT];
-    GLuint enemyTextureID = Util::LoadTexture("ctg.png");
+    GLuint enemyTextureID = Util::LoadTexture("ghost.png");
 
     for (int i = 0; i < ENEMY_COUNT; i++) {
         state.enemies[i].billboard = true;
         state.enemies[i].textureID = enemyTextureID;
-        state.enemies[i].position = glm::vec3(rand() % 20 - 10, 0.5, rand() % 20 - 10); // 0.5 = edit to have enemies touch ground
+        state.enemies[i].scale = glm::vec3(2.0f, 2.0f, 1.0f);
+        state.enemies[i].position = glm::vec3(rand() % 20 - 10, 1.0, rand() % 20 - 10); // 0.5 = edit to have enemies touch ground
         state.enemies[i].rotation = glm::vec3(0, 0, 0);
         state.enemies[i].acceleration = glm::vec3(0, 0, 0);
         state.enemies[i].speed = 1.0f;
-        //state.enemies[i].isActive = false;
+        state.enemies[i].isActive = false;
     }
     
 }
@@ -129,16 +150,16 @@ void Level1::Initialize() {
 
 void Level1::Update(float deltaTime) {
     //
-    state.player->Update(deltaTime, state.player, state.objects, OBJECT_COUNT);
+    state.player->Update(deltaTime, state.player, state.objects, OBJECT_COUNT, state.enemies, ENEMY_COUNT);
     
     // 11.7 -- update cube
     for (size_t i = 0; i < OBJECT_COUNT; i++) {
-        state.objects[i].Update(deltaTime, state.player, state.objects, OBJECT_COUNT);
+        state.objects[i].Update(deltaTime, state.player, state.objects, OBJECT_COUNT, state.enemies, ENEMY_COUNT);
     }
 
     // 12.13 -- update enemies
     for (size_t i = 0; i < ENEMY_COUNT; i++) {
-        state.enemies[i].Update(deltaTime, state.player, state.objects, OBJECT_COUNT);
+        state.enemies[i].Update(deltaTime, state.player, state.objects, OBJECT_COUNT, state.enemies, ENEMY_COUNT);
     }
 
 }
