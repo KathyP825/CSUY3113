@@ -1,5 +1,9 @@
 #define GL_SILENCE_DEPRECATION
 
+#include <iostream>
+#include <string>
+using namespace std;
+
 #ifdef _WINDOWS
 #include <GL/glew.h>
 #endif
@@ -17,12 +21,11 @@
 #include "Entity.h"
 #include "Scene.h"
 
-//#include "Menu.h"
+#include "Menu.h"
 #include "Level1.h"
+#include "LoseScreen.h"
+#include "WinScreen.h"
 
-//
-//#define OBJECT_COUNT 6
-//#define ENEMY_COUNT 1
 
 
 SDL_Window* displayWindow;
@@ -31,12 +34,15 @@ bool gameIsRunning = true;
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
+// UI display
+glm::mat4 uiViewMatrix, uiProjectionMatrix;
+GLuint fontTextureID;
 
 int numLives = 3;
 
 
 Scene* currentScene;
-Scene* sceneList[1];    // only handle game level for now
+Scene* sceneList[4];    // only handle game level for now
 
 // for audio
 //Mix_Music* music;
@@ -62,6 +68,11 @@ void Initialize() {
 
     program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
 
+    // for displaying UI, lives
+    uiViewMatrix = glm::mat4(1.0);
+    uiProjectionMatrix = glm::ortho(-6.4f, 6.4f, -3.6f, 3.6f, -1.0f, 1.0f);
+    fontTextureID = Util::LoadTexture("font1.png");
+
     viewMatrix = glm::mat4(1.0f);
     modelMatrix = glm::mat4(1.0f);
     //projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
@@ -84,8 +95,11 @@ void Initialize() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // scenes
-    sceneList[0] = new Level1();
-    SwitchToScene(sceneList[0]);
+    sceneList[0] = new Menu();
+    sceneList[1] = new Level1();
+    sceneList[2] = new LoseScreen();
+    sceneList[3] = new WinScreen();
+    SwitchToScene(sceneList[0]);    // starting scene
 
 }
 
@@ -104,9 +118,17 @@ void ProcessInput() {
             case SDLK_RETURN:
                 // starts game at Level 1
                 // only works if in Main Menu
-                //if (currentScene == sceneList[0]) {
-                //    SwitchToScene(sceneList[1]);
-                //}
+                if (currentScene == sceneList[0]) {
+                    SwitchToScene(sceneList[1]);
+                }
+                break;
+
+            case SDLK_r:    // maybe delete
+                // only works if at Lose/Win screens
+                // Press R to return to Main Menu
+                if (currentScene == sceneList[2]) {
+                    SwitchToScene(sceneList[0]);
+                }
                 break;
 
             case SDLK_SPACE:
@@ -172,9 +194,35 @@ void Update() {
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // 11.6 -- also clear depth buffer
     
-    program.SetViewMatrix(viewMatrix);  // 12.5
+    //program.SetViewMatrix(viewMatrix);  // 12.5
+
+    program.SetProjectionMatrix(projectionMatrix);  // include for UI display
+    program.SetViewMatrix(viewMatrix);
 
     currentScene->Render(&program);     // need to render scene
+
+    // display UI
+    program.SetProjectionMatrix(uiProjectionMatrix);
+    program.SetViewMatrix(uiViewMatrix);
+
+    if (currentScene == sceneList[0]) {     // Main Menu
+        Util::DrawText(&program, fontTextureID, "Game Name", 1.0, -0.3f, glm::vec3(-3, 1.8, 0));
+        Util::DrawText(&program, fontTextureID, "Press Enter to Start", 0.4, -0.1f, glm::vec3(-3, 0.3, 0));
+        Util::DrawText(&program, fontTextureID, "Use WASD to control your player", 0.25, -0.1f, glm::vec3(-2.5, -0.3, 0));
+    }
+    else if (currentScene == sceneList[2]) {    // Lose Screen
+        Util::DrawText(&program, fontTextureID, "You Lose!", 1.0, -0.3f, glm::vec3(-2.9, 1.0, 0));
+        //Util::DrawText(&program, fontTextureID, "Press R to return to Main Menu", 0.3, -0.1f, glm::vec3(-3, 0.0, 0));   // maybe delete
+    }
+    else if (currentScene == sceneList[3]) {    // Win Screen
+        Util::DrawText(&program, fontTextureID, "You Win!", 1.0, -0.3f, glm::vec3(-2.8, 1.0, 0));
+        //Util::DrawText(&program, fontTextureID, "Press R to return to Main Menu", 0.3, -0.1f, glm::vec3(-3, 0.0, 0));   // maybe delete
+    }
+    else {
+        Util::DrawText(&program, fontTextureID, "Lives: " + to_string(numLives), 0.5, -0.2f, glm::vec3(-6, 3.2, 0));
+        Util::DrawText(&program, fontTextureID, "Time: ", 0.5, -0.2f, glm::vec3(-6, 2.8, 0));
+    }
+
 
     SDL_GL_SwapWindow(displayWindow);
 }
