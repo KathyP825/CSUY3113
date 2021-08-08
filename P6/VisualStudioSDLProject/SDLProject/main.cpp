@@ -188,18 +188,31 @@ void Update() {
     viewMatrix = glm::mat4(1.0f);
     viewMatrix = glm::rotate(viewMatrix, glm::radians(currentScene->state.player->rotation.y), glm::vec3(0, -1.0f, 0));
     viewMatrix = glm::translate(viewMatrix, -currentScene->state.player->position);
+
+    /*
+    -----------------   Life Check    -----------------
+    */
+    // if player is injured, lose 1 life
+    if (currentScene->state.player->injured == true) {
+        numLives -= 1;
+        currentScene->state.player->injured = false;
+        //Mix_PlayChannel(-1, squish, 0);
+    }
 }
 
 
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // 11.6 -- also clear depth buffer
-    
-    //program.SetViewMatrix(viewMatrix);  // 12.5
 
     program.SetProjectionMatrix(projectionMatrix);  // include for UI display
     program.SetViewMatrix(viewMatrix);
 
     currentScene->Render(&program);     // need to render scene
+
+    // if no lives left, switch to Lose screen
+    if (numLives <= 0) {
+        SwitchToScene(sceneList[2]);
+    }
 
     // display UI
     program.SetProjectionMatrix(uiProjectionMatrix);

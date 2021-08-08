@@ -116,6 +116,7 @@ void Level1::Initialize() {
     state.objects[6].scale = glm::vec3(0.03f, 0.03f, 0.03f);
     state.objects[6].position = glm::vec3(0.0f, 0.5f, -5.0f);   // 12.6 -- crate is 1 unit tall, stop from sinking into floor
     state.objects[6].entityType = HEALTH;
+    state.objects[6].isActive = false;
 
     //state.objects[2].textureID = crateTextureID;
     //state.objects[2].mesh = crateMesh;

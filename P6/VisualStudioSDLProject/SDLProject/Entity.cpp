@@ -22,6 +22,11 @@ Entity::Entity() {
 
 // 12.9 -- collision check function
 bool Entity::CheckCollision(Entity* other) {
+    // makes sure enemy isn't colliding with player when isActive is false
+    if (other->isActive == false) {
+        return false;
+    }
+
     float xdist = fabs(position.x - other->position.x) - ((width + other->width) / 2.0f);
     float ydist = fabs(position.y - other->position.y) - ((height + other->height) / 2.0f);
     float zdist = fabs(position.z - other->position.z) - ((depth + other->depth) / 2.0f);
