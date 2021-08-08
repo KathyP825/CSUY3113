@@ -17,6 +17,7 @@ Entity::Entity() {
     depth = 1.0f;
 
     isActive = true;
+    reachedExit = false;
 }
 
 
@@ -61,6 +62,12 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
         for (int i = 0; i < objectCount; i++) {
             // Ignore collisions with the floor
             if (objects[i].entityType == FLOOR) continue;
+
+            reachedExit = false;    // need or else will auto jump to Win Screen
+            if (objects[i].entityType == GOAL) {
+                reachedExit = true;
+            }
+
             if (CheckCollision(&objects[i])) {
                 position = previousPosition;
                 break;

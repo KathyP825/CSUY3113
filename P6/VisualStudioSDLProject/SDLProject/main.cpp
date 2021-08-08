@@ -99,7 +99,7 @@ void Initialize() {
     sceneList[1] = new Level1();
     sceneList[2] = new LoseScreen();
     sceneList[3] = new WinScreen();
-    SwitchToScene(sceneList[0]);    // starting scene
+    SwitchToScene(sceneList[1]);    // starting scene   // need to change back
 
 }
 
@@ -214,6 +214,10 @@ void Render() {
         SwitchToScene(sceneList[2]);
     }
 
+    if (currentScene->state.player->reachedExit == true) {
+        SwitchToScene(sceneList[3]);
+    }
+
     // display UI
     program.SetProjectionMatrix(uiProjectionMatrix);
     program.SetViewMatrix(uiViewMatrix);
@@ -233,7 +237,7 @@ void Render() {
     }
     else {
         Util::DrawText(&program, fontTextureID, "Lives: " + to_string(numLives), 0.5, -0.2f, glm::vec3(-6, 3.2, 0));
-        Util::DrawText(&program, fontTextureID, "Time: ", 0.5, -0.2f, glm::vec3(-6, 2.8, 0));
+        Util::DrawText(&program, fontTextureID, "reachedExit: " + to_string(currentScene->state.player->reachedExit), 0.5, -0.2f, glm::vec3(-6, 2.8, 0));
     }
 
 
