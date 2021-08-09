@@ -1,6 +1,6 @@
 #include "Level1.h"
 
-#define OBJECT_COUNT 25
+#define OBJECT_COUNT 31
 #define ENEMY_COUNT 3
 
 
@@ -242,6 +242,44 @@ void Level1::Initialize() {
     state.objects[24].height = 1.0f;
     state.objects[24].depth = 0.2f;
 
+    // Midpoint, right wall between Top Right and Bottom Right
+    state.objects[25].scale = glm::vec3(6.0f, 1.0f, 0.2f);
+    state.objects[25].position = glm::vec3(22.0f, 0.5f, -4.0f);   // horizontal front wall
+    state.objects[25].width = 6.0f;
+    state.objects[25].height = 1.0f;
+    state.objects[25].depth = 0.2f;
+
+    state.objects[26].scale = glm::vec3(6.0f, 1.0f, 0.2f);
+    state.objects[26].position = glm::vec3(18.0f, 0.5f, 4.0f);   // horizontal back wall
+    state.objects[26].width = 6.0f;
+    state.objects[26].height = 1.0f;
+    state.objects[26].depth = 0.2f;
+
+    // Midpoint, left wall between Top Left and Bottom Left
+    state.objects[27].scale = glm::vec3(6.0f, 1.0f, 0.2f);
+    state.objects[27].position = glm::vec3(-18.0f, 0.5f, -4.0f);   // horizontal front wall
+    state.objects[27].width = 6.0f;
+    state.objects[27].height = 1.0f;
+    state.objects[27].depth = 0.2f;
+
+    state.objects[28].scale = glm::vec3(6.0f, 1.0f, 0.2f);
+    state.objects[28].position = glm::vec3(-22.0f, 0.5f, 4.0f);   // horizontal back wall
+    state.objects[28].width = 6.0f;
+    state.objects[28].height = 1.0f;
+    state.objects[28].depth = 0.2f;
+
+    // Midpoint, back walls between Bottom Left and Bottom Right
+    state.objects[29].scale = glm::vec3(0.2f, 1.0f, 6.0f);
+    state.objects[29].position = glm::vec3(-4.0f, 0.5f, 18.0f);   // vertical wall
+    state.objects[29].width = 0.2f;
+    state.objects[29].height = 1.0f;
+    state.objects[29].depth = 6.0f;
+
+    state.objects[30].scale = glm::vec3(0.2f, 1.0f, 6.0f);
+    state.objects[30].position = glm::vec3(4.0f, 0.5f, 22.0f);   // vertical wall
+    state.objects[30].width = 0.2f;
+    state.objects[30].height = 1.0f;
+    state.objects[30].depth = 6.0f;
 
 
     //// ----- HEALTH ----- 
