@@ -153,12 +153,12 @@ void ProcessInput() {
     currentScene->state.player->velocity.x = 0;
     currentScene->state.player->velocity.z = 0;
     if (keys[SDL_SCANCODE_W]) {
-        currentScene->state.player->velocity.z = cos(glm::radians(currentScene->state.player->rotation.y)) * -2.0f;
-        currentScene->state.player->velocity.x = sin(glm::radians(currentScene->state.player->rotation.y)) * -2.0f;
+        currentScene->state.player->velocity.z = cos(glm::radians(currentScene->state.player->rotation.y)) * -5.0f;
+        currentScene->state.player->velocity.x = sin(glm::radians(currentScene->state.player->rotation.y)) * -5.0f;
     }
     else if (keys[SDL_SCANCODE_S]) {
-        currentScene->state.player->velocity.z = cos(glm::radians(currentScene->state.player->rotation.y)) * 2.0f;
-        currentScene->state.player->velocity.x = sin(glm::radians(currentScene->state.player->rotation.y)) * 2.0f;
+        currentScene->state.player->velocity.z = cos(glm::radians(currentScene->state.player->rotation.y)) * 5.0f;
+        currentScene->state.player->velocity.x = sin(glm::radians(currentScene->state.player->rotation.y)) * 5.0f;
     }
 }
 

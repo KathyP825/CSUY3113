@@ -1,6 +1,6 @@
 #include "Level1.h"
 
-#define OBJECT_COUNT 11
+#define OBJECT_COUNT 25
 #define ENEMY_COUNT 3
 
 
@@ -13,6 +13,7 @@ void Level1::Initialize() {
     state.player = new Entity();
     state.player->entityType = PLAYER;
     state.player->position = glm::vec3(0, 0.75f, 0);    // return to 0.75
+    state.player->width = 0.5;
     state.player->acceleration = glm::vec3(0, 0, 0);
     state.player->speed = 3.0f;
 
@@ -67,23 +68,23 @@ void Level1::Initialize() {
     state.objects[2].position = glm::vec3(25.0f, 3.0f, 0.0f);
     state.objects[2].width = 0.5f;
     state.objects[2].height = 10.0f;
-    state.objects[2].depth = 30.0f;
+    state.objects[2].depth = 50.0f;
 
     state.objects[3].scale = glm::vec3(0.5f, 10.0f, 50.0f);
     state.objects[3].position = glm::vec3(-25.0f, 3.0f, 0.0f);
     state.objects[3].width = 0.5f;
     state.objects[3].height = 10.0f;
-    state.objects[3].depth = 30.0f;
+    state.objects[3].depth = 50.0f;
 
     state.objects[4].scale = glm::vec3(50.0f, 10.0f, 0.5f);
     state.objects[4].position = glm::vec3(0.0f, 3.0f, 25.0f);
-    state.objects[4].width = 30.0f;
+    state.objects[4].width = 50.0f;
     state.objects[4].height = 10.0f;
     state.objects[4].depth = 0.5f;
 
     state.objects[5].scale = glm::vec3(50.0f, 10.0f, 0.5f);
     state.objects[5].position = glm::vec3(0.0f, 3.0f, -25.0f);
-    state.objects[5].width = 30.0f;
+    state.objects[5].width = 50.0f;
     state.objects[5].height = 10.0f;
     state.objects[5].depth = 0.5f;
 
@@ -134,23 +135,113 @@ void Level1::Initialize() {
         state.objects[i].entityType = WALL;
     }
 
-    state.objects[8].scale = glm::vec3(3.0f, 1.0f, 0.2f);
-    state.objects[8].position = glm::vec3(0.0f, 0.5f, 1.5f);   // behind player
-    state.objects[8].width = 3.0f;
+    state.objects[8].scale = glm::vec3(5.0f, 1.0f, 0.2f);
+    state.objects[8].position = glm::vec3(0.0f, 0.5f, 2.5f);   // behind player
+    state.objects[8].width = 5.0f;
     state.objects[8].height = 1.0f;
     state.objects[8].depth = 0.2f;
 
-    state.objects[9].scale = glm::vec3(0.2f, 1.0f, 3.0f);
-    state.objects[9].position = glm::vec3(1.5f, 0.5f, 0.0f);    // player right
+    state.objects[9].scale = glm::vec3(0.2f, 1.0f, 5.0f);
+    state.objects[9].position = glm::vec3(2.5f, 0.5f, 0.0f);    // player right
     state.objects[9].width = 0.2f;
     state.objects[9].height = 1.0f;
-    state.objects[9].depth = 3.0f;
+    state.objects[9].depth = 5.0f;
 
-    state.objects[10].scale = glm::vec3(0.2f, 1.0f, 3.0f);
-    state.objects[10].position = glm::vec3(-1.5f, 0.5f, 0.0f);    // player left
+    state.objects[10].scale = glm::vec3(0.2f, 1.0f, 5.0f);
+    state.objects[10].position = glm::vec3(-2.5f, 0.5f, 0.0f);    // player left
     state.objects[10].width = 0.2f;
     state.objects[10].height = 1.0f;
-    state.objects[10].depth = 3.0f;
+    state.objects[10].depth = 5.0f;
+
+    state.objects[11].scale = glm::vec3(0.2f, 1.0f, 4.0f);
+    state.objects[11].position = glm::vec3(1.5f, 0.5f, -23.0f);    // door right
+    state.objects[11].width = 0.2f;
+    state.objects[11].height = 1.0f;
+    state.objects[11].depth = 4.0f;
+
+    state.objects[12].scale = glm::vec3(0.2f, 1.0f, 8.0f);
+    state.objects[12].position = glm::vec3(-1.5f, 0.5f, -21.0f);    // door left
+    state.objects[12].width = 0.2f;
+    state.objects[12].height = 1.0f;
+    state.objects[12].depth = 8.0f;
+
+    state.objects[13].scale = glm::vec3(8.0f, 1.0f, 0.2f);
+    state.objects[13].position = glm::vec3(2.5f, 0.5f, -17.0f);   // covers door
+    state.objects[13].width = 8.0f;
+    state.objects[13].height = 1.0f;
+    state.objects[13].depth = 0.2f;
+
+    // Upper Right corner
+    state.objects[14].scale = glm::vec3(0.2f, 1.0f, 5.0f);
+    state.objects[14].position = glm::vec3(15.0f, 0.5f, -22.5f);   // outer wall
+    state.objects[14].width = 0.2f;
+    state.objects[14].height = 1.0f;
+    state.objects[14].depth = 5.0f;
+
+    state.objects[15].scale = glm::vec3(14.0f, 1.0f, 0.2f);
+    state.objects[15].position = glm::vec3(19.0f, 0.5f, -15.0f);   // horizontal wall
+    state.objects[15].width = 14.0f;
+    state.objects[15].height = 1.0f;
+    state.objects[15].depth = 0.2f;
+
+    // connect upper right corner to exit
+    state.objects[16].scale = glm::vec3(0.2f, 1.0f, 11.0f);
+    state.objects[16].position = glm::vec3(9.0f, 0.5f, -15.5f);   // outer wall
+    state.objects[16].width = 0.2f;
+    state.objects[16].height = 1.0f;
+    state.objects[16].depth = 11.0f;
+
+    state.objects[17].scale = glm::vec3(2.5f, 1.0f, 0.2f);
+    state.objects[17].position = glm::vec3(7.75f, 0.5f, -21.0f);   // horizontal wall
+    state.objects[17].width = 2.5f;
+    state.objects[17].height = 1.0f;
+    state.objects[17].depth = 0.2f;
+
+    state.objects[18].scale = glm::vec3(0.2f, 1.0f, 6.0f);
+    state.objects[18].position = glm::vec3(6.6f, 0.5f, -18.0f);   // outer wall
+    state.objects[18].width = 0.2f;
+    state.objects[18].height = 1.0f;
+    state.objects[18].depth = 6.0f;
+
+    // Bottom Right corner
+    state.objects[19].scale = glm::vec3(0.2f, 1.0f, 5.0f);
+    state.objects[19].position = glm::vec3(15.0f, 0.5f, 22.5f);   // outer wall
+    state.objects[19].width = 0.2f;
+    state.objects[19].height = 1.0f;
+    state.objects[19].depth = 5.0f;
+
+    state.objects[20].scale = glm::vec3(14.0f, 1.0f, 0.2f);
+    state.objects[20].position = glm::vec3(19.0f, 0.5f, 15.0f);   // horizontal wall
+    state.objects[20].width = 14.0f;
+    state.objects[20].height = 1.0f;
+    state.objects[20].depth = 0.2f;
+
+    // Top Right corner
+    state.objects[21].scale = glm::vec3(0.2f, 1.0f, 5.0f);
+    state.objects[21].position = glm::vec3(-15.0f, 0.5f, -22.5f);   // outer wall
+    state.objects[21].width = 0.2f;
+    state.objects[21].height = 1.0f;
+    state.objects[21].depth = 5.0f;
+
+    state.objects[22].scale = glm::vec3(14.0f, 1.0f, 0.2f);
+    state.objects[22].position = glm::vec3(-19.0f, 0.5f, -15.0f);   // horizontal wall
+    state.objects[22].width = 14.0f;
+    state.objects[22].height = 1.0f;
+    state.objects[22].depth = 0.2f;
+    
+    // Bottom Right corner
+    state.objects[23].scale = glm::vec3(0.2f, 1.0f, 5.0f);
+    state.objects[23].position = glm::vec3(-15.0f, 0.5f, 22.5f);   // outer wall
+    state.objects[23].width = 0.2f;
+    state.objects[23].height = 1.0f;
+    state.objects[23].depth = 5.0f;
+
+    state.objects[24].scale = glm::vec3(14.0f, 1.0f, 0.2f);
+    state.objects[24].position = glm::vec3(-19.0f, 0.5f, 15.0f);   // horizontal wall
+    state.objects[24].width = 14.0f;
+    state.objects[24].height = 1.0f;
+    state.objects[24].depth = 0.2f;
+
 
 
     //// ----- HEALTH ----- 
