@@ -1,6 +1,6 @@
 #include "Level1.h"
 
-#define OBJECT_COUNT 61
+#define OBJECT_COUNT 62
 #define ENEMY_COUNT 3
 
 
@@ -14,7 +14,7 @@ void Level1::Initialize() {
     state.player->entityType = PLAYER;
     //state.player->position = glm::vec3(0, 0.75f, 0);  // return to this 
 
-    state.player->position = glm::vec3(-5.0, 0.75f, 5.0);    // for testing
+    state.player->position = glm::vec3(-5.0, 0.75f, 0.0);    // for testing
 
     state.player->width = 0.5;
     state.player->acceleration = glm::vec3(0, 0, 0);
@@ -259,9 +259,10 @@ void Level1::Initialize() {
     state.objects[26].depth = 0.2f;
 
     // Midpoint, left wall between Top Left and Bottom Left
-    state.objects[27].scale = glm::vec3(6.0f, 1.0f, 0.2f);
-    state.objects[27].position = glm::vec3(-18.0f, 0.5f, -6.0f);   // horizontal front wall
-    state.objects[27].width = 6.0f;
+    state.objects[27].textureID = ceilingTextureID;
+    state.objects[27].scale = glm::vec3(7.0f, 1.0f, 0.2f);
+    state.objects[27].position = glm::vec3(-14.0f, 0.5f, -10.0f);   // horizontal front wall
+    state.objects[27].width = 7.0f;
     state.objects[27].height = 1.0f;
     state.objects[27].depth = 0.2f;
 
@@ -421,68 +422,65 @@ void Level1::Initialize() {
     state.objects[51].height = 1.0f;
     state.objects[51].depth = 5.0f;
 
-    //state.objects[52].textureID = ceilingTextureID;
     state.objects[52].scale = glm::vec3(10.0f, 1.0f, 0.2f);
     state.objects[52].position = glm::vec3(-1.0f, 0.5f, 15.0f);   // horizontal wall, dead end, connect 2 verticals, map back
     state.objects[52].width = 10.0f;
     state.objects[52].height = 1.0f;
     state.objects[52].depth = 0.2f;
 
-    //state.objects[53].textureID = ceilingTextureID;
     state.objects[53].scale = glm::vec3(8.0f, 1.0f, 0.2f);
     state.objects[53].position = glm::vec3(5.0f, 0.5f, 10.0f);   // horizontal wall, dead end, connect 2 verticals, map back
     state.objects[53].width = 8.0f;
     state.objects[53].height = 1.0f;
     state.objects[53].depth = 0.2f;
 
-    //state.objects[54].textureID = ceilingTextureID;
     state.objects[54].scale = glm::vec3(0.2f, 1.0f, 4.0f);
     state.objects[54].position = glm::vec3(2.5f, 0.5f, 4.0f);   // vertical wall, connect to 44
     state.objects[54].width = 0.2f;
     state.objects[54].height = 1.0f;
     state.objects[54].depth = 4.0f;
 
-    //state.objects[55].textureID = ceilingTextureID;
     state.objects[55].scale = glm::vec3(8.0f, 1.0f, 0.2f);
     state.objects[55].position = glm::vec3(6.5f, 0.5f, 4.0f);   // horizontal wall, connect to entrence trick
     state.objects[55].width = 8.0f;
     state.objects[55].height = 1.0f;
     state.objects[55].depth = 0.2f;
 
-    //state.objects[56].textureID = ceilingTextureID;
     state.objects[56].scale = glm::vec3(0.2f, 1.0f, 4.0f);
     state.objects[56].position = glm::vec3(10.5f, 0.5f, 4.0f);   // vertical wall, connect entrence trick and 55
     state.objects[56].width = 0.2f;
     state.objects[56].height = 1.0f;
     state.objects[56].depth = 4.0f;
 
-    //state.objects[57].textureID = ceilingTextureID;
     state.objects[57].scale = glm::vec3(0.2f, 1.0f, 3.0f);
     state.objects[57].position = glm::vec3(7.5f, 0.5f, 8.5f);   // vertical wall, connect entrence trick and 55
     state.objects[57].width = 0.2f;
     state.objects[57].height = 1.0f;
     state.objects[57].depth = 3.0f;
 
-    //state.objects[58].textureID = ceilingTextureID;
     state.objects[58].scale = glm::vec3(0.2f, 1.0f, 5.0f);
     state.objects[58].position = glm::vec3(1.0f, 0.5f, 12.5f);   // vertical wall, connect entrence trick and 55
     state.objects[58].width = 0.2f;
     state.objects[58].height = 1.0f;
     state.objects[58].depth = 5.0f;
 
-    //state.objects[59].textureID = ceilingTextureID;
     state.objects[59].scale = glm::vec3(0.2f, 1.0f, 10.0f);
     state.objects[59].position = glm::vec3(-3.0f, 0.5f, 10.0f);   // vertical wall, connect entrence trick and 55
     state.objects[59].width = 0.2f;
     state.objects[59].height = 1.0f;
     state.objects[59].depth = 10.0f;
 
-    //state.objects[60].textureID = ceilingTextureID;
     state.objects[60].scale = glm::vec3(0.2f, 1.0f, 5.0f);
     state.objects[60].position = glm::vec3(-8.0f, 0.5f, 5.0f);   // vertical wall, connect entrence trick and 55
     state.objects[60].width = 0.2f;
     state.objects[60].height = 1.0f;
     state.objects[60].depth = 5.0f;
+
+    state.objects[61].scale = glm::vec3(8.0f, 1.0f, 0.2f);
+    state.objects[61].position = glm::vec3(-21.0f, 0.5f, -5.0f);   // horizontal front wall
+    state.objects[61].width = 6.0f;
+    state.objects[61].height = 1.0f;
+    state.objects[61].depth = 0.2f;
 
 
 
