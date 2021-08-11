@@ -1,3 +1,8 @@
 ﻿  main.cpp
-C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\main.cpp(226,106): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\main.cpp(229,107): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\main.cpp(230,107): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\main.cpp(231,135): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\main.cpp(232,120): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\main.cpp(236,143): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\main.cpp(240,130): warning C4305: 'argument': truncation from 'double' to 'float'
   SDLProject.vcxproj -> C:\Users\kathy\Documents\NYU\IntroGameProg\CSUY3113\P6\VisualStudioSDLProject\SDLProject\Debug\SDLProject.exe

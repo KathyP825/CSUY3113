@@ -5,8 +5,8 @@ Entity::Entity() {
     acceleration = glm::vec3(0);
     velocity = glm::vec3(0);
     modelMatrix = glm::mat4(1.0f);
-    rotation = glm::vec3(0);    // 11.8
-    scale = glm::vec3(1);   // default scale = 1
+    rotation = glm::vec3(0);
+    scale = glm::vec3(1);   // default scale = 1.0f
 
     speed = 0.0f;
 

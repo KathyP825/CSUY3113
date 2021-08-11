@@ -12,6 +12,7 @@ using namespace std;
 
 #include <vector>
 #include <SDL.h>
+#include <SDL_mixer.h>  // for music and sound
 #include <SDL_opengl.h>
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -25,7 +26,6 @@ using namespace std;
 #include "Level1.h"
 #include "LoseScreen.h"
 #include "WinScreen.h"
-
 
 
 SDL_Window* displayWindow;
@@ -42,11 +42,11 @@ int numLives = 3;
 
 
 Scene* currentScene;
-Scene* sceneList[4];    // only handle game level for now
+Scene* sceneList[4];
 
 // for audio
-//Mix_Music* music;
-//Mix_Chunk* sound;
+Mix_Music* music;
+Mix_Chunk* soundEffect;
 
 void SwitchToScene(Scene* scene) {
     currentScene = scene;
@@ -55,8 +55,8 @@ void SwitchToScene(Scene* scene) {
 
 
 void Initialize() {
-    SDL_Init(SDL_INIT_VIDEO);   // need to add audio pipe
-    displayWindow = SDL_CreateWindow("3D!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);  // 11.5 -- change window size
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    displayWindow = SDL_CreateWindow("Wraith Dungeon Maze", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL);  // change window size
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
 
@@ -64,9 +64,14 @@ void Initialize() {
     glewInit();
 #endif
 
-    glViewport(0, 0, 1280, 720);    // 11.5 -- changed window size view
-
+    glViewport(0, 0, 1280, 720);    // changed window size view
     program.Load("shaders/vertex_textured.glsl", "shaders/fragment_textured.glsl");
+
+    // initialize sound and music
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+    music = Mix_LoadMUS("the-house-of-leaves.mp3");
+    Mix_PlayMusic(music, -1);
+    soundEffect = Mix_LoadWAV("scream1.wav");
 
     // for displaying UI, lives
     uiViewMatrix = glm::mat4(1.0);
@@ -75,7 +80,6 @@ void Initialize() {
 
     viewMatrix = glm::mat4(1.0f);
     modelMatrix = glm::mat4(1.0f);
-    //projectionMatrix = glm::ortho(-5.0f, 5.0f, -3.75f, 3.75f, -1.0f, 1.0f);
     projectionMatrix = glm::perspective(glm::radians(45.0f), 1.777f, 0.1f, 100.0f);     // change from orthographic to perspective
 
     program.SetProjectionMatrix(projectionMatrix);
@@ -87,7 +91,7 @@ void Initialize() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // 11.6 -- include Z-buffer
+    // include Z-buffer
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LEQUAL);
@@ -132,7 +136,7 @@ void ProcessInput() {
         }
     }
 
-    // 12.5 -- A and D turns left/right
+    // A, D turns left/right
     const Uint8* keys = SDL_GetKeyboardState(NULL);
     if (keys[SDL_SCANCODE_A]) {
         //currentScene->state.player->rotation.y += 1.0f;
@@ -176,7 +180,7 @@ void Update() {
     }
     accumulator = deltaTime;
 
-    // 12.5 -- update viewMatrix
+    // update viewMatrix
     viewMatrix = glm::mat4(1.0f);
     viewMatrix = glm::rotate(viewMatrix, glm::radians(currentScene->state.player->rotation.y), glm::vec3(0, -1.0f, 0));
     viewMatrix = glm::translate(viewMatrix, -currentScene->state.player->position);
@@ -184,11 +188,11 @@ void Update() {
     /*
     -----------------   Life Check    -----------------
     */
-    // if player is injured, lose 1 life
+    // if player is injured, lose 1 life and play sound effect
     if (currentScene->state.player->injured == true) {
         numLives -= 1;
         currentScene->state.player->injured = false;
-        //Mix_PlayChannel(-1, squish, 0);
+        Mix_PlayChannel(-1, soundEffect, 0);
     }
 
     // removed because collision error wasn't fixed
@@ -200,12 +204,12 @@ void Update() {
 
 
 void Render() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // 11.6 -- also clear depth buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     program.SetProjectionMatrix(projectionMatrix);  // include for UI display
     program.SetViewMatrix(viewMatrix);
 
-    currentScene->Render(&program);     // need to render scene
+    currentScene->Render(&program);
 
     // if no lives left, switch to Lose screen
     if (numLives <= 0) {
@@ -222,21 +226,21 @@ void Render() {
     program.SetViewMatrix(uiViewMatrix);
 
     if (currentScene == sceneList[0]) {     // Main Menu
-        Util::DrawText(&program, fontTextureID, "Game Name", 1.0, -0.3f, glm::vec3(-3, 1.8, 0));
-        Util::DrawText(&program, fontTextureID, "Press Enter to Start", 0.4, -0.1f, glm::vec3(-3, 0.3, 0));
-        Util::DrawText(&program, fontTextureID, "Use WASD to control your player", 0.25, -0.1f, glm::vec3(-2.5, -0.3, 0));
+        Util::DrawText(&program, fontTextureID, "Wraith Dungeon Maze", 0.7, -0.3f, glm::vec3(-3.6, 1.8, 0));
+        Util::DrawText(&program, fontTextureID, "Press Enter to Start", 0.4, -0.1f, glm::vec3(-3, -2.0, 0));
+        Util::DrawText(&program, fontTextureID, "Escape the wraith's dungeon maze within 3 lives", 0.3, -0.1f, glm::vec3(-4.5, 0.0, 0));
+        Util::DrawText(&program, fontTextureID, "Use WASD to control your player", 0.3, -0.1f, glm::vec3(-3.0, -0.5, 0));
     }
     else if (currentScene == sceneList[2]) {    // Lose Screen
-        Util::DrawText(&program, fontTextureID, "You Lose!", 1.0, -0.3f, glm::vec3(-2.9, 0.0, 0));
-        //Util::DrawText(&program, fontTextureID, "Press R to return to Main Menu", 0.3, -0.1f, glm::vec3(-3, 0.0, 0));   // maybe delete
+        Util::DrawText(&program, fontTextureID, "You Lose!", 1.0, -0.3f, glm::vec3(-2.9, 1.8, 0));
+        Util::DrawText(&program, fontTextureID, "Your soul is doomed to wander the dungeon maze forever", 0.3, -0.1f, glm::vec3(-5.3, -0.5, 0));
     }
     else if (currentScene == sceneList[3]) {    // Win Screen
-        Util::DrawText(&program, fontTextureID, "You Win!", 1.0, -0.3f, glm::vec3(-2.8, 0.0, 0));
-        //Util::DrawText(&program, fontTextureID, "Press R to return to Main Menu", 0.3, -0.1f, glm::vec3(-3, 0.0, 0));   // maybe delete
+        Util::DrawText(&program, fontTextureID, "You Win!", 1.0, -0.3f, glm::vec3(-2.8, 1.5, 0));
+        Util::DrawText(&program, fontTextureID, "Successfully escaped from eternal torment", 0.3, -0.1f, glm::vec3(-4.2, -0.5, 0));
     }
     else {
         Util::DrawText(&program, fontTextureID, "Lives: " + to_string(numLives), 0.5, -0.2f, glm::vec3(-6, 3.2, 0));
-        //Util::DrawText(&program, fontTextureID, "reachedExit: " + to_string(currentScene->state.player->reachedExit), 0.5, -0.2f, glm::vec3(-6, 2.8, 0));
     }
 
 

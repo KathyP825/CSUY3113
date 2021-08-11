@@ -12,9 +12,7 @@ void Level1::Initialize() {
     */
     state.player = new Entity();
     state.player->entityType = PLAYER;
-    state.player->position = glm::vec3(0, 0.75f, 0);  // return to this 
-
-    //state.player->position = glm::vec3(-5.0, 0.75f, 0.0);    // for testing
+    state.player->position = glm::vec3(0, 0.75f, 0);
 
     state.player->width = 0.5;
     state.player->acceleration = glm::vec3(0, 0, 0);
@@ -28,7 +26,7 @@ void Level1::Initialize() {
     // ----- FLOOR -----
     GLuint floorTextureID = Util::LoadTexture("ch01_island_ground_soil_dif.jpg");
     Mesh* cubeMesh = new Mesh();
-    cubeMesh->LoadOBJ("cube.obj", 50);  // 12.3 -- duplicate texture 50 times
+    cubeMesh->LoadOBJ("cube.obj", 50);
 
     state.objects[0].textureID = floorTextureID;
     state.objects[0].mesh = cubeMesh;
@@ -56,7 +54,7 @@ void Level1::Initialize() {
     // i = [2] to [5]
     GLuint wallTextureID = Util::LoadTexture("ch01_island_ground_stonepath_dif.png");
     Mesh* wallMesh = new Mesh();
-    wallMesh->LoadOBJ("cube.obj", 2);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
+    wallMesh->LoadOBJ("cube.obj", 2);
 
     for (size_t i = 2; i < 6; i++) {
         state.objects[i].textureID = wallTextureID;
@@ -126,7 +124,6 @@ void Level1::Initialize() {
 
     // ----- Maze Walls ----- 
     GLuint mazeTextureID = Util::LoadTexture("Grass_Texture.png");
-    //GLuint mazeTextureID = Util::LoadTexture("Grass_Texture.png");
     Mesh* mazeMesh = new Mesh();
     mazeMesh->LoadOBJ("cube.obj", 1);
 
@@ -435,13 +432,13 @@ void Level1::Initialize() {
     state.objects[54].depth = 4.0f;
 
     state.objects[55].scale = glm::vec3(8.0f, 1.0f, 0.2f);
-    state.objects[55].position = glm::vec3(6.5f, 0.5f, 4.0f);   // horizontal wall, connect to entrence trick
+    state.objects[55].position = glm::vec3(6.5f, 0.5f, 4.0f);   // horizontal wall, connect to enterance trick
     state.objects[55].width = 8.0f;
     state.objects[55].height = 1.0f;
     state.objects[55].depth = 0.2f;
 
     state.objects[56].scale = glm::vec3(0.2f, 1.0f, 4.0f);
-    state.objects[56].position = glm::vec3(10.5f, 0.5f, 4.0f);   // vertical wall, connect entrence trick and 55
+    state.objects[56].position = glm::vec3(10.5f, 0.5f, 4.0f);   // vertical wall, connect entrance trick and 55
     state.objects[56].width = 0.2f;
     state.objects[56].height = 1.0f;
     state.objects[56].depth = 4.0f;
@@ -477,9 +474,7 @@ void Level1::Initialize() {
     state.objects[61].depth = 0.2f;
 
 
-
     //// ----- HEALTH ----- 
-
     //GLuint healthTextureID = Util::LoadTexture("health.png");
     //Mesh* healthMesh = new Mesh();
     //healthMesh->LoadOBJ("cube.obj", 1);  // 12.3 -- duplicate texture 50 times
@@ -507,11 +502,11 @@ void Level1::Initialize() {
         state.enemies[i].billboard = true;
         state.enemies[i].textureID = enemyTextureID;
         state.enemies[i].scale = glm::vec3(2.0f, 2.0f, 1.0f);
-        state.enemies[i].position = glm::vec3(rand() % 20 - 10, 1.0, rand() % 20 - 10); // 0.5 = edit to have enemies touch ground
+        state.enemies[i].position = glm::vec3(rand() % 20 - 10, 1.0, rand() % 20 - 10);     // enemies float above ground
         state.enemies[i].rotation = glm::vec3(0, 0, 0);
         state.enemies[i].acceleration = glm::vec3(0, 0, 0);
         state.enemies[i].speed = 1.0f;
-        state.enemies[i].isActive = false;
+        //state.enemies[i].isActive = false;    // turn off for maze building and testing
     }
     
 }
@@ -539,12 +534,12 @@ void Level1::Update(float deltaTime) {
 
 
 void Level1::Render(ShaderProgram* program) {
-    // 11.7 -- render objects
+    // render objects
     for (size_t i = 0; i < OBJECT_COUNT; i++) {
         state.objects[i].Render(program);
     }
 
-    // 12.13 -- render enemies
+    // render enemies
     for (size_t i = 0; i < ENEMY_COUNT; i++) {
         state.enemies[i].Render(program);
     }
