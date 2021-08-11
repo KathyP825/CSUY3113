@@ -23,20 +23,20 @@ public:
     glm::vec3 position;
     glm::vec3 velocity;
     glm::vec3 acceleration;
-    glm::vec3 rotation;     // 11.8
-    glm::vec3 scale;    // 11.13
+    glm::vec3 rotation;
+    glm::vec3 scale;
 
     float speed;
 
-    // 12.9 -- add collision
     bool billboard;
-    float width;    // 12.9 -- need to change if scale
-    float height;   // 12.9 -- need to change if scale
-    float depth;    // 12.9 -- need to change if scale
+    float width;
+    float height;
+    float depth;
 
     bool isActive;
     bool injured;
-    int reachedExit;
+    //bool gainHealth;
+    bool reachedExit;
 
     GLuint textureID;
     Mesh* mesh;

@@ -99,7 +99,7 @@ void Initialize() {
     sceneList[1] = new Level1();
     sceneList[2] = new LoseScreen();
     sceneList[3] = new WinScreen();
-    SwitchToScene(sceneList[1]);    // starting scene   // need to change back
+    SwitchToScene(sceneList[0]);    // starting scene
 
 }
 
@@ -120,14 +120,6 @@ void ProcessInput() {
                 // only works if in Main Menu
                 if (currentScene == sceneList[0]) {
                     SwitchToScene(sceneList[1]);
-                }
-                break;
-
-            case SDLK_r:    // maybe delete
-                // only works if at Lose/Win screens
-                // Press R to return to Main Menu
-                if (currentScene == sceneList[2]) {
-                    SwitchToScene(sceneList[0]);
                 }
                 break;
 
@@ -198,6 +190,12 @@ void Update() {
         currentScene->state.player->injured = false;
         //Mix_PlayChannel(-1, squish, 0);
     }
+
+    // removed because collision error wasn't fixed
+    //if (currentScene->state.player->gainHealth == true) {
+    //    numLives += 1;
+    //    currentScene->state.player->gainHealth = false;
+    //}
 }
 
 
@@ -214,6 +212,7 @@ void Render() {
         SwitchToScene(sceneList[2]);
     }
 
+    // if reach door, switch to Win screen
     if (currentScene->state.player->reachedExit == true) {
         SwitchToScene(sceneList[3]);
     }
@@ -228,16 +227,16 @@ void Render() {
         Util::DrawText(&program, fontTextureID, "Use WASD to control your player", 0.25, -0.1f, glm::vec3(-2.5, -0.3, 0));
     }
     else if (currentScene == sceneList[2]) {    // Lose Screen
-        Util::DrawText(&program, fontTextureID, "You Lose!", 1.0, -0.3f, glm::vec3(-2.9, 1.0, 0));
+        Util::DrawText(&program, fontTextureID, "You Lose!", 1.0, -0.3f, glm::vec3(-2.9, 0.0, 0));
         //Util::DrawText(&program, fontTextureID, "Press R to return to Main Menu", 0.3, -0.1f, glm::vec3(-3, 0.0, 0));   // maybe delete
     }
     else if (currentScene == sceneList[3]) {    // Win Screen
-        Util::DrawText(&program, fontTextureID, "You Win!", 1.0, -0.3f, glm::vec3(-2.8, 1.0, 0));
+        Util::DrawText(&program, fontTextureID, "You Win!", 1.0, -0.3f, glm::vec3(-2.8, 0.0, 0));
         //Util::DrawText(&program, fontTextureID, "Press R to return to Main Menu", 0.3, -0.1f, glm::vec3(-3, 0.0, 0));   // maybe delete
     }
     else {
         Util::DrawText(&program, fontTextureID, "Lives: " + to_string(numLives), 0.5, -0.2f, glm::vec3(-6, 3.2, 0));
-        Util::DrawText(&program, fontTextureID, "reachedExit: " + to_string(currentScene->state.player->reachedExit), 0.5, -0.2f, glm::vec3(-6, 2.8, 0));
+        //Util::DrawText(&program, fontTextureID, "reachedExit: " + to_string(currentScene->state.player->reachedExit), 0.5, -0.2f, glm::vec3(-6, 2.8, 0));
     }
 
 

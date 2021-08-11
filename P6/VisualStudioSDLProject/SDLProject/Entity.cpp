@@ -10,20 +10,19 @@ Entity::Entity() {
 
     speed = 0.0f;
 
-    // 12.9
     billboard = false;
     width = 1.0f;
     height = 1.0f;
     depth = 1.0f;
 
     isActive = true;
+    //gainHealth = false;
     reachedExit = false;
 }
 
 
-// 12.9 -- collision check function
 bool Entity::CheckCollision(Entity* other) {
-    // makes sure enemy isn't colliding with player when isActive is false
+    // ensure enemy isn't colliding with player when isActive = false
     if (other->isActive == false) {
         return false;
     }
@@ -36,20 +35,19 @@ bool Entity::CheckCollision(Entity* other) {
 }
 
 
-// 12.9 -- new Update with parameters for collision check
-//void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount) {
+
 void Entity::Update(float deltaTime, Entity* player, Entity* objects, int objectCount, Entity* enemies, int enemyCount) {
     if (isActive == false) return;
     
     glm::vec3 previousPosition = position;
 
-    // 12.12 -- ensure 2d enemy always face player
+    // ensures 2d enemy always face player
     if (billboard) {
         float directionX = position.x - player->position.x;
         float directionZ = position.z - player->position.z;
         rotation.y = glm::degrees(atan2f(directionX, directionZ));
 
-        // 12.13 -- billboard walks towards us
+        // billboard/enemies moves towards player
         velocity.z = cos(glm::radians(rotation.y)) * -1.0f;
         velocity.x = sin(glm::radians(rotation.y)) * -1.0f;
     }
@@ -57,16 +55,22 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
     velocity += acceleration * deltaTime;
     position += velocity * deltaTime;
 
-    // 12.9 -- only care about collisions if it's player colliding
+    // only care about collisions if player is colliding
     if (entityType == PLAYER) {
         for (int i = 0; i < objectCount; i++) {
-            // Ignore collisions with the floor
-            if (objects[i].entityType == FLOOR) continue;
+            if (objects[i].entityType == FLOOR) continue;   // ignore collisions with the floor
 
             reachedExit = false;    // need or else will auto jump to Win Screen
             if (objects[i].entityType == GOAL) {
                 reachedExit = true;
             }
+            
+            // removed because for some reason HEALTH was always true
+            //gainHealth = false;
+            //if (objects[i].entityType == HEALTH) {
+            //    gainHealth = true;
+            //    objects[i].isActive = false;
+            //}
 
             if (CheckCollision(&objects[i])) {
                 position = previousPosition;
@@ -83,64 +87,26 @@ void Entity::Update(float deltaTime, Entity* player, Entity* objects, int object
 
     }
 
-    // 11.8 -- rotate every frame, causes continuous rotation
-    if (entityType == CUBE) {
-        /*
-        -----------------   One Axis  -----------------
-        */
-        // X-axis
-        //rotation.x += 45 * deltaTime;     // rotate in towards screen
-        //rotation.x += -45 * deltaTime;   // rotate out away from screen
-
-        // Y-axis
-        //rotation.y += 45 * deltaTime;     // rotate right
-        //rotation.y += -45 * deltaTime;      // rotate left
-
-        // Z-axis
-        //rotation.z += 45 * deltaTime;     // rotate counter clockwise from top view
-        //rotation.z += -45 * deltaTime;      // rotate clockwise from top view
-
-        /*
-        -----------------   Two Axis  -----------------
-        */
-        rotation.y += 45 * deltaTime;
-        rotation.z += 45 * deltaTime;
-
-    }
-    else if (entityType == ENEMY){
+    // enemy rotation speed to face player
+    if (entityType == ENEMY){
         rotation.y += 30 * deltaTime;
     }
 
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
-    modelMatrix = glm::scale(modelMatrix, scale);    // 11.13 -- order = translate, scale, rotate
+    modelMatrix = glm::scale(modelMatrix, scale);
 
-    /*
-    -----------------   One Axis  -----------------
-    */
-    //modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));  // 11.8 -- rotate X
-    //modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));  // 11.8 -- rotate Y
-    //modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));  // 11.8 -- rotate Z
-
-    /*
-    -----------------   Two Axis  -----------------
-    */
     modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
     modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-
 
 }
 
 void Entity::Render(ShaderProgram* program) {
     if (isActive == false) return;
-    // 11.8 -- remove because unnecessary
-    //glm::mat4 modelMatrix = glm::mat4(1.0f);
-    //modelMatrix = glm::translate(modelMatrix, position);
-    program->SetModelMatrix(modelMatrix);
 
-    // 12.12 -- replace previous code
+    program->SetModelMatrix(modelMatrix);
     glBindTexture(GL_TEXTURE_2D, textureID);
+
     if (billboard) {
         DrawBillboard(program);
     }

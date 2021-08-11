@@ -12,9 +12,9 @@ void Level1::Initialize() {
     */
     state.player = new Entity();
     state.player->entityType = PLAYER;
-    //state.player->position = glm::vec3(0, 0.75f, 0);  // return to this 
+    state.player->position = glm::vec3(0, 0.75f, 0);  // return to this 
 
-    state.player->position = glm::vec3(-5.0, 0.75f, 0.0);    // for testing
+    //state.player->position = glm::vec3(-5.0, 0.75f, 0.0);    // for testing
 
     state.player->width = 0.5;
     state.player->acceleration = glm::vec3(0, 0, 0);
@@ -26,7 +26,7 @@ void Level1::Initialize() {
     state.objects = new Entity[OBJECT_COUNT];
     
     // ----- FLOOR -----
-    GLuint floorTextureID = Util::LoadTexture("diamondFloor.png");
+    GLuint floorTextureID = Util::LoadTexture("ch01_island_ground_soil_dif.jpg");
     Mesh* cubeMesh = new Mesh();
     cubeMesh->LoadOBJ("cube.obj", 50);  // 12.3 -- duplicate texture 50 times
 
@@ -39,9 +39,9 @@ void Level1::Initialize() {
     state.objects[0].entityType = FLOOR;
 
     // ----- CEILING -----
-    GLuint ceilingTextureID = Util::LoadTexture("bricktext.jpg");
+    GLuint ceilingTextureID = Util::LoadTexture("ch01_island_ground_stone_dif.png");
     Mesh* ceilingMesh = new Mesh();
-    ceilingMesh->LoadOBJ("cube.obj", 30);
+    ceilingMesh->LoadOBJ("cube.obj", 10);
 
     state.objects[1].textureID = ceilingTextureID;
     state.objects[1].mesh = ceilingMesh;
@@ -54,9 +54,9 @@ void Level1::Initialize() {
 
     // ----- Outer Walls ----- 
     // i = [2] to [5]
-    GLuint wallTextureID = Util::LoadTexture("ch01_island_iron.png");
+    GLuint wallTextureID = Util::LoadTexture("ch01_island_ground_stonepath_dif.png");
     Mesh* wallMesh = new Mesh();
-    wallMesh->LoadOBJ("cube.obj", 1);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
+    wallMesh->LoadOBJ("cube.obj", 2);  // 12.3 -- duplicate texture 10 times // 12.6 -- dup 20 times
 
     for (size_t i = 2; i < 6; i++) {
         state.objects[i].textureID = wallTextureID;
@@ -125,13 +125,14 @@ void Level1::Initialize() {
     state.objects[7].depth = 0.5f;
 
     // ----- Maze Walls ----- 
-    GLuint crateTextureID = Util::LoadTexture("crate1_diffuse.png");
-    Mesh* crateMesh = new Mesh();   // 12.6 -- need a new one b/c floor one is duplicated
-    crateMesh->LoadOBJ("cube.obj", 1);  // 12.6 -- 1 = no duplicate
+    GLuint mazeTextureID = Util::LoadTexture("Grass_Texture.png");
+    //GLuint mazeTextureID = Util::LoadTexture("Grass_Texture.png");
+    Mesh* mazeMesh = new Mesh();
+    mazeMesh->LoadOBJ("cube.obj", 1);
 
-    for (size_t i = 8; i < OBJECT_COUNT; i++) {     // change obj count to num of walls later9
-        state.objects[i].textureID = crateTextureID;
-        state.objects[i].mesh = crateMesh;
+    for (size_t i = 8; i < OBJECT_COUNT; i++) {
+        state.objects[i].textureID = mazeTextureID;
+        state.objects[i].mesh = mazeMesh;
 
         state.objects[i].acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
         state.objects[1].rotation = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -259,7 +260,6 @@ void Level1::Initialize() {
     state.objects[26].depth = 0.2f;
 
     // Midpoint, left wall between Top Left and Bottom Left
-    state.objects[27].textureID = ceilingTextureID;
     state.objects[27].scale = glm::vec3(7.0f, 1.0f, 0.2f);
     state.objects[27].position = glm::vec3(-14.0f, 0.5f, -10.0f);   // horizontal front wall
     state.objects[27].width = 7.0f;
@@ -271,7 +271,6 @@ void Level1::Initialize() {
     state.objects[28].width = 4.0f;
     state.objects[28].height = 1.0f;
     state.objects[28].depth = 0.2f;
-    //state.objects[28].isActive = false;
 
     // Midpoint, back walls between Bottom Left and Bottom Right
     state.objects[29].scale = glm::vec3(0.2f, 1.0f, 6.0f);
@@ -341,28 +340,24 @@ void Level1::Initialize() {
     state.objects[39].width = 6.0f;
     state.objects[39].height = 1.0f;
     state.objects[39].depth = 0.2f;
-    //state.objects[39].isActive = false;
 
     state.objects[40].scale = glm::vec3(0.2f, 1.0f, 7.0f);
     state.objects[40].position = glm::vec3(-9.0f, 0.5f, 16.5f);   // outer vertical wall, path to lower left 
     state.objects[40].width = 0.2f;
     state.objects[40].height = 1.0f;
     state.objects[40].depth = 7.0f;
-    //state.objects[40].isActive = false;
 
     state.objects[41].scale = glm::vec3(0.2f, 1.0f, 6.0f);
     state.objects[41].position = glm::vec3(-21.0f, 0.5f, 7.0f);   // connect vertical wall
     state.objects[41].width = 0.2f;
     state.objects[41].height = 1.0f;
     state.objects[41].depth = 6.0f;
-    //state.objects[41].isActive = false;
 
     state.objects[42].scale = glm::vec3(12.0f, 1.0f, 0.2f);
     state.objects[42].position = glm::vec3(-15.0f, 0.5f, 10.0f);   // horizontal wall, to crossroad
     state.objects[42].width = 12.0f;
     state.objects[42].height = 1.0f;
     state.objects[42].depth = 0.2f;
-    //state.objects[42].isActive = false;
 
     // player path
     state.objects[43].scale = glm::vec3(10.0f, 1.0f, 0.2f);
@@ -403,7 +398,6 @@ void Level1::Initialize() {
     state.objects[48].depth = 9.0f;
 
     // connect gates to Top Left corner, gap in between for middle path
-
     state.objects[49].scale = glm::vec3(0.2f, 1.0f, 6.0f);
     state.objects[49].position = glm::vec3(-9.0f, 0.5f, -18.0f);   // vertical wall, connect to 44, 
     state.objects[49].width = 0.2f;
@@ -485,16 +479,22 @@ void Level1::Initialize() {
 
 
     //// ----- HEALTH ----- 
-    //GLuint healthTextureID = Util::LoadTexture("potion_blue.png");
-    //Mesh* healthMesh = new Mesh();   // 12.6 -- need a new one b/c floor one is duplicated
-    //healthMesh->LoadOBJ("potion_HighPoly.obj", 1);  // 12.6 -- 1 = no duplicate
 
-    //state.objects[6].textureID = healthTextureID;
-    //state.objects[6].mesh = healthMesh;
-    //state.objects[6].scale = glm::vec3(0.03f, 0.03f, 0.03f);
-    //state.objects[6].position = glm::vec3(0.0f, 0.5f, -5.0f);   // 12.6 -- crate is 1 unit tall, stop from sinking into floor
-    //state.objects[6].entityType = HEALTH;
-    //state.objects[6].isActive = false;
+    //GLuint healthTextureID = Util::LoadTexture("health.png");
+    //Mesh* healthMesh = new Mesh();
+    //healthMesh->LoadOBJ("cube.obj", 1);  // 12.3 -- duplicate texture 50 times
+
+    //state.objects[62].textureID = healthTextureID;
+    //state.objects[62].mesh = healthMesh;
+    //state.objects[62].scale = glm::vec3(0.5f, 0.5f, 0.5f);
+    //state.objects[62].position = glm::vec3(-22.0f, 0.5f, -22.0f);
+    //state.objects[62].rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    //state.objects[62].acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
+    //state.objects[62].width = 0.5f;
+    //state.objects[62].height = 0.5f;
+    //state.objects[62].depth = 0.5f;
+    //state.objects[62].entityType = HEALTH;
+
 
     /*
     -----------------   Initialize Enemies  -----------------
@@ -518,15 +518,14 @@ void Level1::Initialize() {
 
 
 void Level1::Update(float deltaTime) {
-    //
     state.player->Update(deltaTime, state.player, state.objects, OBJECT_COUNT, state.enemies, ENEMY_COUNT);
     
-    // 11.7 -- update cube
+    // update objects
     for (size_t i = 0; i < OBJECT_COUNT; i++) {
         state.objects[i].Update(deltaTime, state.player, state.objects, OBJECT_COUNT, state.enemies, ENEMY_COUNT);
     }
 
-    // 12.13 -- update enemies
+    // update enemies
     for (size_t i = 0; i < ENEMY_COUNT; i++) {
         state.enemies[i].Update(deltaTime, state.player, state.objects, OBJECT_COUNT, state.enemies, ENEMY_COUNT);
     }
